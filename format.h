@@ -3,6 +3,7 @@
 
 #include "allocator.h"
 #include "sv.h"
+#include <math.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -16,7 +17,6 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt, ...) {
 
   char buffer[IVY_FORMAT_BUFFER_SIZE];
   char *write_cursor = buffer;
-  uint64_t bytes_written = 0;
 
   while (fmt.length > 0) {
     char chopped = fmt.data[0];
@@ -24,13 +24,11 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt, ...) {
 
     if (chopped != '{' && chopped != '}') {
       *write_cursor++ = chopped;
-      bytes_written++;
       continue;
     }
 
     if (fmt.length > 0 && fmt.data[0] == chopped) {
       *write_cursor++ = chopped;
-      bytes_written++;
       sv_chop_left(&fmt, 1);
       continue;
     }
@@ -41,18 +39,32 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt, ...) {
       string_view_t str = va_arg(args, string_view_t);
       memcpy(write_cursor, str.data, str.length);
       write_cursor += str.length;
-      bytes_written += str.length;
     } else if (sv_compare(fmt_option, SV("cs")) == 0) {
       char *str = va_arg(args, char *);
       uint64_t str_length = strlen(str);
       memcpy(write_cursor, str, str_length);
       write_cursor += str_length;
-      bytes_written += str_length;
+    } else if (sv_compare(fmt_option, SV("i")) == 0) {
+      int32_t n = va_arg(args, int32_t);
+
+      if (n < 0) {
+        n *= -1;
+        *write_cursor++ = '-';
+      }
+
+      uint64_t length = (int)log10(n);
+
+      for (int64_t i = length; i >= 0; i--) {
+        *(write_cursor + i) = (n % 10) + '0';
+        n = (int)(n / 10);
+      }
+      write_cursor += length + 1;
     }
   }
 
   va_end(args);
 
+  uint64_t bytes_written = write_cursor - buffer;
   char *out = (char *)ALLOC(alloc, bytes_written + 1);
   memcpy(out, buffer, bytes_written);
   out[bytes_written] = '\0';
