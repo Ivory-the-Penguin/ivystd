@@ -49,8 +49,6 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt, ...) {
       write_cursor += str_length;
       bytes_written += str_length;
     }
-
-    printf(SV_FMT "\n", (int)fmt_option.length, fmt_option.data);
   }
 
   va_end(args);
