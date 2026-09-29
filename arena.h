@@ -1,5 +1,5 @@
-#ifndef IVY_ARENA_H
-#define IVY_ARENA_H
+#ifndef IVYSTD_ARENA_H
+#define IVYSTD_ARENA_H
 
 #include <stdint.h>
 #include <string.h>

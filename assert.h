@@ -1,5 +1,5 @@
-#ifndef IVY_ASSERT_H
-#define IVY_ASSERT_H
+#ifndef IVYSTD_ASSERT_H
+#define IVYSTD_ASSERT_H
 
 #include <stdio.h>
 #include <stdlib.h>

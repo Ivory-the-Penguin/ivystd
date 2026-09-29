@@ -1,9 +1,9 @@
-// Define IVY_STD_IMPL for implementation
+// Define IVYSTD_IMPL for implementation
 // Read https://github.com/nothings/stb/blob/master/docs/stb_howto.txt for
 // details
 
-#ifndef IVY_SV_H
-#define IVY_SV_H
+#ifndef IVYSTD_SV_H
+#define IVYSTD_SV_H
 
 #include <ctype.h>
 #include <stdbool.h>
@@ -85,7 +85,7 @@ string_view_t sv_chop_by_type(string_view_t *sv, int (*is_type)(int c));
 // is_type is what ISN'T a delimiter
 string_view_t sv_chop_by_type_rev(string_view_t *sv, int (*is_type)(int c));
 
-#ifdef IVY_STD_IMPL
+#ifdef IVYSTD_IMPL
 
 string_view_t sv_chop_by_delimiter(string_view_t *sv, char delimiter) {
   while (sv->length > 0 && sv->data[0] == delimiter) {

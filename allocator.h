@@ -1,7 +1,7 @@
 // You can't change the default allocators for the heap.
 // BUT you can just make another allocator
-#ifndef IVY_ALLOCATOR_H
-#define IVY_ALLOCATOR_H
+#ifndef IVYSTD_ALLOCATOR_H
+#define IVYSTD_ALLOCATOR_H
 
 #include <stdint.h>
 #include <stdlib.h>
