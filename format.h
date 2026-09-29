@@ -4,13 +4,16 @@
 #include "allocator.h"
 #include "sv.h"
 #include <stdarg.h>
+#include <stdio.h>
 #include <string.h>
 
 #define IVY_FORMAT_BUFFER_SIZE 512
 
 // The returned string is hidden null terminating
-string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
-                              va_list args) {
+string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt, ...) {
+  va_list args;
+  va_start(args, fmt);
+
   char buffer[IVY_FORMAT_BUFFER_SIZE];
   char *write_cursor = buffer;
   uint64_t bytes_written = 0;
@@ -31,7 +34,20 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
       sv_chop_left(&fmt, 1);
       continue;
     }
+
+    string_view_t fmt_option = sv_chop_by_delimiter(&fmt, '}');
+
+    if (sv_compare(fmt_option, SV("s")) == 0) {
+      string_view_t str = va_arg(args, string_view_t);
+      memcpy(write_cursor, str.data, str.length);
+      write_cursor += str.length;
+      bytes_written += str.length;
+    }
+
+    printf(SV_FMT "\n", (int)fmt_option.length, fmt_option.data);
   }
+
+  va_end(args);
 
   char *out = (char *)ALLOC(alloc, bytes_written + 1);
   memcpy(out, buffer, bytes_written);
