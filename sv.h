@@ -1,9 +1,9 @@
-// Define IVYSTD_IMPL for implementation
+// Define IVY_STD_IMPL for implementation
 // Read https://github.com/nothings/stb/blob/master/docs/stb_howto.txt for
 // details
 
-#ifndef IVYSTD_SV_H
-#define IVYSTD_SV_H
+#ifndef IVY_STD_SV_H
+#define IVY_STD_SV_H
 
 #include <ctype.h>
 #include <stdbool.h>
@@ -95,7 +95,7 @@ uint64_t sv_to_uint(string_view_t sv);
 string_view_t sv_from_int(allocator_t alloc, int64_t n);
 string_view_t sv_from_uint(allocator_t alloc, uint64_t n);
 
-#ifdef IVYSTD_IMPL
+#ifdef IVY_STD_IMPL
 
 string_view_t sv_chop_by_delimiter(string_view_t *sv, char delimiter) {
   while (sv->length > 0 && sv->data[0] == delimiter) {
