@@ -13,6 +13,31 @@
 
 // The returned string is hidden null terminating
 string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
+                              va_list args);
+
+static inline string_view_t ivy_format(allocator_t alloc, string_view_t fmt,
+                                       ...) {
+  va_list args;
+  va_start(args, fmt);
+  string_view_t view = _ivy_format_raw(alloc, fmt, args);
+  va_end(args);
+  return view;
+}
+
+static inline void ivy_print(const char *fmt, ...) {
+  va_list args;
+  va_start(args, fmt);
+  string_view_t view = _ivy_format_raw(heap, SV(fmt), args);
+  va_end(args);
+
+  fwrite(view.data, sizeof(char), view.length, stdout);
+
+  FREE(heap, (void *)view.data);
+}
+
+#ifdef IVY_STD_IMPL
+
+string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
                               va_list args) {
 
   char buffer[IVY_FORMAT_BUFFER_SIZE];
@@ -113,24 +138,6 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
   };
 }
 
-static inline string_view_t ivy_format(allocator_t alloc, string_view_t fmt,
-                                       ...) {
-  va_list args;
-  va_start(args, fmt);
-  string_view_t view = _ivy_format_raw(alloc, fmt, args);
-  va_end(args);
-  return view;
-}
-
-static inline void ivy_print(const char *fmt, ...) {
-  va_list args;
-  va_start(args, fmt);
-  string_view_t view = _ivy_format_raw(heap, SV(fmt), args);
-  va_end(args);
-
-  fwrite(view.data, sizeof(char), view.length, stdout);
-
-  FREE(heap, (void *)view.data);
-}
+#endif
 
 #endif
