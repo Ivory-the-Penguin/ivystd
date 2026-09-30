@@ -195,8 +195,6 @@ int64_t sv_to_int(string_view_t sv) {
   bool is_negative = (sv.data[0] == '-');
   sv_chop_left(&sv, is_negative);
 
-  IVY_ASSERT(sv.length <= 19, "The string view is too big to be an integer");
-
   int64_t out = 0;
   SV_FOREACH(sv, i) {
     char c = sv.data[i];
@@ -210,13 +208,43 @@ int64_t sv_to_int(string_view_t sv) {
     IVY_ASSERT(out <= INT64_MAX_DIV_10 + (int64_t)is_negative,
                "Integer would overflow");
 
+    if (out == INT64_MAX_DIV_10) {
+      IVY_ASSERT(digit <= 7 + is_negative, "Integer would overflow");
+    }
+
     out = (out * 10) + digit;
   }
 
   return (is_negative ? -out : out);
 }
 
-uint64_t sv_to_uint(string_view_t sv) {}
+#define UINT64_MAX_DIV_10 (UINT64_MAX / 10)
+
+uint64_t sv_to_uint(string_view_t sv) {
+  IVY_ASSERT(sv.data != NULL && sv.length > 0,
+             "String view can't be null or empty!");
+
+  uint64_t out = 0;
+  SV_FOREACH(sv, i) {
+    char c = sv.data[i];
+
+    IVY_ASSERT(isdigit(c),
+               "String view can't contain a nonnumerical character, or a "
+               "negative");
+
+    int64_t digit = sv.data[i] - '0';
+
+    IVY_ASSERT(out <= UINT64_MAX_DIV_10, "Integer would overflow");
+
+    if (out == UINT64_MAX_DIV_10) {
+      IVY_ASSERT(digit <= 5, "Integer would overflow");
+    }
+
+    out = (out * 10) + digit;
+  }
+
+  return out;
+}
 
 string_view_t sv_from_int(allocator_t alloc, int64_t n);
 string_view_t sv_from_uint(allocator_t alloc, uint64_t n);
