@@ -189,7 +189,8 @@ string_view_t sv_chop_by_type_rev(string_view_t *sv, int (*is_type)(int c)) {
 #define INT64_MAX_DIV_10 (INT64_MAX / 10)
 
 int64_t sv_to_int(string_view_t sv) {
-  SV_FOREACH(sv, i) {}
+  IVY_ASSERT(sv.data != NULL && sv.length > 0,
+             "String view can't be null or empty!");
 
   bool is_negative = (sv.data[0] == '-');
   sv_chop_left(&sv, is_negative);
