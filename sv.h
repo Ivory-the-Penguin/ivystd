@@ -266,7 +266,9 @@ string_view_t sv_from_int(allocator_t alloc, int64_t n) {
 
   char *buffer = ALLOC(alloc, length + 2);
 
-  buffer[0] = '-';
+  if (is_negative) {
+    buffer[0] = '-';
+  }
 
   for (int64_t i = length - is_negative; i >= 0; i--) {
     *(buffer + i + is_negative) = (out_n % 10) + '0';
@@ -280,7 +282,29 @@ string_view_t sv_from_int(allocator_t alloc, int64_t n) {
       .length = length + 1,
   };
 }
-string_view_t sv_from_uint(allocator_t alloc, uint64_t n);
+string_view_t sv_from_uint(allocator_t alloc, uint64_t n) {
+  int64_t length = 0;
+  uint64_t temp = n;
+  while (temp > 0) {
+    length++;
+    temp /= 10;
+  }
+  length = (length == 0 ? 0 : length - 1);
+
+  char *buffer = ALLOC(alloc, length + 2);
+
+  for (int64_t i = length; i >= 0; i--) {
+    *(buffer + i) = (n % 10) + '0';
+    n /= 10;
+  }
+
+  buffer[length + 1] = '\0';
+
+  return (string_view_t){
+      .data = buffer,
+      .length = length + 1,
+  };
+}
 
 #endif
 
