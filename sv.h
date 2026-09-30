@@ -81,7 +81,8 @@ static inline void sv_trim(string_view_t *sv) {
   sv_trim_right(sv);
 }
 
-// Has a secret '\0' in the end
+// Has a secret '\0' in the end.
+// Recommended to use ivy_format instead of this.
 static inline string_view_t sv_combine(allocator_t alloc, string_view_t a,
                                        string_view_t b) {
   char *new_buffer = (char *)ALLOC(alloc, a.length + b.length + 1);
@@ -96,18 +97,18 @@ static inline string_view_t sv_combine(allocator_t alloc, string_view_t a,
 
 string_view_t sv_chop_by_delimiter(string_view_t *sv, char delimiter);
 
-// is_type is what IS a delimiter
+// is_type is what IS a delimiter.
 string_view_t sv_chop_by_type(string_view_t *sv, int (*is_type)(int c));
 
-// is_type is what ISN'T a delimiter
+// is_type is what ISN'T a delimiter.
 string_view_t sv_chop_by_type_rev(string_view_t *sv, int (*is_type)(int c));
 
 int64_t sv_to_int(string_view_t sv);
 uint64_t sv_to_uint(string_view_t sv);
 
-// Has a secret '\0' in the end
+// Has a secret '\0' in the end.
 string_view_t sv_from_int(allocator_t alloc, int64_t n);
-// Has a secret '\0' in the end
+// Has a secret '\0' in the end.
 string_view_t sv_from_uint(allocator_t alloc, uint64_t n);
 
 #ifdef IVY_STD_IMPL

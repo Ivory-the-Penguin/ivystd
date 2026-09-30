@@ -11,7 +11,7 @@
 
 #define IVY_FORMAT_BUFFER_SIZE 512
 
-// The returned string is hidden null terminating
+// Has a secret '\0' in the end.
 string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
                               va_list args);
 
