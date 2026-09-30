@@ -91,7 +91,7 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt, ...) {
         length++;
         temp /= 10;
       }
-      length = (length == 0 ? 1 : length - 1);
+      length = (length == 0 ? 0 : length - 1);
 
       for (int64_t i = length; i >= 0; i--) {
         *(write_cursor + i) = (n % 10) + '0';
