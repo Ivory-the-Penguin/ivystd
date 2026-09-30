@@ -5,6 +5,7 @@
 #include "sv.h"
 #include <math.h>
 #include <stdarg.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -45,14 +46,21 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt, ...) {
       memcpy(write_cursor, str, str_length);
       write_cursor += str_length;
     } else if (sv_compare(fmt_option, SV("i")) == 0) {
-      int32_t n = va_arg(args, int32_t);
+      int32_t in_n = va_arg(args, int32_t);
 
-      if (n < 0) {
-        n *= -1;
+      if (in_n < 0) {
         *write_cursor++ = '-';
       }
 
-      uint64_t length = (int)log10(n);
+      uint32_t n = (in_n < 0 ? (uint32_t)-in_n : (uint32_t)in_n);
+
+      uint64_t length = 0;
+      uint64_t temp = n;
+      while (temp > 0) {
+        length++;
+        temp /= 10;
+      }
+      length = (length == 0 ? 1 : length - 1);
 
       for (int64_t i = length; i >= 0; i--) {
         *(write_cursor + i) = (n % 10) + '0';
