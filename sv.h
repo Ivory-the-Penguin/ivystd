@@ -203,7 +203,7 @@ int64_t sv_to_int(string_view_t sv) {
                "String view can't contain a nonnumerical character, or a "
                "negative in the wrong place");
 
-    int64_t digit = sv.data[i] - '0';
+    int64_t digit = c - '0';
 
     IVY_ASSERT(out <= INT64_MAX_DIV_10 + (int64_t)is_negative,
                "Integer would overflow");
