@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "allocator.h"
 #include "assert.h"
 
 typedef struct {
@@ -19,6 +20,9 @@ typedef struct {
 
 #define SV(c_str)                                                              \
   (string_view_t) { .data = c_str, .length = strlen(c_str), }
+
+#define SV_FOREACH(sv, i) for (uint64_t(i) = 0; (i) < (sv.length); (i)++)
+#define SV_FOREACH_REV(sv, i) for (uint64_t(i) = sv.length - 1; (i) >= 0; (i)--)
 
 #define SV_FMT "%.*s"
 
@@ -84,6 +88,12 @@ string_view_t sv_chop_by_type(string_view_t *sv, int (*is_type)(int c));
 
 // is_type is what ISN'T a delimiter
 string_view_t sv_chop_by_type_rev(string_view_t *sv, int (*is_type)(int c));
+
+int64_t sv_to_int(string_view_t sv);
+uint64_t sv_to_uint(string_view_t sv);
+
+string_view_t sv_from_int(allocator_t alloc, int64_t n);
+string_view_t sv_from_uint(allocator_t alloc, uint64_t n);
 
 #ifdef IVYSTD_IMPL
 
@@ -175,6 +185,28 @@ string_view_t sv_chop_by_type_rev(string_view_t *sv, int (*is_type)(int c)) {
   sv_chop_left(sv, sv->length);
   return out;
 }
+
+int64_t sv_to_int(string_view_t sv) {
+  SV_FOREACH(sv, i) {
+    ZYRX_ASSERT(isdigit(sv.data[i]) || (i == 0 && sv.data[i] == '-'),
+                "String view can't contain a nonnumerical character, or a "
+                "negative in the wrong place");
+  }
+  ZYRX_ASSERT(sv.length <= 20 &&,
+              "The string view is too big to be an integer");
+  if (sv.length == 20) {
+    ZYRX_ASSERT(sv.data[1] <= '2',
+                "The string view is too big to be an integer");
+  }
+
+  bool is_negative = (sv.data[0] == '-');
+  sv_chop_left(&sv, is_negative);
+}
+
+uint64_t sv_to_uint(string_view_t sv) {}
+
+string_view_t sv_from_int(allocator_t alloc, int64_t n);
+string_view_t sv_from_uint(allocator_t alloc, uint64_t n);
 
 #endif
 

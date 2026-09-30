@@ -45,17 +45,48 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt, ...) {
       uint64_t str_length = strlen(str);
       memcpy(write_cursor, str, str_length);
       write_cursor += str_length;
-    } else if (sv_compare(fmt_option, SV("i")) == 0) {
-      int32_t in_n = va_arg(args, int32_t);
+    } else if (sv_has_prefix(fmt_option, SV("i"))) {
+      sv_chop_left(&fmt_option, 1);
 
-      if (in_n < 0) {
-        *write_cursor++ = '-';
+      bool is_unsigned = false;
+      bool is_long = false;
+      SV_FOREACH(fmt_option, i) {
+        switch (fmt_option.data[i]) {
+        case 'u':
+          is_unsigned = true;
+          break;
+        case 'l':
+          is_long = true;
+          break;
+        default:
+          break;
+        }
       }
 
-      uintmax_t n = (in_n < 0 ? (uintmax_t) - (intmax_t)in_n : (uintmax_t)in_n);
+      uint64_t n;
+      if (!is_unsigned) {
+        int64_t in_n;
+        if (is_long) {
+          in_n = va_arg(args, int64_t);
+        } else {
+          in_n = (int64_t)va_arg(args, int32_t);
+        }
+
+        if (in_n < 0) {
+          *write_cursor++ = '-';
+        }
+
+        n = (in_n < 0 ? (uint64_t)-in_n : (uint64_t)in_n);
+      } else {
+        if (is_long) {
+          n = va_arg(args, uint64_t);
+        } else {
+          n = (uint64_t)va_arg(args, uint32_t);
+        }
+      }
 
       uint64_t length = 0;
-      uintmax_t temp = n;
+      uint64_t temp = n;
       while (temp > 0) {
         length++;
         temp /= 10;
