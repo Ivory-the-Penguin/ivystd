@@ -22,7 +22,7 @@ typedef struct {
   (string_view_t) { .data = c_str, .length = strlen(c_str), }
 
 #define SV_FOREACH(sv, i) for (uint64_t(i) = 0; (i) < (sv.length); (i)++)
-#define SV_FOREACH_REV(sv, i) for (uint64_t(i) = sv.length - 1; (i) >= 0; (i)--)
+#define SV_FOREACH_REV(sv, i) for (int64_t(i) = sv.length - 1; (i) >= 0; (i)--)
 
 #define SV_FMT "%.*s"
 
