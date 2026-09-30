@@ -81,6 +81,19 @@ static inline void sv_trim(string_view_t *sv) {
   sv_trim_right(sv);
 }
 
+// Has a secret '\0' in the end
+static inline string_view_t sv_combine(allocator_t alloc, string_view_t a,
+                                       string_view_t b) {
+  char *new_buffer = (char *)ALLOC(alloc, a.length + b.length + 1);
+  memcpy(new_buffer, a.data, a.length);
+  memcpy(new_buffer + a.length, b.data, b.length);
+  new_buffer[a.length + b.length] = '\0';
+  return (string_view_t){
+      .data = new_buffer,
+      .length = a.length + b.length,
+  };
+}
+
 string_view_t sv_chop_by_delimiter(string_view_t *sv, char delimiter);
 
 // is_type is what IS a delimiter
@@ -92,7 +105,9 @@ string_view_t sv_chop_by_type_rev(string_view_t *sv, int (*is_type)(int c));
 int64_t sv_to_int(string_view_t sv);
 uint64_t sv_to_uint(string_view_t sv);
 
+// Has a secret '\0' in the end
 string_view_t sv_from_int(allocator_t alloc, int64_t n);
+// Has a secret '\0' in the end
 string_view_t sv_from_uint(allocator_t alloc, uint64_t n);
 
 #ifdef IVY_STD_IMPL
