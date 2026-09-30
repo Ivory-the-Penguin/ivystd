@@ -186,21 +186,33 @@ string_view_t sv_chop_by_type_rev(string_view_t *sv, int (*is_type)(int c)) {
   return out;
 }
 
+#define INT64_MAX_DIV_10 (INT64_MAX / 10)
+
 int64_t sv_to_int(string_view_t sv) {
-  SV_FOREACH(sv, i) {
-    ZYRX_ASSERT(isdigit(sv.data[i]) || (i == 0 && sv.data[i] == '-'),
-                "String view can't contain a nonnumerical character, or a "
-                "negative in the wrong place");
-  }
-  ZYRX_ASSERT(sv.length <= 20 &&,
-              "The string view is too big to be an integer");
-  if (sv.length == 20) {
-    ZYRX_ASSERT(sv.data[1] <= '2',
-                "The string view is too big to be an integer");
-  }
+  SV_FOREACH(sv, i) {}
 
   bool is_negative = (sv.data[0] == '-');
   sv_chop_left(&sv, is_negative);
+
+  IVY_ASSERT(sv.length <= 19, "The string view is too big to be an integer");
+
+  int64_t out = 0;
+  SV_FOREACH(sv, i) {
+    char c = sv.data[i];
+
+    IVY_ASSERT(isdigit(c),
+               "String view can't contain a nonnumerical character, or a "
+               "negative in the wrong place");
+
+    int64_t digit = sv.data[i] - '0';
+
+    IVY_ASSERT(out <= INT64_MAX_DIV_10 + (int64_t)is_negative,
+               "Integer would overflow");
+
+    out = (out * 10) + digit;
+  }
+
+  return (is_negative ? -out : out);
 }
 
 uint64_t sv_to_uint(string_view_t sv) {}
