@@ -98,6 +98,8 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt, ...) {
         n = n / 10;
       }
       write_cursor += length + 1;
+    } else {
+      IVY_ASSERT(0, "Unknown formatting specifier!");
     }
   }
 
