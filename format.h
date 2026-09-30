@@ -52,10 +52,10 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt, ...) {
         *write_cursor++ = '-';
       }
 
-      uint32_t n = (in_n < 0 ? (uint32_t)-in_n : (uint32_t)in_n);
+      uintmax_t n = (in_n < 0 ? (uintmax_t) - (intmax_t)in_n : (uintmax_t)in_n);
 
       uint64_t length = 0;
-      uint64_t temp = n;
+      uintmax_t temp = n;
       while (temp > 0) {
         length++;
         temp /= 10;
@@ -64,7 +64,7 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt, ...) {
 
       for (int64_t i = length; i >= 0; i--) {
         *(write_cursor + i) = (n % 10) + '0';
-        n = (int)(n / 10);
+        n = n / 10;
       }
       write_cursor += length + 1;
     }
