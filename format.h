@@ -12,9 +12,8 @@
 #define IVY_FORMAT_BUFFER_SIZE 512
 
 // The returned string is hidden null terminating
-string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt, ...) {
-  va_list args;
-  va_start(args, fmt);
+string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
+                              va_list args) {
 
   char buffer[IVY_FORMAT_BUFFER_SIZE];
   char *write_cursor = buffer;
@@ -103,8 +102,6 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt, ...) {
     }
   }
 
-  va_end(args);
-
   uint64_t bytes_written = write_cursor - buffer;
   char *out = (char *)ALLOC(alloc, bytes_written + 1);
   memcpy(out, buffer, bytes_written);
@@ -114,6 +111,15 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt, ...) {
       .data = out,
       .length = bytes_written,
   };
+}
+
+static inline string_view_t ivy_format(allocator_t alloc, string_view_t fmt,
+                                       ...) {
+  va_list args;
+  va_start(args, fmt);
+  string_view_t view = _ivy_format_raw(alloc, fmt, args);
+  va_end(args);
+  return view;
 }
 
 #endif
