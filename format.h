@@ -122,4 +122,15 @@ static inline string_view_t ivy_format(allocator_t alloc, string_view_t fmt,
   return view;
 }
 
+static inline void ivy_print(const char *fmt, ...) {
+  va_list args;
+  va_start(args, fmt);
+  string_view_t view = _ivy_format_raw(heap, SV(fmt), args);
+  va_end(args);
+
+  fwrite(view.data, sizeof(char), view.length, stdout);
+
+  FREE(heap, (void *)view.data);
+}
+
 #endif
