@@ -246,7 +246,43 @@ uint64_t sv_to_uint(string_view_t sv) {
   return out;
 }
 
-string_view_t sv_from_int(allocator_t alloc, int64_t n);
+string_view_t sv_from_int(allocator_t alloc, int64_t n) {
+  bool is_negative = false;
+  uint64_t out_n;
+  if (n < 0) {
+    is_negative = true;
+    out_n = (uint64_t)-(int64_t)n;
+  } else {
+    out_n = (uint64_t)n;
+  }
+
+  uint64_t length = 0;
+  uint64_t temp = out_n;
+  while (temp > 0) {
+    length++;
+    temp /= 10;
+  }
+  length = (length == 0 ? 1 : length - 1) + is_negative;
+
+  char *buffer = ALLOC(alloc, length + 2);
+  char *write_cursor = buffer;
+
+  if (is_negative) {
+    *write_cursor++ = '-';
+  }
+
+  for (int64_t i = length - is_negative; i >= 0; i--) {
+    *(write_cursor + i) = (out_n % 10) + '0';
+    out_n /= 10;
+  }
+
+  buffer[length + 1] = '\0';
+
+  return (string_view_t){
+      .data = buffer,
+      .length = length + 1,
+  };
+}
 string_view_t sv_from_uint(allocator_t alloc, uint64_t n);
 
 #endif
