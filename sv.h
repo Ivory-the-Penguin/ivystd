@@ -256,23 +256,20 @@ string_view_t sv_from_int(allocator_t alloc, int64_t n) {
     out_n = (uint64_t)n;
   }
 
-  uint64_t length = 0;
+  int64_t length = 0;
   uint64_t temp = out_n;
   while (temp > 0) {
     length++;
     temp /= 10;
   }
-  length = (length == 0 ? 1 : length - 1) + is_negative;
+  length = (length == 0 ? 0 : length - 1) + is_negative;
 
   char *buffer = ALLOC(alloc, length + 2);
-  char *write_cursor = buffer;
 
-  if (is_negative) {
-    *write_cursor++ = '-';
-  }
+  buffer[0] = '-';
 
   for (int64_t i = length - is_negative; i >= 0; i--) {
-    *(write_cursor + i) = (out_n % 10) + '0';
+    *(buffer + i + is_negative) = (out_n % 10) + '0';
     out_n /= 10;
   }
 
