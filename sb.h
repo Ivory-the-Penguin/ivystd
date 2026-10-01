@@ -71,4 +71,13 @@ static inline void sb_append_char(string_builder_t *sb, char c) {
   sb->data[sb->length++] = c;
 }
 
+static inline void sb_append_sv(string_builder_t *sb, string_view_t sv) {
+  if (sb->length + sv.length > sb->capacity) {
+    sb_expand(sb, sb->length + sv.length);
+  }
+
+  memcpy(sb->data + sb->length, sv.data, sv.length);
+  sb->length += sv.length;
+}
+
 #endif
