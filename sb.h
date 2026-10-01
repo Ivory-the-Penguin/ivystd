@@ -58,8 +58,17 @@ static inline void sb_free(string_builder_t *sb) {
 static inline void sb_expand(string_builder_t *sb, uint64_t capacity) {
   IVY_ASSERT(sb->capacity < capacity, "New capacity has to be bigger than old");
 
-  sb->data = (char *)REALLOC(sb->alloc, sb->data, capacity);
-  sb->capacity = capacity;
+  sb->data = (char *)REALLOC(sb->alloc, sb->data,
+                             ALIGN_BYTES(capacity * sizeof(char)));
+  sb->capacity = ALIGN_BYTES(capacity);
+}
+
+static inline void sb_append_char(string_builder_t *sb, char c) {
+  if (sb->length + 1 > sb->capacity) {
+    sb_expand(sb, sb->capacity * 2);
+  }
+
+  sb->data[sb->length++] = c;
 }
 
 #endif
