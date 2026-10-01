@@ -89,4 +89,16 @@ static inline void sb_pop(string_builder_t *sb, uint64_t amount) {
   sb->length -= amount;
 }
 
+static inline string_view_t sb_to_sv(allocator_t alloc, string_builder_t *sb) {
+  char *buffer = (char *)ALLOC(alloc, sb->length + 1);
+
+  memcpy(buffer, sb->data, sb->length);
+  buffer[sb->length] = '\0';
+
+  return (string_view_t){
+      .data = buffer,
+      .length = sb->length,
+  };
+}
+
 #endif
