@@ -80,4 +80,13 @@ static inline void sb_append_sv(string_builder_t *sb, string_view_t sv) {
   sb->length += sv.length;
 }
 
+// Use this sparingly
+static inline void sb_pop(string_builder_t *sb, uint64_t amount) {
+  IVY_ASSERT(amount <= sb->length,
+             "Popping amount exceeds string builder length");
+
+  memset(sb->data + sb->length - amount, 0, amount);
+  sb->length -= amount;
+}
+
 #endif
