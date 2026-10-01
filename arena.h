@@ -35,16 +35,11 @@ static inline void *_arena_alloc(allocator_t *self, uint64_t bytes) {
   return ctx->buffer + ctx->offset - aligned_bytes;
 }
 
-static inline void _arena_free(allocator_t *self, void *ptr) {
-  (void)self;
-  (void)ptr;
-}
-
 static inline allocator_t arena_make_allocator(arena_t *arena) {
   return (allocator_t){
       .ctx = (void *)arena,
+      .flags = ALLOCATOR_HAS_ALLOC,
       .alloc = _arena_alloc,
-      .free = _arena_free,
   };
 }
 
