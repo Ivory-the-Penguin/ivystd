@@ -35,6 +35,17 @@ static inline void ivy_print(const char *fmt, ...) {
   FREE(heap, (void *)view.data);
 }
 
+static inline void ivy_print_file(FILE *file, const char *fmt, ...) {
+  va_list args;
+  va_start(args, fmt);
+  string_view_t view = _ivy_format_raw(heap, SV(fmt), args);
+  va_end(args);
+
+  fwrite(view.data, sizeof(char), view.length, file);
+
+  FREE(heap, (void *)view.data);
+}
+
 #ifdef IVY_STD_IMPL
 
 string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
