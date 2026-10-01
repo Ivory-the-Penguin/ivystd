@@ -2,14 +2,13 @@
 #define IVY_STD_FORMAT_H
 
 #include "allocator.h"
+#include "sb.h"
 #include "sv.h"
 #include <math.h>
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-
-#define IVY_FORMAT_BUFFER_SIZE 512
 
 // Has a secret '\0' in the end.
 string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
@@ -50,21 +49,19 @@ static inline void ivy_print_file(FILE *file, const char *fmt, ...) {
 
 string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
                               va_list args) {
-
-  char buffer[IVY_FORMAT_BUFFER_SIZE];
-  char *write_cursor = buffer;
+  string_builder_t buffer = sb_make(heap);
 
   while (fmt.length > 0) {
     char chopped = fmt.data[0];
     sv_chop_left(&fmt, 1);
 
     if (chopped != '{' && chopped != '}') {
-      *write_cursor++ = chopped;
+      sb_append_char(&buffer, chopped);
       continue;
     }
 
     if (fmt.length > 0 && fmt.data[0] == chopped) {
-      *write_cursor++ = chopped;
+      sb_append_char(&buffer, chopped);
       sv_chop_left(&fmt, 1);
       continue;
     }
@@ -73,13 +70,10 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
 
     if (sv_compare(fmt_option, SV("s")) == 0) {
       string_view_t str = va_arg(args, string_view_t);
-      memcpy(write_cursor, str.data, str.length);
-      write_cursor += str.length;
+      sb_append_sv(&buffer, str);
     } else if (sv_compare(fmt_option, SV("cs")) == 0) {
       char *str = va_arg(args, char *);
-      uint64_t str_length = strlen(str);
-      memcpy(write_cursor, str, str_length);
-      write_cursor += str_length;
+      sb_append_sv(&buffer, SV(str));
     } else if (sv_has_prefix(fmt_option, SV("i"))) {
       sv_chop_left(&fmt_option, 1);
 
@@ -108,7 +102,7 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
         }
 
         if (in_n < 0) {
-          *write_cursor++ = '-';
+          sb_append_char(&buffer, '-');
         }
 
         n = (in_n < 0 ? (uint64_t)-in_n : (uint64_t)in_n);
@@ -120,33 +114,31 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
         }
       }
 
+      char scratch[32];
+
       uint64_t length = 0;
       uint64_t temp = n;
       while (temp > 0) {
         length++;
         temp /= 10;
       }
-      length = (length == 0 ? 0 : length - 1);
+      length = (length == 0 ? 1 : length);
 
-      for (int64_t i = length; i >= 0; i--) {
-        *(write_cursor + i) = (n % 10) + '0';
+      for (int64_t i = length - 1; i >= 0; i--) {
+        scratch[i] = (n % 10) + '0';
         n = n / 10;
       }
-      write_cursor += length + 1;
+
+      sb_append_sv(&buffer, (string_view_t){.data = scratch, .length = length});
     } else {
       IVY_ASSERT(0, "Unknown formatting specifier!");
     }
   }
 
-  uint64_t bytes_written = write_cursor - buffer;
-  char *out = (char *)ALLOC(alloc, bytes_written + 1);
-  memcpy(out, buffer, bytes_written);
-  out[bytes_written] = '\0';
+  string_view_t out = sb_to_sv(alloc, &buffer);
+  sb_free(&buffer);
 
-  return (string_view_t){
-      .data = out,
-      .length = bytes_written,
-  };
+  return out;
 }
 
 #endif
