@@ -267,7 +267,7 @@ string_view_t sv_from_int(allocator_t alloc, int64_t n) {
   uint64_t out_n;
   if (n < 0) {
     is_negative = true;
-    out_n = (uint64_t)-(int64_t)n;
+    out_n = -(uint64_t)n;
   } else {
     out_n = (uint64_t)n;
   }

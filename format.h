@@ -105,7 +105,7 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
           sb_append_char(&buffer, '-');
         }
 
-        n = (in_n < 0 ? (uint64_t)-in_n : (uint64_t)in_n);
+        n = (in_n < 0 ? -(uint64_t)in_n : (uint64_t)in_n);
       } else {
         if (is_long) {
           n = va_arg(args, uint64_t);
