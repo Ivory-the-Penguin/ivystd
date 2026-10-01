@@ -78,7 +78,7 @@ typedef union {
   struct {
     union {
       vec3_t rgb;
-      union {
+      struct {
         float r;
         float g;
         float b;
