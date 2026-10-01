@@ -4,6 +4,7 @@
 #define IVY_STD_ALLOCATOR_H
 
 #include "assert.h"
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -18,16 +19,21 @@ typedef enum {
   ALLOCATOR_HAS_ALLOC = 1 << 0,
   ALLOCATOR_HAS_REALLOC = 1 << 1,
   ALLOCATOR_HAS_FREE = 1 << 2,
-} allocator_flags_t;
+} allocator_flag_t;
 
 typedef struct allocator_t {
   void *ctx;
-  allocator_flags_t flags;
+  allocator_flag_t flags;
 
   void *(*alloc)(struct allocator_t *self, uint64_t size);
   void *(*realloc)(struct allocator_t *self, void *ptr, uint64_t new_size);
   void (*free)(struct allocator_t *self, void *ptr);
 } allocator_t;
+
+static inline bool allocator_has_flag(allocator_t alloc,
+                                      allocator_flag_t flag) {
+  return (alloc.flags & flag) > 0;
+}
 
 static inline void *_heap_alloc(allocator_t *self, uint64_t size) {
   (void)self;
