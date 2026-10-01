@@ -12,7 +12,7 @@
 
 #define ALLOC(allocator, size) (allocator).alloc(&(allocator), (size))
 #define REALLOC(allocator, ptr, new_size)                                      \
-  (allocator).realloc(&(allocator), (ptr), (size))
+  (allocator).realloc(&(allocator), (ptr), (new_size))
 #define FREE(allocator, ptr) (allocator).free(&(allocator), (ptr))
 
 typedef enum {
