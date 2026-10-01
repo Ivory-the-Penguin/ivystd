@@ -5,12 +5,10 @@
 #include <stdlib.h>
 
 #define IVY_ASSERT(condition, message)                                         \
-  do {                                                                         \
-    if (!(condition)) {                                                        \
-      fprintf(stderr, "ASSERTION FAILED: %s\nFile: %s, Line %d\n", message,    \
-              __FILE__, __LINE__);                                             \
-      abort();                                                                 \
-    }                                                                          \
-  } while (0)
+  ((condition)                                                                 \
+       ? (void)0                                                               \
+       : (fprintf(stderr, "ASSERTION FAILED: %s\nFile: %s, Line: %d\n",        \
+                  (message), __FILE__, __LINE__),                              \
+          abort()))
 
 #endif

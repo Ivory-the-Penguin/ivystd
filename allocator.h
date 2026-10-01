@@ -10,10 +10,19 @@
 
 #define ALIGN_BYTES(bytes) (uint64_t)(((bytes) + 7) & ~7)
 
-#define ALLOC(allocator, size) (allocator).alloc(&(allocator), (size))
+#define ALLOC(allocator, size)                                                 \
+  (IVY_ASSERT(allocator_has_flag((allocator), ALLOCATOR_HAS_ALLOC),            \
+              "Allocator doesn't have ALLOC capability"),                      \
+   (allocator).alloc(&(allocator), (size)))
+
 #define REALLOC(allocator, ptr, new_size)                                      \
-  (allocator).realloc(&(allocator), (ptr), (new_size))
-#define FREE(allocator, ptr) (allocator).free(&(allocator), (ptr))
+  (IVY_ASSERT(allocator_has_flag((allocator), ALLOCATOR_HAS_REALLOC),          \
+              "Allocator doesn't have REALLOC capability"),                    \
+   (allocator).realloc(&(allocator), (ptr), (new_size)))
+#define FREE(allocator, ptr)                                                   \
+  (allocator_has_flag((allocator), ALLOCATOR_HAS_FREE)                         \
+       ? (allocator).free(&(allocator), (ptr))                                 \
+       : (void)0)
 
 typedef enum {
   ALLOCATOR_HAS_ALLOC = 1 << 0,
