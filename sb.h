@@ -31,7 +31,7 @@ static inline string_builder_t sb_make_from_sv(string_view_t sv) {
                             "sb_make_with_reserved or sb_make instead");
 
   string_builder_t sb = sb_make_with_reserved(sv.length);
-  sv.length = sv.length;
+  sb.length = sv.length;
   memcpy(sb.data, sv.data, sv.length);
 
   return sb;
@@ -43,7 +43,7 @@ static inline string_builder_t sb_make(void) {
 
 static inline void sb_free(string_builder_t *sb) {
   IVY_ASSERT(sb->data != NULL && sb->capacity > 0,
-             "String builder can't be empty");
+             "String builder can't be uninitialized or freed");
 
   FREE(heap, sb->data);
   sb->data = NULL;
