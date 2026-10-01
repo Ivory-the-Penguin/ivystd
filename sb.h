@@ -51,4 +51,11 @@ static inline void sb_free(string_builder_t *sb) {
   sb->capacity = 0;
 }
 
+static inline void sb_expand(string_builder_t *sb, uint64_t capacity) {
+  IVY_ASSERT(sb->capacity < capacity, "New capacity has to be bigger than old");
+
+  sb->data = (char *)realloc(sb->data, capacity);
+  sb->capacity = capacity;
+}
+
 #endif
