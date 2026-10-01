@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#define ALIGN_BYTES(bytes) (uint64_t)(((bytes) + 7) & ~7)
+#define ALIGN_BYTES(bytes) (uint64_t)(((bytes) + 15) & ~15)
 
 #define ALLOC(allocator, size)                                                 \
   (IVY_ASSERT(allocator_has_flag((allocator), ALLOCATOR_HAS_ALLOC),            \
