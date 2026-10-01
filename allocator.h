@@ -62,12 +62,18 @@ static inline void _heap_free(allocator_t *self, void *ptr) {
   free(ptr);
 }
 
-static allocator_t heap = (allocator_t){
+extern allocator_t heap;
+
+#ifdef IVY_STD_IMPL
+
+allocator_t heap = (allocator_t){
     .ctx = NULL,
     .flags = ALLOCATOR_HAS_ALLOC | ALLOCATOR_HAS_REALLOC | ALLOCATOR_HAS_FREE,
     .alloc = _heap_alloc,
     .realloc = _heap_realloc,
     .free = _heap_free,
 };
+
+#endif
 
 #endif
