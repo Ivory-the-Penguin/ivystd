@@ -1,5 +1,5 @@
-#ifndef IVY_STD_LINMATH_H
-#define IVY_STD_LINMATH_H
+#ifndef IVY_LINMATH_H
+#define IVY_LINMATH_H
 
 typedef union {
   struct {
@@ -139,7 +139,7 @@ typedef union {
   float elements[4];
 } quat_t;
 
-#ifdef IVY_STD_IMPL
+#ifdef IVY_IMPL
 
 #endif
 

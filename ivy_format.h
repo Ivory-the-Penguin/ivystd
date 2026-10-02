@@ -1,5 +1,5 @@
-#ifndef IVY_STD_FORMAT_H
-#define IVY_STD_FORMAT_H
+#ifndef IVY_FORMAT_H
+#define IVY_FORMAT_H
 
 #include "ivy_allocator.h"
 #include "ivy_sb.h"
@@ -45,7 +45,7 @@ static inline void ivy_print_file(FILE *file, const char *fmt, ...) {
   FREE(heap, (void *)view.data);
 }
 
-#ifdef IVY_STD_IMPL
+#ifdef IVY_IMPL
 
 string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
                               va_list args) {

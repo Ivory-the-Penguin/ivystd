@@ -1,5 +1,5 @@
-#ifndef IVY_STD_SB_H
-#define IVY_STD_SB_H
+#ifndef IVY_SB_H
+#define IVY_SB_H
 
 #include "ivy_allocator.h"
 #include "ivy_assert.h"

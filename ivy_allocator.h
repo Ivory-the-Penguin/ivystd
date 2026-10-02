@@ -1,7 +1,7 @@
 // You can't change the default allocators for the heap.
 // BUT you can just make another allocator
-#ifndef IVY_STD_ALLOCATOR_H
-#define IVY_STD_ALLOCATOR_H
+#ifndef IVY_ALLOCATOR_H
+#define IVY_ALLOCATOR_H
 
 #include "ivy_assert.h"
 #include <stdbool.h>
@@ -64,7 +64,7 @@ static inline void _heap_free(allocator_t *self, void *ptr) {
 
 extern allocator_t heap;
 
-#ifdef IVY_STD_IMPL
+#ifdef IVY_IMPL
 
 allocator_t heap = (allocator_t){
     .ctx = NULL,
