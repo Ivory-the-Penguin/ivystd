@@ -85,7 +85,7 @@ IVY_FORCE_INLINE void sv_trim(string_view_t *sv) {
 // Recommended to use ivy_format instead of this.
 IVY_FORCE_INLINE string_view_t sv_combine(allocator_t alloc, string_view_t a,
                                           string_view_t b) {
-  char *new_buffer = (char *)ALLOC(alloc, a.length + b.length + 1);
+  char *new_buffer = (char *)ivy_alloc(alloc, a.length + b.length + 1);
   memcpy(new_buffer, a.data, a.length);
   memcpy(new_buffer + a.length, b.data, b.length);
   new_buffer[a.length + b.length] = '\0';
@@ -280,7 +280,7 @@ string_view_t sv_from_int(allocator_t alloc, int64_t n) {
   }
   length = (length == 0 ? 0 : length - 1) + is_negative;
 
-  char *buffer = ALLOC(alloc, length + 2);
+  char *buffer = ivy_alloc(alloc, length + 2);
 
   if (is_negative) {
     buffer[0] = '-';
@@ -307,7 +307,7 @@ string_view_t sv_from_uint(allocator_t alloc, uint64_t n) {
   }
   length = (length == 0 ? 0 : length - 1);
 
-  char *buffer = ALLOC(alloc, length + 2);
+  char *buffer = ivy_alloc(alloc, length + 2);
 
   for (int64_t i = length; i >= 0; i--) {
     *(buffer + i) = (n % 10) + '0';

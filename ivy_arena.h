@@ -22,7 +22,7 @@ IVY_FORCE_INLINE arena_t arena_make(uint8_t *buffer, uint64_t n) {
 IVY_FORCE_INLINE void *_arena_alloc(allocator_t *self, uint64_t bytes) {
   arena_t *ctx = (arena_t *)self->ctx;
 
-  uint64_t aligned_bytes = ALIGN_BYTES(bytes);
+  uint64_t aligned_bytes = align_bytes(bytes);
 
   IVY_ASSERT(ctx->offset + aligned_bytes <= ctx->capacity,
              "Arena ran out of memory!");

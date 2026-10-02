@@ -5,22 +5,6 @@
 
 #include "ivy_core.h"
 
-#define ALIGN_BYTES(bytes) (uint64_t)(((bytes) + 15) & ~15)
-
-#define ALLOC(allocator, size)                                                 \
-  (IVY_ASSERT(allocator_has_flag((allocator), ALLOCATOR_HAS_ALLOC),            \
-              "Allocator doesn't have ALLOC capability"),                      \
-   (allocator).alloc(&(allocator), (size)))
-
-#define REALLOC(allocator, ptr, new_size)                                      \
-  (IVY_ASSERT(allocator_has_flag((allocator), ALLOCATOR_HAS_REALLOC),          \
-              "Allocator doesn't have REALLOC capability"),                    \
-   (allocator).realloc(&(allocator), (ptr), (new_size)))
-#define FREE(allocator, ptr)                                                   \
-  (allocator_has_flag((allocator), ALLOCATOR_HAS_FREE)                         \
-       ? (allocator).free(&(allocator), (ptr))                                 \
-       : (void)0)
-
 typedef enum {
   ALLOCATOR_HAS_ALLOC = 1 << 0,
   ALLOCATOR_HAS_REALLOC = 1 << 1,
@@ -36,9 +20,32 @@ typedef struct allocator_t {
   void (*free)(struct allocator_t *self, void *ptr);
 } allocator_t;
 
+IVY_FORCE_INLINE uint64_t align_bytes(uint64_t bytes) {
+  return (uint64_t)((bytes + 15) & ~15);
+}
+
 IVY_FORCE_INLINE bool allocator_has_flag(allocator_t alloc,
                                          allocator_flag_t flag) {
   return (alloc.flags & flag) > 0;
+}
+
+IVY_FORCE_INLINE void *ivy_alloc(allocator_t alloc, uint64_t size) {
+  IVY_ASSERT(allocator_has_flag(alloc, ALLOCATOR_HAS_ALLOC),
+             "Allocator doesn't have allocation capability");
+  return alloc.alloc(&alloc, size);
+}
+
+IVY_FORCE_INLINE void *ivy_realloc(allocator_t alloc, void *ptr,
+                                   uint64_t new_size) {
+  IVY_ASSERT(allocator_has_flag(alloc, ALLOCATOR_HAS_REALLOC),
+             "Allocator doesn't have reallocation capability");
+  return alloc.realloc(&alloc, ptr, new_size);
+}
+
+IVY_FORCE_INLINE void ivy_free(allocator_t alloc, void *ptr) {
+  if (allocator_has_flag(alloc, ALLOCATOR_HAS_FREE)) {
+    alloc.free(&alloc, ptr);
+  }
 }
 
 IVY_FORCE_INLINE void *_heap_alloc(allocator_t *self, uint64_t size) {

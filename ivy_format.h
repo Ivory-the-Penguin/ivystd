@@ -26,7 +26,7 @@ IVY_FORCE_INLINE void ivy_print(const char *fmt, ...) {
 
   fwrite(view.data, sizeof(char), view.length, stdout);
 
-  FREE(heap, (void *)view.data);
+  ivy_free(heap, (void *)view.data);
 }
 
 IVY_FORCE_INLINE void ivy_print_file(FILE *file, const char *fmt, ...) {
@@ -37,7 +37,7 @@ IVY_FORCE_INLINE void ivy_print_file(FILE *file, const char *fmt, ...) {
 
   fwrite(view.data, sizeof(char), view.length, file);
 
-  FREE(heap, (void *)view.data);
+  ivy_free(heap, (void *)view.data);
 }
 
 #ifdef IVY_IMPL
