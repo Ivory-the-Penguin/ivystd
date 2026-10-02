@@ -4,8 +4,8 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "allocator.h"
-#include "assert.h"
+#include "ivy_allocator.h"
+#include "ivy_assert.h"
 
 typedef struct {
   uint8_t *buffer;

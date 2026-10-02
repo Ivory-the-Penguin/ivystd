@@ -3,7 +3,7 @@
 #ifndef IVY_STD_ALLOCATOR_H
 #define IVY_STD_ALLOCATOR_H
 
-#include "assert.h"
+#include "ivy_assert.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
