@@ -111,6 +111,15 @@ string_view_t sv_from_int(allocator_t alloc, int64_t n);
 // Has a secret '\0' in the end.
 string_view_t sv_from_uint(allocator_t alloc, uint64_t n);
 
+#define sv_from(alloc, n)                                                      \
+  _Generic((n),                                                                \
+      int: sv_from_int,                                                        \
+      long: sv_from_int,                                                       \
+      long long: sv_from_int,                                                  \
+      unsigned int: sv_from_uint,                                              \
+      unsigned long: sv_from_uint,                                             \
+      unsigned long long: sv_from_uint)(alloc, n)
+
 #ifdef IVY_IMPL
 
 string_view_t sv_chop_by_delimiter(string_view_t *sv, char delimiter) {
