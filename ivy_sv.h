@@ -11,7 +11,7 @@
 #include <string.h>
 
 #include "ivy_allocator.h"
-#include "ivy_assert.h"
+#include "ivy_core.h"
 
 typedef struct {
   const char *data;

@@ -3,10 +3,7 @@
 #ifndef IVY_ALLOCATOR_H
 #define IVY_ALLOCATOR_H
 
-#include "ivy_assert.h"
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdlib.h>
+#include "ivy_core.h"
 
 #define ALIGN_BYTES(bytes) (uint64_t)(((bytes) + 15) & ~15)
 

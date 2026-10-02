@@ -1,11 +1,8 @@
 #ifndef IVY_ARENA_H
 #define IVY_ARENA_H
 
-#include <stdint.h>
-#include <string.h>
-
 #include "ivy_allocator.h"
-#include "ivy_assert.h"
+#include "ivy_core.h"
 
 typedef struct {
   uint8_t *buffer;

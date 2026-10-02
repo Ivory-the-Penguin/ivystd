@@ -4,11 +4,6 @@
 #include "ivy_allocator.h"
 #include "ivy_sb.h"
 #include "ivy_sv.h"
-#include <math.h>
-#include <stdarg.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <string.h>
 
 // Has a secret '\0' in the end.
 string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,

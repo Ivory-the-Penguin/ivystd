@@ -2,7 +2,7 @@
 #define IVY_SB_H
 
 #include "ivy_allocator.h"
-#include "ivy_assert.h"
+#include "ivy_core.h"
 #include "ivy_sv.h"
 #include <stdint.h>
 #include <string.h>
