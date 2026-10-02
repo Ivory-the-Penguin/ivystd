@@ -9,8 +9,8 @@
 string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
                               va_list args);
 
-static inline string_view_t ivy_format(allocator_t alloc, string_view_t fmt,
-                                       ...) {
+IVY_FORCE_INLINE string_view_t ivy_format(allocator_t alloc, string_view_t fmt,
+                                          ...) {
   va_list args;
   va_start(args, fmt);
   string_view_t view = _ivy_format_raw(alloc, fmt, args);
@@ -18,7 +18,7 @@ static inline string_view_t ivy_format(allocator_t alloc, string_view_t fmt,
   return view;
 }
 
-static inline void ivy_print(const char *fmt, ...) {
+IVY_FORCE_INLINE void ivy_print(const char *fmt, ...) {
   va_list args;
   va_start(args, fmt);
   string_view_t view = _ivy_format_raw(heap, SV(fmt), args);
@@ -29,7 +29,7 @@ static inline void ivy_print(const char *fmt, ...) {
   FREE(heap, (void *)view.data);
 }
 
-static inline void ivy_print_file(FILE *file, const char *fmt, ...) {
+IVY_FORCE_INLINE void ivy_print_file(FILE *file, const char *fmt, ...) {
   va_list args;
   va_start(args, fmt);
   string_view_t view = _ivy_format_raw(heap, SV(fmt), args);

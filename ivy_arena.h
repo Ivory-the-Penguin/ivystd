@@ -10,7 +10,7 @@ typedef struct {
   uint64_t capacity;
 } arena_t;
 
-static inline arena_t arena_make(uint8_t *buffer, uint64_t n) {
+IVY_FORCE_INLINE arena_t arena_make(uint8_t *buffer, uint64_t n) {
   memset(buffer, 0, n);
   return (arena_t){
       .buffer = buffer,
@@ -19,7 +19,7 @@ static inline arena_t arena_make(uint8_t *buffer, uint64_t n) {
   };
 }
 
-static inline void *_arena_alloc(allocator_t *self, uint64_t bytes) {
+IVY_FORCE_INLINE void *_arena_alloc(allocator_t *self, uint64_t bytes) {
   arena_t *ctx = (arena_t *)self->ctx;
 
   uint64_t aligned_bytes = ALIGN_BYTES(bytes);
@@ -32,7 +32,7 @@ static inline void *_arena_alloc(allocator_t *self, uint64_t bytes) {
   return ctx->buffer + ctx->offset - aligned_bytes;
 }
 
-static inline allocator_t arena_make_allocator(arena_t *arena) {
+IVY_FORCE_INLINE allocator_t arena_make_allocator(arena_t *arena) {
   return (allocator_t){
       .ctx = (void *)arena,
       .flags = ALLOCATOR_HAS_ALLOC,
@@ -40,7 +40,7 @@ static inline allocator_t arena_make_allocator(arena_t *arena) {
   };
 }
 
-static inline void arena_clear(arena_t *arena) {
+IVY_FORCE_INLINE void arena_clear(arena_t *arena) {
   memset(arena->buffer, 0, arena->offset);
   arena->offset = 0;
 }

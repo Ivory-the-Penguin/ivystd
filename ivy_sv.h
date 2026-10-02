@@ -31,7 +31,7 @@ typedef struct {
 0 means a is equal to b,
 1 means a is bigger than b,
 */
-static inline int8_t sv_compare(string_view_t a, string_view_t b) {
+IVY_FORCE_INLINE int8_t sv_compare(string_view_t a, string_view_t b) {
   int cmp = memcmp(a.data, b.data, (a.length < b.length ? a.length : b.length));
 
   if (cmp == 0) {
@@ -45,7 +45,7 @@ static inline int8_t sv_compare(string_view_t a, string_view_t b) {
   return (cmp > 0 ? 1 : -1);
 }
 
-static inline bool sv_has_prefix(string_view_t sv, string_view_t prefix) {
+IVY_FORCE_INLINE bool sv_has_prefix(string_view_t sv, string_view_t prefix) {
   if (prefix.length > sv.length) {
     return false;
   }
@@ -53,38 +53,38 @@ static inline bool sv_has_prefix(string_view_t sv, string_view_t prefix) {
   return memcmp(sv.data, prefix.data, prefix.length) == 0;
 }
 
-static inline void sv_chop_left(string_view_t *sv, uint64_t n) {
+IVY_FORCE_INLINE void sv_chop_left(string_view_t *sv, uint64_t n) {
   IVY_ASSERT(sv->length >= n, "String view is too small to be chopped");
   sv->data += n;
   sv->length -= n;
 }
 
-static inline void sv_chop_right(string_view_t *sv, uint64_t n) {
+IVY_FORCE_INLINE void sv_chop_right(string_view_t *sv, uint64_t n) {
   IVY_ASSERT(sv->length >= n, "String view is too small to be chopped");
   sv->length -= n;
 }
 
-static inline void sv_trim_left(string_view_t *sv) {
+IVY_FORCE_INLINE void sv_trim_left(string_view_t *sv) {
   while (sv->length > 0 && isspace((unsigned char)sv->data[0])) {
     sv_chop_left(sv, 1);
   }
 }
 
-static inline void sv_trim_right(string_view_t *sv) {
+IVY_FORCE_INLINE void sv_trim_right(string_view_t *sv) {
   while (sv->length > 0 && isspace((unsigned char)sv->data[sv->length - 1])) {
     sv_chop_right(sv, 1);
   }
 }
 
-static inline void sv_trim(string_view_t *sv) {
+IVY_FORCE_INLINE void sv_trim(string_view_t *sv) {
   sv_trim_left(sv);
   sv_trim_right(sv);
 }
 
 // Has a secret '\0' in the end.
 // Recommended to use ivy_format instead of this.
-static inline string_view_t sv_combine(allocator_t alloc, string_view_t a,
-                                       string_view_t b) {
+IVY_FORCE_INLINE string_view_t sv_combine(allocator_t alloc, string_view_t a,
+                                          string_view_t b) {
   char *new_buffer = (char *)ALLOC(alloc, a.length + b.length + 1);
   memcpy(new_buffer, a.data, a.length);
   memcpy(new_buffer + a.length, b.data, b.length);

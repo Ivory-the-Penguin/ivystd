@@ -16,8 +16,8 @@ typedef struct {
 
 #define SB_MINIMUM_CAPACITY 16
 
-static inline string_builder_t sb_make_with_reserved(allocator_t alloc,
-                                                     uint64_t capacity) {
+IVY_FORCE_INLINE string_builder_t sb_make_with_reserved(allocator_t alloc,
+                                                        uint64_t capacity) {
   IVY_ASSERT(capacity > 0, "Capacity can't be zero");
 
   return (string_builder_t){
@@ -28,8 +28,8 @@ static inline string_builder_t sb_make_with_reserved(allocator_t alloc,
   };
 }
 
-static inline string_builder_t sb_make_from_sv(allocator_t alloc,
-                                               string_view_t sv) {
+IVY_FORCE_INLINE string_builder_t sb_make_from_sv(allocator_t alloc,
+                                                  string_view_t sv) {
   IVY_ASSERT(sv.data != NULL, "String view is NULL");
   IVY_ASSERT(sv.length > 0, "String view can't be empty. Use "
                             "sb_make_with_reserved or sb_make instead");
@@ -41,11 +41,11 @@ static inline string_builder_t sb_make_from_sv(allocator_t alloc,
   return sb;
 }
 
-static inline string_builder_t sb_make(allocator_t alloc) {
+IVY_FORCE_INLINE string_builder_t sb_make(allocator_t alloc) {
   return sb_make_with_reserved(alloc, SB_MINIMUM_CAPACITY);
 }
 
-static inline void sb_free(string_builder_t *sb) {
+IVY_FORCE_INLINE void sb_free(string_builder_t *sb) {
   IVY_ASSERT(sb->data != NULL && sb->capacity > 0,
              "String builder can't be uninitialized or freed");
 
@@ -55,7 +55,7 @@ static inline void sb_free(string_builder_t *sb) {
   sb->capacity = 0;
 }
 
-static inline void sb_expand(string_builder_t *sb, uint64_t capacity) {
+IVY_FORCE_INLINE void sb_expand(string_builder_t *sb, uint64_t capacity) {
   IVY_ASSERT(sb->capacity < capacity, "New capacity has to be bigger than old");
 
   sb->data = (char *)REALLOC(sb->alloc, sb->data,
@@ -63,7 +63,7 @@ static inline void sb_expand(string_builder_t *sb, uint64_t capacity) {
   sb->capacity = ALIGN_BYTES(capacity);
 }
 
-static inline void sb_append_char(string_builder_t *sb, char c) {
+IVY_FORCE_INLINE void sb_append_char(string_builder_t *sb, char c) {
   if (sb->length + 1 > sb->capacity) {
     sb_expand(sb, sb->capacity * 2);
   }
@@ -71,7 +71,7 @@ static inline void sb_append_char(string_builder_t *sb, char c) {
   sb->data[sb->length++] = c;
 }
 
-static inline void sb_append_sv(string_builder_t *sb, string_view_t sv) {
+IVY_FORCE_INLINE void sb_append_sv(string_builder_t *sb, string_view_t sv) {
   if (sb->length + sv.length > sb->capacity) {
     sb_expand(sb, sb->length + sv.length);
   }
@@ -81,7 +81,7 @@ static inline void sb_append_sv(string_builder_t *sb, string_view_t sv) {
 }
 
 // Use this sparingly
-static inline void sb_pop(string_builder_t *sb, uint64_t amount) {
+IVY_FORCE_INLINE void sb_pop(string_builder_t *sb, uint64_t amount) {
   IVY_ASSERT(amount <= sb->length,
              "Popping amount exceeds string builder length");
 
@@ -89,7 +89,8 @@ static inline void sb_pop(string_builder_t *sb, uint64_t amount) {
   sb->length -= amount;
 }
 
-static inline string_view_t sb_to_sv(allocator_t alloc, string_builder_t *sb) {
+IVY_FORCE_INLINE string_view_t sb_to_sv(allocator_t alloc,
+                                        string_builder_t *sb) {
   char *buffer = (char *)ALLOC(alloc, sb->length + 1);
 
   memcpy(buffer, sb->data, sb->length);

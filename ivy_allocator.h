@@ -36,24 +36,24 @@ typedef struct allocator_t {
   void (*free)(struct allocator_t *self, void *ptr);
 } allocator_t;
 
-static inline bool allocator_has_flag(allocator_t alloc,
-                                      allocator_flag_t flag) {
+IVY_FORCE_INLINE bool allocator_has_flag(allocator_t alloc,
+                                         allocator_flag_t flag) {
   return (alloc.flags & flag) > 0;
 }
 
-static inline void *_heap_alloc(allocator_t *self, uint64_t size) {
+IVY_FORCE_INLINE void *_heap_alloc(allocator_t *self, uint64_t size) {
   (void)self;
   IVY_ASSERT(size > 0, "Size can't be zero");
   return malloc(((uint64_t)size));
 }
 
-static inline void *_heap_realloc(allocator_t *self, void *ptr,
-                                  uint64_t new_size) {
+IVY_FORCE_INLINE void *_heap_realloc(allocator_t *self, void *ptr,
+                                     uint64_t new_size) {
   (void)self;
   return realloc(ptr, new_size);
 }
 
-static inline void _heap_free(allocator_t *self, void *ptr) {
+IVY_FORCE_INLINE void _heap_free(allocator_t *self, void *ptr) {
   (void)self;
   IVY_ASSERT(ptr != NULL, "Pointer can't be uninitialized or already freed");
   free(ptr);
