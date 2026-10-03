@@ -209,9 +209,6 @@ IVY_FORCE_INLINE vec4_t vec4_add(vec4_t a, vec4_t b) {
   return vec4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
 }
 
-#define vec_add(a, b)                                                          \
-  _Generic((a), vec2_t: vec2_add, vec3_t: vec3_add, vec4_t: vec4_add)(a, b)
-
 IVY_FORCE_INLINE vec2_t vec2_sub(vec2_t a, vec2_t b) {
   return vec2(a.x - b.x, a.y - b.y);
 }
@@ -224,8 +221,41 @@ IVY_FORCE_INLINE vec4_t vec4_sub(vec4_t a, vec4_t b) {
   return vec4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
 }
 
+IVY_FORCE_INLINE vec2_t vec2_mul(vec2_t a, vec2_t b) {
+  return vec2(a.x * b.x, a.y * b.y);
+}
+
+IVY_FORCE_INLINE vec3_t vec3_mul(vec3_t a, vec3_t b) {
+  return vec3(a.x * b.x, a.y * b.y, a.z * b.z);
+}
+
+IVY_FORCE_INLINE vec4_t vec4_mul(vec4_t a, vec4_t b) {
+  return vec4(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
+}
+
+IVY_FORCE_INLINE vec2_t vec2_div(vec2_t a, vec2_t b) {
+  return vec2(a.x / b.x, a.y / b.y);
+}
+
+IVY_FORCE_INLINE vec3_t vec3_div(vec3_t a, vec3_t b) {
+  return vec3(a.x / b.x, a.y / b.y, a.z / b.z);
+}
+
+IVY_FORCE_INLINE vec4_t vec4_div(vec4_t a, vec4_t b) {
+  return vec4(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w);
+}
+
+#define vec_add(a, b)                                                          \
+  _Generic((a), vec2_t: vec2_add, vec3_t: vec3_add, vec4_t: vec4_add)(a, b)
+
 #define vec_sub(a, b)                                                          \
   _Generic((a), vec2_t: vec2_sub, vec3_t: vec3_sub, vec4_t: vec4_sub)(a, b)
+
+#define vec_mul(a, b)                                                          \
+  _Generic((a), vec2_t: vec2_mul, vec3_t: vec3_mul, vec4_t: vec4_mul)(a, b)
+
+#define vec_div(a, b)                                                          \
+  _Generic((a), vec2_t: vec2_div, vec3_t: vec3_div, vec4_t: vec4_div)(a, b)
 
 #ifdef IVY_IMPL
 
