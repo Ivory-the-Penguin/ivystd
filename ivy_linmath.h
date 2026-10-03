@@ -368,6 +368,11 @@ IVY_FORCE_INLINE vec4_t vec4_norm(vec4_t vec) {
 #define vec_norm(vec)                                                          \
   _Generic((vec), vec2_t: vec2_norm, vec3_t: vec3_norm, vec4_t: vec4_norm)(vec)
 
+IVY_FORCE_INLINE vec3_t vec3_cross(vec3_t a, vec3_t b) {
+  return vec3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z,
+              a.x * b.y - a.y * b.x);
+}
+
 #ifdef IVY_IMPL
 
 #endif
