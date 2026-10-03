@@ -471,6 +471,15 @@ mat4_t mat4_mul(mat4_t a, mat4_t b);
   _Generic((vec), vec2_t: vec2_refl, vec3_t: vec3_refl, vec4_t: vec4_refl)(    \
       (vec), (norm))
 
+#define mat_mul_vec(mat, vec)                                                  \
+  _Generic((mat),                                                              \
+      mat2_t: mat2_mul_vec2,                                                   \
+      mat3_t: mat3_mul_vec3,                                                   \
+      mat4_t: mat4_mul_vec4)((mat), (vec))
+
+#define mat_mul(a, b)                                                          \
+  _Generic((a), mat2_t: mat2_mul, mat3_t: mat3_mul, mat4_t: mat4_mul)((a), (b))
+
 #ifdef IVY_IMPL
 
 mat2_t mat2_mul(mat2_t a, mat2_t b) {
