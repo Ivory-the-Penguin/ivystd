@@ -434,9 +434,18 @@ IVY_FORCE_INLINE mat4_t mat4_mul(mat4_t a, mat4_t b) {
   return out;
 }
 
-static inline mat4_t mat4_trans(vec3_t trans) {
+IVY_FORCE_INLINE mat4_t mat4_trans(vec3_t trans) {
   mat4_t out = mat4(1.0f);
   out.columns[3] = vec4(trans.x, trans.y, trans.z, 1.0f);
+
+  return out;
+}
+
+IVY_FORCE_INLINE mat4_t mat4_scale(vec3_t scale) {
+  mat4_t out = mat4(1.0f);
+  out.elements[0][0] = scale.x;
+  out.elements[1][1] = scale.y;
+  out.elements[2][2] = scale.z;
 
   return out;
 }
