@@ -430,8 +430,13 @@ IVY_FORCE_INLINE vec3_t vec3_refl(vec3_t vec, vec3_t norm) {
   return vec3_sub(vec, vec3_mul_s(norm, 2.0f * vec3_dot(vec, norm)));
 }
 
+IVY_FORCE_INLINE vec4_t vec4_refl(vec4_t vec, vec4_t norm) {
+  return vec4_sub(vec, vec4_mul_s(norm, 2.0f * vec4_dot(vec, norm)));
+}
+
 #define vec_refl(vec, norm)                                                    \
-  _Generic((vec), vec2_t: vec2_refl, vec3_t: vec3_refl)(vec, norm)
+  _Generic((vec), vec2_t: vec2_refl, vec3_t: vec3_refl, vec4_t: vec4_refl)(    \
+      vec, norm)
 
 #ifdef IVY_IMPL
 
