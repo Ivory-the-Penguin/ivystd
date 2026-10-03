@@ -434,6 +434,13 @@ IVY_FORCE_INLINE mat4_t mat4_mul(mat4_t a, mat4_t b) {
   return out;
 }
 
+static inline mat4_t mat4_trans(vec3_t trans) {
+  mat4_t out = mat4(1.0f);
+  out.columns[3] = vec4(trans.x, trans.y, trans.z, 1.0f);
+
+  return out;
+}
+
 // Generic macros
 #define vec_add(a, b)                                                          \
   _Generic((a), vec2_t: vec2_add, vec3_t: vec3_add, vec4_t: vec4_add)((a), (b))
