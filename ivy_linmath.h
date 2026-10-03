@@ -379,7 +379,7 @@ IVY_FORCE_INLINE vec4_t vec4_refl(vec4_t vec, vec4_t norm) {
   return vec4_sub(vec, vec4_mul_s(norm, 2.0f * vec4_dot(vec, norm)));
 }
 
-IVY_FORCE_INLINE vec2_t mat4_mul_vec2(mat2_t mat, vec2_t vec) {
+IVY_FORCE_INLINE vec2_t mat2_mul_vec2(mat2_t mat, vec2_t vec) {
   return vec2(mat.columns[0].x * vec.x + mat.columns[1].x * vec.y,
               mat.columns[0].y * vec.x + mat.columns[1].y * vec.y);
 }
@@ -403,6 +403,10 @@ IVY_FORCE_INLINE vec4_t mat4_mul_vec4(mat4_t mat, vec4_t vec) {
               mat.columns[0].w * vec.x + mat.columns[1].w * vec.y +
                   mat.columns[2].w * vec.z + mat.columns[3].w * vec.w);
 }
+
+mat2_t mat2_mul(mat2_t a, mat2_t b);
+mat3_t mat3_mul(mat3_t a, mat3_t b);
+mat4_t mat4_mul(mat4_t a, mat4_t b);
 
 // Generic macros
 #define vec_add(a, b)                                                          \
@@ -468,6 +472,36 @@ IVY_FORCE_INLINE vec4_t mat4_mul_vec4(mat4_t mat, vec4_t vec) {
       (vec), (norm))
 
 #ifdef IVY_IMPL
+
+mat2_t mat2_mul(mat2_t a, mat2_t b) {
+  mat2_t out = mat2(0.0f);
+
+  out.columns[0] = mat2_mul_vec2(a, b.columns[0]);
+  out.columns[1] = mat2_mul_vec2(a, b.columns[1]);
+
+  return out;
+}
+
+mat3_t mat3_mul(mat3_t a, mat3_t b) {
+  mat3_t out = mat3(0.0f);
+
+  out.columns[0] = mat3_mul_vec3(a, b.columns[0]);
+  out.columns[1] = mat3_mul_vec3(a, b.columns[1]);
+  out.columns[2] = mat3_mul_vec3(a, b.columns[2]);
+
+  return out;
+}
+
+mat4_t mat4_mul(mat4_t a, mat4_t b) {
+  mat4_t out = mat4(0.0f);
+
+  out.columns[0] = mat4_mul_vec4(a, b.columns[0]);
+  out.columns[1] = mat4_mul_vec4(a, b.columns[1]);
+  out.columns[2] = mat4_mul_vec4(a, b.columns[2]);
+  out.columns[3] = mat4_mul_vec4(a, b.columns[3]);
+
+  return out;
+}
 
 #endif
 
