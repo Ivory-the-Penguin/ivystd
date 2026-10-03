@@ -336,6 +336,23 @@ IVY_FORCE_INLINE float vec4_dot(vec4_t a, vec4_t b) {
 #define vec_dot(a, b)                                                          \
   _Generic((a), vec2_t: vec2_dot, vec3_t: vec3_dot, vec4_t: vec4_dot)(a, b)
 
+IVY_FORCE_INLINE float vec2_len_sq(vec2_t vec) { return vec2_dot(vec, vec); }
+IVY_FORCE_INLINE float vec3_len_sq(vec3_t vec) { return vec3_dot(vec, vec); }
+IVY_FORCE_INLINE float vec4_len_sq(vec4_t vec) { return vec4_dot(vec, vec); }
+
+IVY_FORCE_INLINE float vec2_len(vec2_t vec) { return sqrtf(vec2_len_sq(vec)); }
+IVY_FORCE_INLINE float vec3_len(vec3_t vec) { return sqrtf(vec3_len_sq(vec)); }
+IVY_FORCE_INLINE float vec4_len(vec4_t vec) { return sqrtf(vec4_len_sq(vec)); }
+
+#define vec_len_sq(vec)                                                        \
+  _Generic((vec),                                                              \
+      vec2_t: vec2_len_sq,                                                     \
+      vec3_t: vec3_len_sq,                                                     \
+      vec4_t: vec4_len_sq)(vec)
+
+#define vec_len(vec)                                                           \
+  _Generic((vec), vec2_t: vec2_len, vec3_t: vec3_len, vec4_t: vec4_len)(vec)
+
 #ifdef IVY_IMPL
 
 #endif
