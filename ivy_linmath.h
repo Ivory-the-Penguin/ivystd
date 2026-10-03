@@ -413,15 +413,14 @@ IVY_FORCE_INLINE float vec4_dist(vec4_t a, vec4_t b) {
   return vec4_len(vec4_sub(a, b));
 }
 
-#define vec_dist_sq(a, b, t)                                                   \
+#define vec_dist_sq(a, b)                                                      \
   _Generic((a),                                                                \
       vec2_t: vec2_dist_sq,                                                    \
       vec3_t: vec3_dist_sq,                                                    \
-      vec4_t: vec4_dist_sq)(a, b, t)
+      vec4_t: vec4_dist_sq)(a, b)
 
-#define vec_dist(a, b, t)                                                      \
-  _Generic((a), vec2_t: vec2_dist, vec3_t: vec3_dist, vec4_t: vec4_dist)(a, b, \
-                                                                         t)
+#define vec_dist(a, b)                                                         \
+  _Generic((a), vec2_t: vec2_dist, vec3_t: vec3_dist, vec4_t: vec4_dist)(a, b)
 
 IVY_FORCE_INLINE vec2_t vec2_refl(vec2_t vec, vec2_t norm) {
   return vec2_sub(vec, vec2_mul_s(norm, 2.0f * vec2_dot(vec, norm)));
