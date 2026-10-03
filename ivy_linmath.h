@@ -2,6 +2,7 @@
 #define IVY_LINMATH_H
 
 #include "ivy_core.h"
+
 typedef union {
   struct {
     float x;
@@ -245,18 +246,6 @@ IVY_FORCE_INLINE vec4_t vec4_div(vec4_t a, vec4_t b) {
   return vec4(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w);
 }
 
-#define vec_add(a, b)                                                          \
-  _Generic((a), vec2_t: vec2_add, vec3_t: vec3_add, vec4_t: vec4_add)(a, b)
-
-#define vec_sub(a, b)                                                          \
-  _Generic((a), vec2_t: vec2_sub, vec3_t: vec3_sub, vec4_t: vec4_sub)(a, b)
-
-#define vec_mul(a, b)                                                          \
-  _Generic((a), vec2_t: vec2_mul, vec3_t: vec3_mul, vec4_t: vec4_mul)(a, b)
-
-#define vec_div(a, b)                                                          \
-  _Generic((a), vec2_t: vec2_div, vec3_t: vec3_div, vec4_t: vec4_div)(a, b)
-
 IVY_FORCE_INLINE vec2_t vec2_add_s(vec2_t vec, float scalar) {
   return vec2(vec.x + scalar, vec.y + scalar);
 }
@@ -305,22 +294,6 @@ IVY_FORCE_INLINE vec4_t vec4_div_s(vec4_t vec, float scalar) {
   return vec4(vec.x / scalar, vec.y / scalar, vec.z / scalar, vec.w / scalar);
 }
 
-#define vec_add_s(vec, scalar)                                                 \
-  _Generic((vec), vec2_t: vec2_add_s, vec3_t: vec3_add_s, vec4_t: vec4_add_s)( \
-      vec, scalar)
-
-#define vec_sub_s(vec, scalar)                                                 \
-  _Generic((vec), vec2_t: vec2_sub_s, vec3_t: vec3_sub_s, vec4_t: vec4_sub_s)( \
-      vec, scalar)
-
-#define vec_mul_s(vec, scalar)                                                 \
-  _Generic((vec), vec2_t: vec2_mul_s, vec3_t: vec3_mul_s, vec4_t: vec4_mul_s)( \
-      vec, scalar)
-
-#define vec_div_s(vec, scalar)                                                 \
-  _Generic((vec), vec2_t: vec2_div_s, vec3_t: vec3_div_s, vec4_t: vec4_div_s)( \
-      vec, scalar)
-
 IVY_FORCE_INLINE float vec2_dot(vec2_t a, vec2_t b) {
   return a.x * b.x + a.y * b.y;
 }
@@ -333,9 +306,6 @@ IVY_FORCE_INLINE float vec4_dot(vec4_t a, vec4_t b) {
   return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
-#define vec_dot(a, b)                                                          \
-  _Generic((a), vec2_t: vec2_dot, vec3_t: vec3_dot, vec4_t: vec4_dot)(a, b)
-
 IVY_FORCE_INLINE float vec2_len_sq(vec2_t vec) { return vec2_dot(vec, vec); }
 IVY_FORCE_INLINE float vec3_len_sq(vec3_t vec) { return vec3_dot(vec, vec); }
 IVY_FORCE_INLINE float vec4_len_sq(vec4_t vec) { return vec4_dot(vec, vec); }
@@ -343,15 +313,6 @@ IVY_FORCE_INLINE float vec4_len_sq(vec4_t vec) { return vec4_dot(vec, vec); }
 IVY_FORCE_INLINE float vec2_len(vec2_t vec) { return sqrtf(vec2_len_sq(vec)); }
 IVY_FORCE_INLINE float vec3_len(vec3_t vec) { return sqrtf(vec3_len_sq(vec)); }
 IVY_FORCE_INLINE float vec4_len(vec4_t vec) { return sqrtf(vec4_len_sq(vec)); }
-
-#define vec_len_sq(vec)                                                        \
-  _Generic((vec),                                                              \
-      vec2_t: vec2_len_sq,                                                     \
-      vec3_t: vec3_len_sq,                                                     \
-      vec4_t: vec4_len_sq)(vec)
-
-#define vec_len(vec)                                                           \
-  _Generic((vec), vec2_t: vec2_len, vec3_t: vec3_len, vec4_t: vec4_len)(vec)
 
 IVY_FORCE_INLINE vec2_t vec2_norm(vec2_t vec) {
   return vec2_div_s(vec, vec2_len(vec));
@@ -364,9 +325,6 @@ IVY_FORCE_INLINE vec3_t vec3_norm(vec3_t vec) {
 IVY_FORCE_INLINE vec4_t vec4_norm(vec4_t vec) {
   return vec4_div_s(vec, vec4_len(vec));
 }
-
-#define vec_norm(vec)                                                          \
-  _Generic((vec), vec2_t: vec2_norm, vec3_t: vec3_norm, vec4_t: vec4_norm)(vec)
 
 IVY_FORCE_INLINE vec3_t vec3_cross(vec3_t a, vec3_t b) {
   return vec3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z,
@@ -384,10 +342,6 @@ IVY_FORCE_INLINE vec3_t vec3_lerp(vec3_t a, vec3_t b, float t) {
 IVY_FORCE_INLINE vec4_t vec4_lerp(vec4_t a, vec4_t b, float t) {
   return vec4_add(a, vec4_mul_s(vec4_sub(b, a), t));
 }
-
-#define vec_lerp(a, b, t)                                                      \
-  _Generic((a), vec2_t: vec2_lerp, vec3_t: vec3_lerp, vec4_t: vec4_lerp)(a, b, \
-                                                                         t)
 
 IVY_FORCE_INLINE float vec2_dist_sq(vec2_t a, vec2_t b) {
   return vec2_len_sq(vec2_sub(a, b));
@@ -413,15 +367,6 @@ IVY_FORCE_INLINE float vec4_dist(vec4_t a, vec4_t b) {
   return vec4_len(vec4_sub(a, b));
 }
 
-#define vec_dist_sq(a, b)                                                      \
-  _Generic((a),                                                                \
-      vec2_t: vec2_dist_sq,                                                    \
-      vec3_t: vec3_dist_sq,                                                    \
-      vec4_t: vec4_dist_sq)(a, b)
-
-#define vec_dist(a, b)                                                         \
-  _Generic((a), vec2_t: vec2_dist, vec3_t: vec3_dist, vec4_t: vec4_dist)(a, b)
-
 IVY_FORCE_INLINE vec2_t vec2_refl(vec2_t vec, vec2_t norm) {
   return vec2_sub(vec, vec2_mul_s(norm, 2.0f * vec2_dot(vec, norm)));
 }
@@ -434,9 +379,68 @@ IVY_FORCE_INLINE vec4_t vec4_refl(vec4_t vec, vec4_t norm) {
   return vec4_sub(vec, vec4_mul_s(norm, 2.0f * vec4_dot(vec, norm)));
 }
 
+// Generic macros
+#define vec_add(a, b)                                                          \
+  _Generic((a), vec2_t: vec2_add, vec3_t: vec3_add, vec4_t: vec4_add)((a), (b))
+
+#define vec_sub(a, b)                                                          \
+  _Generic((a), vec2_t: vec2_sub, vec3_t: vec3_sub, vec4_t: vec4_sub)((a), (b))
+
+#define vec_mul(a, b)                                                          \
+  _Generic((a), vec2_t: vec2_mul, vec3_t: vec3_mul, vec4_t: vec4_mul)((a), (b))
+
+#define vec_div(a, b)                                                          \
+  _Generic((a), vec2_t: vec2_div, vec3_t: vec3_div, vec4_t: vec4_div)((a), (b))
+
+#define vec_add_s(vec, scalar)                                                 \
+  _Generic((vec), vec2_t: vec2_add_s, vec3_t: vec3_add_s, vec4_t: vec4_add_s)( \
+      (vec), (scalar))
+
+#define vec_sub_s(vec, scalar)                                                 \
+  _Generic((vec), vec2_t: vec2_sub_s, vec3_t: vec3_sub_s, vec4_t: vec4_sub_s)( \
+      (vec), (scalar))
+
+#define vec_mul_s(vec, scalar)                                                 \
+  _Generic((vec), vec2_t: vec2_mul_s, vec3_t: vec3_mul_s, vec4_t: vec4_mul_s)( \
+      (vec), (scalar))
+
+#define vec_div_s(vec, scalar)                                                 \
+  _Generic((vec), vec2_t: vec2_div_s, vec3_t: vec3_div_s, vec4_t: vec4_div_s)( \
+      (vec), (scalar))
+
+#define vec_dot(a, b)                                                          \
+  _Generic((a), vec2_t: vec2_dot, vec3_t: vec3_dot, vec4_t: vec4_dot)((a), (b))
+
+#define vec_len_sq(vec)                                                        \
+  _Generic((vec),                                                              \
+      vec2_t: vec2_len_sq,                                                     \
+      vec3_t: vec3_len_sq,                                                     \
+      vec4_t: vec4_len_sq)((vec))
+
+#define vec_len(vec)                                                           \
+  _Generic((vec), vec2_t: vec2_len, vec3_t: vec3_len, vec4_t: vec4_len)((vec))
+
+#define vec_norm(vec)                                                          \
+  _Generic((vec), vec2_t: vec2_norm, vec3_t: vec3_norm, vec4_t: vec4_norm)(    \
+      (vec))
+
+#define vec_lerp(a, b, t)                                                      \
+  _Generic((a), vec2_t: vec2_lerp, vec3_t: vec3_lerp, vec4_t: vec4_lerp)(      \
+      (a), (b), (t))
+
+#define vec_dist_sq(a, b)                                                      \
+  _Generic((a),                                                                \
+      vec2_t: vec2_dist_sq,                                                    \
+      vec3_t: vec3_dist_sq,                                                    \
+      vec4_t: vec4_dist_sq)((a), (b))
+
+#define vec_dist(a, b)                                                         \
+  _Generic((a), vec2_t: vec2_dist, vec3_t: vec3_dist, vec4_t: vec4_dist)((a),  \
+                                                                         (b))
+
 #define vec_refl(vec, norm)                                                    \
   _Generic((vec), vec2_t: vec2_refl, vec3_t: vec3_refl, vec4_t: vec4_refl)(    \
-      vec, norm)
+      (vec), (norm))
 
 #ifdef IVY_IMPL
 
