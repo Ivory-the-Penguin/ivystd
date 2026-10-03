@@ -379,6 +379,31 @@ IVY_FORCE_INLINE vec4_t vec4_refl(vec4_t vec, vec4_t norm) {
   return vec4_sub(vec, vec4_mul_s(norm, 2.0f * vec4_dot(vec, norm)));
 }
 
+IVY_FORCE_INLINE vec2_t mat4_mul_vec2(mat2_t mat, vec2_t vec) {
+  return vec2(mat.columns[0].x * vec.x + mat.columns[1].x * vec.y,
+              mat.columns[0].y * vec.x + mat.columns[1].y * vec.y);
+}
+
+IVY_FORCE_INLINE vec3_t mat3_mul_vec3(mat3_t mat, vec3_t vec) {
+  return vec3(mat.columns[0].x * vec.x + mat.columns[1].x * vec.y +
+                  mat.columns[2].x * vec.z,
+              mat.columns[0].y * vec.x + mat.columns[1].y * vec.y +
+                  mat.columns[2].y * vec.z,
+              mat.columns[0].z * vec.x + mat.columns[1].z * vec.y +
+                  mat.columns[2].z * vec.z);
+}
+
+IVY_FORCE_INLINE vec4_t mat4_mul_vec4(mat4_t mat, vec4_t vec) {
+  return vec4(mat.columns[0].x * vec.x + mat.columns[1].x * vec.y +
+                  mat.columns[2].x * vec.z + mat.columns[3].x * vec.w,
+              mat.columns[0].y * vec.x + mat.columns[1].y * vec.y +
+                  mat.columns[2].y * vec.z + mat.columns[3].y * vec.w,
+              mat.columns[0].z * vec.x + mat.columns[1].z * vec.y +
+                  mat.columns[2].z * vec.z + mat.columns[3].z * vec.w,
+              mat.columns[0].w * vec.x + mat.columns[1].w * vec.y +
+                  mat.columns[2].w * vec.z + mat.columns[3].w * vec.w);
+}
+
 // Generic macros
 #define vec_add(a, b)                                                          \
   _Generic((a), vec2_t: vec2_add, vec3_t: vec3_add, vec4_t: vec4_add)((a), (b))
