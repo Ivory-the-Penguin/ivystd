@@ -434,9 +434,9 @@ IVY_FORCE_INLINE mat4_t mat4_mul(mat4_t a, mat4_t b) {
   return out;
 }
 
-IVY_FORCE_INLINE mat4_t mat4_trans(vec3_t trans) {
+IVY_FORCE_INLINE mat4_t mat4_translate(vec3_t translate) {
   mat4_t out = mat4(1.0f);
-  out.columns[3] = vec4(trans.x, trans.y, trans.z, 1.0f);
+  out.columns[3] = vec4(translate.x, translate.y, translate.z, 1.0f);
 
   return out;
 }
@@ -446,6 +446,31 @@ IVY_FORCE_INLINE mat4_t mat4_scale(vec3_t scale) {
   out.elements[0][0] = scale.x;
   out.elements[1][1] = scale.y;
   out.elements[2][2] = scale.z;
+
+  return out;
+}
+
+IVY_FORCE_INLINE mat4_t mat4_rotate(float angle, vec3_t axis) {
+  mat4_t out = mat4(1.0f);
+
+  axis = vec3_norm(axis);
+
+  float sin_theta = sinf(angle);
+  float cos_theta = cosf(angle);
+  float cos_value = 1.0f - cos_theta;
+
+  out.elements[0][0] = (axis.x * axis.x * cos_value) + cos_theta;
+  out.elements[1][1] = (axis.y * axis.y * cos_value) + cos_theta;
+  out.elements[2][2] = (axis.z * axis.z * cos_value) + cos_theta;
+
+  out.elements[0][1] = (axis.x * axis.y * cos_value) + (axis.z * sin_theta);
+  out.elements[0][2] = (axis.x * axis.z * cos_value) - (axis.y * sin_theta);
+
+  out.elements[1][0] = (axis.y * axis.x * cos_value) - (axis.z * sin_theta);
+  out.elements[1][2] = (axis.y * axis.z * cos_value) + (axis.x * sin_theta);
+
+  out.elements[2][0] = (axis.z * axis.x * cos_value) + (axis.y * sin_theta);
+  out.elements[2][1] = (axis.z * axis.y * cos_value) - (axis.x * sin_theta);
 
   return out;
 }
