@@ -358,14 +358,13 @@ IVY_FORCE_INLINE vec4_t vec4_refl(vec4_t vec, vec4_t norm) {
 /*
 mat2 implementation
 */
-IVY_FORCE_INLINE mat2_t mat2(float scalar) {
-  return (mat2_t){
-      .elements =
-          {
-              {scalar, 0.0f},
-              {0.0f, scalar},
-          },
-  };
+IVY_FORCE_INLINE mat2_t mat2(float diagonal) {
+  mat2_t out;
+
+  out.columns[0] = vec2(diagonal, 0.0f);
+  out.columns[1] = vec2(0.0f, diagonal);
+
+  return out;
 }
 
 IVY_FORCE_INLINE mat2_t mat2_transpose(mat2_t mat) {
@@ -467,15 +466,14 @@ IVY_FORCE_INLINE vec4_t mat4_mul_vec4(mat4_t mat, vec4_t vec) {
 /*
 mat3 implementation
 */
-IVY_FORCE_INLINE mat3_t mat3(float scalar) {
-  return (mat3_t){
-      .elements =
-          {
-              {scalar, 0.0f, 0.0f},
-              {0.0f, scalar, 0.0f},
-              {0.0f, 0.0f, scalar},
-          },
-  };
+IVY_FORCE_INLINE mat3_t mat3(float diagonal) {
+  mat3_t out;
+
+  out.columns[0] = vec3(diagonal, 0.0f, 0.0f);
+  out.columns[1] = vec3(0.0f, diagonal, 0.0f);
+  out.columns[2] = vec3(0.0f, 0.0f, diagonal);
+
+  return out;
 }
 
 IVY_FORCE_INLINE mat3_t mat3_mul(mat3_t a, mat3_t b) {
@@ -491,16 +489,15 @@ IVY_FORCE_INLINE mat3_t mat3_mul(mat3_t a, mat3_t b) {
 /*
 mat4 implementation
 */
-IVY_FORCE_INLINE mat4_t mat4(float scalar) {
-  return (mat4_t){
-      .elements =
-          {
-              {scalar, 0.0f, 0.0f, 0.0f},
-              {0.0f, scalar, 0.0f, 0.0f},
-              {0.0f, 0.0f, scalar, 0.0f},
-              {0.0f, 0.0f, 0.0f, scalar},
-          },
-  };
+IVY_FORCE_INLINE mat4_t mat4(float diagonal) {
+  mat4_t out;
+
+  out.columns[0] = vec4(diagonal, 0.0f, 0.0f, 0.0f);
+  out.columns[1] = vec4(0.0f, diagonal, 0.0f, 0.0f);
+  out.columns[2] = vec4(0.0f, 0.0f, diagonal, 0.0f);
+  out.columns[3] = vec4(0.0f, 0.0f, 0.0f, diagonal);
+
+  return out;
 }
 
 IVY_FORCE_INLINE mat4_t mat4_mul(mat4_t a, mat4_t b) {
