@@ -321,6 +321,21 @@ IVY_FORCE_INLINE vec4_t vec4_div_s(vec4_t vec, float scalar) {
   _Generic((a), vec2_t: vec2_div_s, vec3_t: vec3_div_s, vec4_t: vec4_div_s)(   \
       vec, scalar)
 
+IVY_FORCE_INLINE float vec2_dot(vec2_t a, vec2_t b) {
+  return a.x * b.x + a.y * b.y;
+}
+
+IVY_FORCE_INLINE float vec3_dot(vec3_t a, vec3_t b) {
+  return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+IVY_FORCE_INLINE float vec4_dot(vec4_t a, vec4_t b) {
+  return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+}
+
+#define vec_dot(a, b)                                                          \
+  _Generic((a), vec2_t: vec2_dot, vec3_t: vec3_dot, vec4_t: vec4_dot)(a, b)
+
 #ifdef IVY_IMPL
 
 #endif
