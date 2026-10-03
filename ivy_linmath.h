@@ -1,6 +1,7 @@
 #ifndef IVY_LINMATH_H
 #define IVY_LINMATH_H
 
+#include "ivy_core.h"
 typedef union {
   struct {
     float x;
@@ -138,6 +139,63 @@ typedef union {
 
   float elements[4];
 } quat_t;
+
+IVY_FORCE_INLINE vec2_t vec2(float x, float y) {
+  return (vec2_t){.x = x, .y = y};
+}
+
+IVY_FORCE_INLINE vec3_t vec3(float x, float y, float z) {
+  return (vec3_t){.x = x, .y = y, .z = z};
+}
+
+IVY_FORCE_INLINE vec4_t vec4(float x, float y, float z, float w) {
+  return (vec4_t){.x = x, .y = y, .z = z, .w = w};
+}
+
+IVY_FORCE_INLINE vec2_t vec2_scalar(float scalar) {
+  return (vec2_t){.x = scalar, .y = scalar};
+}
+
+IVY_FORCE_INLINE vec3_t vec3_scalar(float scalar) {
+  return (vec3_t){.x = scalar, .y = scalar, .z = scalar};
+}
+
+IVY_FORCE_INLINE vec4_t vec4_scalar(float scalar) {
+  return (vec4_t){.x = scalar, .y = scalar, .z = scalar, .w = scalar};
+}
+
+IVY_FORCE_INLINE mat2_t mat2(float scalar) {
+  return (mat2_t){
+      .elements =
+          {
+              {scalar, 0.0f},
+              {0.0f, scalar},
+          },
+  };
+}
+
+IVY_FORCE_INLINE mat3_t mat3(float scalar) {
+  return (mat3_t){
+      .elements =
+          {
+              {scalar, 0.0f, 0.0f},
+              {0.0f, scalar, 0.0f},
+              {0.0f, 0.0f, scalar},
+          },
+  };
+}
+
+IVY_FORCE_INLINE mat4_t mat4(float scalar) {
+  return (mat4_t){
+      .elements =
+          {
+              {scalar, 0.0f, 0.0f, 0.0f},
+              {0.0f, scalar, 0.0f, 0.0f},
+              {0.0f, 0.0f, scalar, 0.0f},
+              {0.0f, 0.0f, 0.0f, scalar},
+          },
+  };
+}
 
 #ifdef IVY_IMPL
 
