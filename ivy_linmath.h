@@ -141,30 +141,6 @@ typedef union {
   float elements[4];
 } quat_t;
 
-IVY_FORCE_INLINE vec2_t vec2(float x, float y) {
-  return (vec2_t){.x = x, .y = y};
-}
-
-IVY_FORCE_INLINE vec3_t vec3(float x, float y, float z) {
-  return (vec3_t){.x = x, .y = y, .z = z};
-}
-
-IVY_FORCE_INLINE vec4_t vec4(float x, float y, float z, float w) {
-  return (vec4_t){.x = x, .y = y, .z = z, .w = w};
-}
-
-IVY_FORCE_INLINE vec2_t vec2_s(float scalar) {
-  return (vec2_t){.x = scalar, .y = scalar};
-}
-
-IVY_FORCE_INLINE vec3_t vec3_s(float scalar) {
-  return (vec3_t){.x = scalar, .y = scalar, .z = scalar};
-}
-
-IVY_FORCE_INLINE vec4_t vec4_s(float scalar) {
-  return (vec4_t){.x = scalar, .y = scalar, .z = scalar, .w = scalar};
-}
-
 IVY_FORCE_INLINE mat2_t mat2(float scalar) {
   return (mat2_t){
       .elements =
@@ -198,132 +174,128 @@ IVY_FORCE_INLINE mat4_t mat4(float scalar) {
   };
 }
 
+/*
+vec2 implementation
+*/
+IVY_FORCE_INLINE vec2_t vec2(float x, float y) {
+  return (vec2_t){.x = x, .y = y};
+}
+
+IVY_FORCE_INLINE vec2_t vec2_s(float scalar) {
+  return (vec2_t){.x = scalar, .y = scalar};
+}
+
 IVY_FORCE_INLINE vec2_t vec2_add(vec2_t a, vec2_t b) {
   return vec2(a.x + b.x, a.y + b.y);
-}
-
-IVY_FORCE_INLINE vec3_t vec3_add(vec3_t a, vec3_t b) {
-  return vec3(a.x + b.x, a.y + b.y, a.z + b.z);
-}
-
-IVY_FORCE_INLINE vec4_t vec4_add(vec4_t a, vec4_t b) {
-  return vec4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
 }
 
 IVY_FORCE_INLINE vec2_t vec2_sub(vec2_t a, vec2_t b) {
   return vec2(a.x - b.x, a.y - b.y);
 }
 
-IVY_FORCE_INLINE vec3_t vec3_sub(vec3_t a, vec3_t b) {
-  return vec3(a.x - b.x, a.y - b.y, a.z - b.z);
-}
-
-IVY_FORCE_INLINE vec4_t vec4_sub(vec4_t a, vec4_t b) {
-  return vec4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
-}
-
 IVY_FORCE_INLINE vec2_t vec2_mul(vec2_t a, vec2_t b) {
   return vec2(a.x * b.x, a.y * b.y);
-}
-
-IVY_FORCE_INLINE vec3_t vec3_mul(vec3_t a, vec3_t b) {
-  return vec3(a.x * b.x, a.y * b.y, a.z * b.z);
-}
-
-IVY_FORCE_INLINE vec4_t vec4_mul(vec4_t a, vec4_t b) {
-  return vec4(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
 }
 
 IVY_FORCE_INLINE vec2_t vec2_div(vec2_t a, vec2_t b) {
   return vec2(a.x / b.x, a.y / b.y);
 }
 
-IVY_FORCE_INLINE vec3_t vec3_div(vec3_t a, vec3_t b) {
-  return vec3(a.x / b.x, a.y / b.y, a.z / b.z);
-}
-
-IVY_FORCE_INLINE vec4_t vec4_div(vec4_t a, vec4_t b) {
-  return vec4(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w);
-}
-
 IVY_FORCE_INLINE vec2_t vec2_add_s(vec2_t vec, float scalar) {
   return vec2(vec.x + scalar, vec.y + scalar);
-}
-
-IVY_FORCE_INLINE vec3_t vec3_add_s(vec3_t vec, float scalar) {
-  return vec3(vec.x + scalar, vec.y + scalar, vec.z + scalar);
-}
-
-IVY_FORCE_INLINE vec4_t vec4_add_s(vec4_t vec, float scalar) {
-  return vec4(vec.x + scalar, vec.y + scalar, vec.z + scalar, vec.w + scalar);
 }
 
 IVY_FORCE_INLINE vec2_t vec2_sub_s(vec2_t vec, float scalar) {
   return vec2(vec.x - scalar, vec.y - scalar);
 }
 
-IVY_FORCE_INLINE vec3_t vec3_sub_s(vec3_t vec, float scalar) {
-  return vec3(vec.x - scalar, vec.y - scalar, vec.z - scalar);
-}
-
-IVY_FORCE_INLINE vec4_t vec4_sub_s(vec4_t vec, float scalar) {
-  return vec4(vec.x - scalar, vec.y - scalar, vec.z - scalar, vec.w - scalar);
-}
-
 IVY_FORCE_INLINE vec2_t vec2_mul_s(vec2_t vec, float scalar) {
   return vec2(vec.x * scalar, vec.y * scalar);
-}
-
-IVY_FORCE_INLINE vec3_t vec3_mul_s(vec3_t vec, float scalar) {
-  return vec3(vec.x * scalar, vec.y * scalar, vec.z * scalar);
-}
-
-IVY_FORCE_INLINE vec4_t vec4_mul_s(vec4_t vec, float scalar) {
-  return vec4(vec.x * scalar, vec.y * scalar, vec.z * scalar, vec.w * scalar);
 }
 
 IVY_FORCE_INLINE vec2_t vec2_div_s(vec2_t vec, float scalar) {
   return vec2(vec.x / scalar, vec.y / scalar);
 }
 
-IVY_FORCE_INLINE vec3_t vec3_div_s(vec3_t vec, float scalar) {
-  return vec3(vec.x / scalar, vec.y / scalar, vec.z / scalar);
-}
-
-IVY_FORCE_INLINE vec4_t vec4_div_s(vec4_t vec, float scalar) {
-  return vec4(vec.x / scalar, vec.y / scalar, vec.z / scalar, vec.w / scalar);
-}
-
 IVY_FORCE_INLINE float vec2_dot(vec2_t a, vec2_t b) {
   return a.x * b.x + a.y * b.y;
+}
+
+IVY_FORCE_INLINE float vec2_len_sq(vec2_t vec) { return vec2_dot(vec, vec); }
+IVY_FORCE_INLINE float vec2_len(vec2_t vec) { return sqrtf(vec2_len_sq(vec)); }
+
+IVY_FORCE_INLINE vec2_t vec2_norm(vec2_t vec) {
+  return vec2_div_s(vec, vec2_len(vec));
+}
+
+IVY_FORCE_INLINE vec2_t vec2_lerp(vec2_t a, vec2_t b, float t) {
+  return vec2_add(a, vec2_mul_s(vec2_sub(b, a), t));
+}
+
+IVY_FORCE_INLINE float vec2_dist_sq(vec2_t a, vec2_t b) {
+  return vec2_len_sq(vec2_sub(a, b));
+}
+
+IVY_FORCE_INLINE float vec2_dist(vec2_t a, vec2_t b) {
+  return vec2_len(vec2_sub(a, b));
+}
+
+IVY_FORCE_INLINE vec2_t vec2_refl(vec2_t vec, vec2_t norm) {
+  return vec2_sub(vec, vec2_mul_s(norm, 2.0f * vec2_dot(vec, norm)));
+}
+
+/*
+vec3 implementation
+*/
+IVY_FORCE_INLINE vec3_t vec3(float x, float y, float z) {
+  return (vec3_t){.x = x, .y = y, .z = z};
+}
+
+IVY_FORCE_INLINE vec3_t vec3_s(float scalar) {
+  return (vec3_t){.x = scalar, .y = scalar, .z = scalar};
+}
+
+IVY_FORCE_INLINE vec3_t vec3_add(vec3_t a, vec3_t b) {
+  return vec3(a.x + b.x, a.y + b.y, a.z + b.z);
+}
+
+IVY_FORCE_INLINE vec3_t vec3_sub(vec3_t a, vec3_t b) {
+  return vec3(a.x - b.x, a.y - b.y, a.z - b.z);
+}
+
+IVY_FORCE_INLINE vec3_t vec3_mul(vec3_t a, vec3_t b) {
+  return vec3(a.x * b.x, a.y * b.y, a.z * b.z);
+}
+
+IVY_FORCE_INLINE vec3_t vec3_div(vec3_t a, vec3_t b) {
+  return vec3(a.x / b.x, a.y / b.y, a.z / b.z);
+}
+
+IVY_FORCE_INLINE vec3_t vec3_add_s(vec3_t vec, float scalar) {
+  return vec3(vec.x + scalar, vec.y + scalar, vec.z + scalar);
+}
+
+IVY_FORCE_INLINE vec3_t vec3_sub_s(vec3_t vec, float scalar) {
+  return vec3(vec.x - scalar, vec.y - scalar, vec.z - scalar);
+}
+
+IVY_FORCE_INLINE vec3_t vec3_mul_s(vec3_t vec, float scalar) {
+  return vec3(vec.x * scalar, vec.y * scalar, vec.z * scalar);
+}
+
+IVY_FORCE_INLINE vec3_t vec3_div_s(vec3_t vec, float scalar) {
+  return vec3(vec.x / scalar, vec.y / scalar, vec.z / scalar);
 }
 
 IVY_FORCE_INLINE float vec3_dot(vec3_t a, vec3_t b) {
   return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
-IVY_FORCE_INLINE float vec4_dot(vec4_t a, vec4_t b) {
-  return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
-}
-
-IVY_FORCE_INLINE float vec2_len_sq(vec2_t vec) { return vec2_dot(vec, vec); }
 IVY_FORCE_INLINE float vec3_len_sq(vec3_t vec) { return vec3_dot(vec, vec); }
-IVY_FORCE_INLINE float vec4_len_sq(vec4_t vec) { return vec4_dot(vec, vec); }
-
-IVY_FORCE_INLINE float vec2_len(vec2_t vec) { return sqrtf(vec2_len_sq(vec)); }
 IVY_FORCE_INLINE float vec3_len(vec3_t vec) { return sqrtf(vec3_len_sq(vec)); }
-IVY_FORCE_INLINE float vec4_len(vec4_t vec) { return sqrtf(vec4_len_sq(vec)); }
-
-IVY_FORCE_INLINE vec2_t vec2_norm(vec2_t vec) {
-  return vec2_div_s(vec, vec2_len(vec));
-}
 
 IVY_FORCE_INLINE vec3_t vec3_norm(vec3_t vec) {
   return vec3_div_s(vec, vec3_len(vec));
-}
-
-IVY_FORCE_INLINE vec4_t vec4_norm(vec4_t vec) {
-  return vec4_div_s(vec, vec4_len(vec));
 }
 
 IVY_FORCE_INLINE vec3_t vec3_cross(vec3_t a, vec3_t b) {
@@ -331,48 +303,86 @@ IVY_FORCE_INLINE vec3_t vec3_cross(vec3_t a, vec3_t b) {
               a.x * b.y - a.y * b.x);
 }
 
-IVY_FORCE_INLINE vec2_t vec2_lerp(vec2_t a, vec2_t b, float t) {
-  return vec2_add(a, vec2_mul_s(vec2_sub(b, a), t));
-}
-
 IVY_FORCE_INLINE vec3_t vec3_lerp(vec3_t a, vec3_t b, float t) {
   return vec3_add(a, vec3_mul_s(vec3_sub(b, a), t));
 }
 
-IVY_FORCE_INLINE vec4_t vec4_lerp(vec4_t a, vec4_t b, float t) {
-  return vec4_add(a, vec4_mul_s(vec4_sub(b, a), t));
-}
-
-IVY_FORCE_INLINE float vec2_dist_sq(vec2_t a, vec2_t b) {
-  return vec2_len_sq(vec2_sub(a, b));
+IVY_FORCE_INLINE vec3_t vec3_refl(vec3_t vec, vec3_t norm) {
+  return vec3_sub(vec, vec3_mul_s(norm, 2.0f * vec3_dot(vec, norm)));
 }
 
 IVY_FORCE_INLINE float vec3_dist_sq(vec3_t a, vec3_t b) {
   return vec3_len_sq(vec3_sub(a, b));
 }
 
-IVY_FORCE_INLINE float vec4_dist_sq(vec4_t a, vec4_t b) {
-  return vec4_len_sq(vec4_sub(a, b));
-}
-
-IVY_FORCE_INLINE float vec2_dist(vec2_t a, vec2_t b) {
-  return vec2_len(vec2_sub(a, b));
-}
-
 IVY_FORCE_INLINE float vec3_dist(vec3_t a, vec3_t b) {
   return vec3_len(vec3_sub(a, b));
 }
 
+/*
+vec4 implementation
+*/
+IVY_FORCE_INLINE vec4_t vec4(float x, float y, float z, float w) {
+  return (vec4_t){.x = x, .y = y, .z = z, .w = w};
+}
+
+IVY_FORCE_INLINE vec4_t vec4_s(float scalar) {
+  return (vec4_t){.x = scalar, .y = scalar, .z = scalar, .w = scalar};
+}
+
+IVY_FORCE_INLINE vec4_t vec4_add(vec4_t a, vec4_t b) {
+  return vec4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
+}
+
+IVY_FORCE_INLINE vec4_t vec4_sub(vec4_t a, vec4_t b) {
+  return vec4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
+}
+
+IVY_FORCE_INLINE vec4_t vec4_mul(vec4_t a, vec4_t b) {
+  return vec4(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
+}
+
+IVY_FORCE_INLINE vec4_t vec4_div(vec4_t a, vec4_t b) {
+  return vec4(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w);
+}
+
+IVY_FORCE_INLINE vec4_t vec4_add_s(vec4_t vec, float scalar) {
+  return vec4(vec.x + scalar, vec.y + scalar, vec.z + scalar, vec.w + scalar);
+}
+
+IVY_FORCE_INLINE vec4_t vec4_sub_s(vec4_t vec, float scalar) {
+  return vec4(vec.x - scalar, vec.y - scalar, vec.z - scalar, vec.w - scalar);
+}
+
+IVY_FORCE_INLINE vec4_t vec4_mul_s(vec4_t vec, float scalar) {
+  return vec4(vec.x * scalar, vec.y * scalar, vec.z * scalar, vec.w * scalar);
+}
+
+IVY_FORCE_INLINE vec4_t vec4_div_s(vec4_t vec, float scalar) {
+  return vec4(vec.x / scalar, vec.y / scalar, vec.z / scalar, vec.w / scalar);
+}
+
+IVY_FORCE_INLINE float vec4_dot(vec4_t a, vec4_t b) {
+  return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+}
+
+IVY_FORCE_INLINE float vec4_len_sq(vec4_t vec) { return vec4_dot(vec, vec); }
+IVY_FORCE_INLINE float vec4_len(vec4_t vec) { return sqrtf(vec4_len_sq(vec)); }
+
+IVY_FORCE_INLINE vec4_t vec4_norm(vec4_t vec) {
+  return vec4_div_s(vec, vec4_len(vec));
+}
+
+IVY_FORCE_INLINE vec4_t vec4_lerp(vec4_t a, vec4_t b, float t) {
+  return vec4_add(a, vec4_mul_s(vec4_sub(b, a), t));
+}
+
+IVY_FORCE_INLINE float vec4_dist_sq(vec4_t a, vec4_t b) {
+  return vec4_len_sq(vec4_sub(a, b));
+}
+
 IVY_FORCE_INLINE float vec4_dist(vec4_t a, vec4_t b) {
   return vec4_len(vec4_sub(a, b));
-}
-
-IVY_FORCE_INLINE vec2_t vec2_refl(vec2_t vec, vec2_t norm) {
-  return vec2_sub(vec, vec2_mul_s(norm, 2.0f * vec2_dot(vec, norm)));
-}
-
-IVY_FORCE_INLINE vec3_t vec3_refl(vec3_t vec, vec3_t norm) {
-  return vec3_sub(vec, vec3_mul_s(norm, 2.0f * vec3_dot(vec, norm)));
 }
 
 IVY_FORCE_INLINE vec4_t vec4_refl(vec4_t vec, vec4_t norm) {
