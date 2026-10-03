@@ -257,6 +257,70 @@ IVY_FORCE_INLINE vec4_t vec4_div(vec4_t a, vec4_t b) {
 #define vec_div(a, b)                                                          \
   _Generic((a), vec2_t: vec2_div, vec3_t: vec3_div, vec4_t: vec4_div)(a, b)
 
+IVY_FORCE_INLINE vec2_t vec2_add_s(vec2_t a, float scalar) {
+  return vec2(a.x + scalar, a.y + scalar);
+}
+
+IVY_FORCE_INLINE vec3_t vec3_add_s(vec3_t a, float scalar) {
+  return vec3(a.x + scalar, a.y + scalar, a.z + scalar);
+}
+
+IVY_FORCE_INLINE vec4_t vec4_add_s(vec4_t a, float scalar) {
+  return vec4(a.x + scalar, a.y + scalar, a.z + scalar, a.w + scalar);
+}
+
+IVY_FORCE_INLINE vec2_t vec2_sub_s(vec2_t a, float scalar) {
+  return vec2(a.x - scalar, a.y - scalar);
+}
+
+IVY_FORCE_INLINE vec3_t vec3_sub_s(vec3_t a, float scalar) {
+  return vec3(a.x - scalar, a.y - scalar, a.z - scalar);
+}
+
+IVY_FORCE_INLINE vec4_t vec4_sub_s(vec4_t a, float scalar) {
+  return vec4(a.x - scalar, a.y - scalar, a.z - scalar, a.w - scalar);
+}
+
+IVY_FORCE_INLINE vec2_t vec2_mul_s(vec2_t a, float scalar) {
+  return vec2(a.x * scalar, a.y * scalar);
+}
+
+IVY_FORCE_INLINE vec3_t vec3_mul_s(vec3_t a, float scalar) {
+  return vec3(a.x * scalar, a.y * scalar, a.z * scalar);
+}
+
+IVY_FORCE_INLINE vec4_t vec4_mul_s(vec4_t a, float scalar) {
+  return vec4(a.x * scalar, a.y * scalar, a.z * scalar, a.w * scalar);
+}
+
+IVY_FORCE_INLINE vec2_t vec2_div_s(vec2_t a, float scalar) {
+  return vec2(a.x / scalar, a.y / scalar);
+}
+
+IVY_FORCE_INLINE vec3_t vec3_div_s(vec3_t a, float scalar) {
+  return vec3(a.x / scalar, a.y / scalar, a.z / scalar);
+}
+
+IVY_FORCE_INLINE vec4_t vec4_div_s(vec4_t a, float scalar) {
+  return vec4(a.x / scalar, a.y / scalar, a.z / scalar, a.w / scalar);
+}
+
+#define vec_add_s(a, scalar)                                                   \
+  _Generic((a), vec2_t: vec2_add_s, vec3_t: vec3_add_s, vec4_t: vec4_add_s)(   \
+      a, scalar)
+
+#define vec_sub_s(a, scalar)                                                   \
+  _Generic((a), vec2_t: vec2_sub_s, vec3_t: vec3_sub_s, vec4_t: vec4_sub_s)(   \
+      a, scalar)
+
+#define vec_mul_s(a, scalar)                                                   \
+  _Generic((a), vec2_t: vec2_mul_s, vec3_t: vec3_mul_s, vec4_t: vec4_mul_s)(   \
+      a, scalar)
+
+#define vec_div_s(a, scalar)                                                   \
+  _Generic((a), vec2_t: vec2_div_s, vec3_t: vec3_div_s, vec4_t: vec4_div_s)(   \
+      a, scalar)
+
 #ifdef IVY_IMPL
 
 #endif
