@@ -317,8 +317,8 @@ IVY_FORCE_INLINE vec4_t vec4_div_s(vec4_t vec, float scalar) {
   _Generic((vec), vec2_t: vec2_mul_s, vec3_t: vec3_mul_s, vec4_t: vec4_mul_s)( \
       vec, scalar)
 
-#define vec_div_s(a, scalar)                                                   \
-  _Generic((a), vec2_t: vec2_div_s, vec3_t: vec3_div_s, vec4_t: vec4_div_s)(   \
+#define vec_div_s(vec, scalar)                                                 \
+  _Generic((vec), vec2_t: vec2_div_s, vec3_t: vec3_div_s, vec4_t: vec4_div_s)( \
       vec, scalar)
 
 IVY_FORCE_INLINE float vec2_dot(vec2_t a, vec2_t b) {
@@ -386,7 +386,42 @@ IVY_FORCE_INLINE vec4_t vec4_lerp(vec4_t a, vec4_t b, float t) {
 }
 
 #define vec_lerp(a, b, t)                                                      \
-  _Generic((a), vec2_t: vec2_lerp, vec3_t: vec3_lerp, vec4_t: vec4_lerp)(vec)
+  _Generic((a), vec2_t: vec2_lerp, vec3_t: vec3_lerp, vec4_t: vec4_lerp)(a, b, \
+                                                                         t)
+
+IVY_FORCE_INLINE float vec2_dist_sq(vec2_t a, vec2_t b) {
+  return vec2_len_sq(vec2_sub(a, b));
+}
+
+IVY_FORCE_INLINE float vec3_dist_sq(vec3_t a, vec3_t b) {
+  return vec3_len_sq(vec3_sub(a, b));
+}
+
+IVY_FORCE_INLINE float vec4_dist_sq(vec4_t a, vec4_t b) {
+  return vec4_len_sq(vec4_sub(a, b));
+}
+
+IVY_FORCE_INLINE float vec2_dist(vec2_t a, vec2_t b) {
+  return vec2_len(vec2_sub(a, b));
+}
+
+IVY_FORCE_INLINE float vec3_dist(vec3_t a, vec3_t b) {
+  return vec3_len(vec3_sub(a, b));
+}
+
+IVY_FORCE_INLINE float vec4_dist(vec4_t a, vec4_t b) {
+  return vec4_len(vec4_sub(a, b));
+}
+
+#define vec_dist_sq(a, b, t)                                                   \
+  _Generic((a),                                                                \
+      vec2_t: vec2_dist_sq,                                                    \
+      vec3_t: vec3_dist_sq,                                                    \
+      vec4_t: vec4_dist_sq)(a.b, t)
+
+#define vec_dist(a, b, t)                                                      \
+  _Generic((a), vec2_t: vec2_dist, vec3_t: vec3_dist, vec4_t: vec4_dist)(a, b, \
+                                                                         t)
 
 #ifdef IVY_IMPL
 
