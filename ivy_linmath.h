@@ -141,39 +141,6 @@ typedef union {
   float elements[4];
 } quat_t;
 
-IVY_FORCE_INLINE mat2_t mat2(float scalar) {
-  return (mat2_t){
-      .elements =
-          {
-              {scalar, 0.0f},
-              {0.0f, scalar},
-          },
-  };
-}
-
-IVY_FORCE_INLINE mat3_t mat3(float scalar) {
-  return (mat3_t){
-      .elements =
-          {
-              {scalar, 0.0f, 0.0f},
-              {0.0f, scalar, 0.0f},
-              {0.0f, 0.0f, scalar},
-          },
-  };
-}
-
-IVY_FORCE_INLINE mat4_t mat4(float scalar) {
-  return (mat4_t){
-      .elements =
-          {
-              {scalar, 0.0f, 0.0f, 0.0f},
-              {0.0f, scalar, 0.0f, 0.0f},
-              {0.0f, 0.0f, scalar, 0.0f},
-              {0.0f, 0.0f, 0.0f, scalar},
-          },
-  };
-}
-
 /*
 vec2 implementation
 */
@@ -388,6 +355,18 @@ IVY_FORCE_INLINE float vec4_dist(vec4_t a, vec4_t b) {
 IVY_FORCE_INLINE vec4_t vec4_refl(vec4_t vec, vec4_t norm) {
   return vec4_sub(vec, vec4_mul_s(norm, 2.0f * vec4_dot(vec, norm)));
 }
+/*
+mat2 implementation
+*/
+IVY_FORCE_INLINE mat2_t mat2(float scalar) {
+  return (mat2_t){
+      .elements =
+          {
+              {scalar, 0.0f},
+              {0.0f, scalar},
+          },
+  };
+}
 
 IVY_FORCE_INLINE mat2_t mat2_transpose(mat2_t mat) {
   mat2_t out = mat;
@@ -485,6 +464,20 @@ IVY_FORCE_INLINE vec4_t mat4_mul_vec4(mat4_t mat, vec4_t vec) {
                   mat.columns[2].w * vec.z + mat.columns[3].w * vec.w);
 }
 
+/*
+mat3 implementation
+*/
+IVY_FORCE_INLINE mat3_t mat3(float scalar) {
+  return (mat3_t){
+      .elements =
+          {
+              {scalar, 0.0f, 0.0f},
+              {0.0f, scalar, 0.0f},
+              {0.0f, 0.0f, scalar},
+          },
+  };
+}
+
 IVY_FORCE_INLINE mat3_t mat3_mul(mat3_t a, mat3_t b) {
   mat3_t out = mat3(1.0f);
 
@@ -493,6 +486,21 @@ IVY_FORCE_INLINE mat3_t mat3_mul(mat3_t a, mat3_t b) {
   out.columns[2] = mat3_mul_vec3(a, b.columns[2]);
 
   return out;
+}
+
+/*
+mat4 implementation
+*/
+IVY_FORCE_INLINE mat4_t mat4(float scalar) {
+  return (mat4_t){
+      .elements =
+          {
+              {scalar, 0.0f, 0.0f, 0.0f},
+              {0.0f, scalar, 0.0f, 0.0f},
+              {0.0f, 0.0f, scalar, 0.0f},
+              {0.0f, 0.0f, 0.0f, scalar},
+          },
+  };
 }
 
 IVY_FORCE_INLINE mat4_t mat4_mul(mat4_t a, mat4_t b) {
