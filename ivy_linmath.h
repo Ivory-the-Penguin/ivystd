@@ -404,9 +404,35 @@ IVY_FORCE_INLINE vec4_t mat4_mul_vec4(mat4_t mat, vec4_t vec) {
                   mat.columns[2].w * vec.z + mat.columns[3].w * vec.w);
 }
 
-mat2_t mat2_mul(mat2_t a, mat2_t b);
-mat3_t mat3_mul(mat3_t a, mat3_t b);
-mat4_t mat4_mul(mat4_t a, mat4_t b);
+IVY_FORCE_INLINE mat2_t mat2_mul(mat2_t a, mat2_t b) {
+  mat2_t out = mat2(1.0f);
+
+  out.columns[0] = mat2_mul_vec2(a, b.columns[0]);
+  out.columns[1] = mat2_mul_vec2(a, b.columns[1]);
+
+  return out;
+}
+
+IVY_FORCE_INLINE mat3_t mat3_mul(mat3_t a, mat3_t b) {
+  mat3_t out = mat3(1.0f);
+
+  out.columns[0] = mat3_mul_vec3(a, b.columns[0]);
+  out.columns[1] = mat3_mul_vec3(a, b.columns[1]);
+  out.columns[2] = mat3_mul_vec3(a, b.columns[2]);
+
+  return out;
+}
+
+IVY_FORCE_INLINE mat4_t mat4_mul(mat4_t a, mat4_t b) {
+  mat4_t out = mat4(1.0f);
+
+  out.columns[0] = mat4_mul_vec4(a, b.columns[0]);
+  out.columns[1] = mat4_mul_vec4(a, b.columns[1]);
+  out.columns[2] = mat4_mul_vec4(a, b.columns[2]);
+  out.columns[3] = mat4_mul_vec4(a, b.columns[3]);
+
+  return out;
+}
 
 // Generic macros
 #define vec_add(a, b)                                                          \
@@ -479,39 +505,5 @@ mat4_t mat4_mul(mat4_t a, mat4_t b);
 
 #define mat_mul(a, b)                                                          \
   _Generic((a), mat2_t: mat2_mul, mat3_t: mat3_mul, mat4_t: mat4_mul)((a), (b))
-
-#ifdef IVY_IMPL
-
-mat2_t mat2_mul(mat2_t a, mat2_t b) {
-  mat2_t out = mat2(0.0f);
-
-  out.columns[0] = mat2_mul_vec2(a, b.columns[0]);
-  out.columns[1] = mat2_mul_vec2(a, b.columns[1]);
-
-  return out;
-}
-
-mat3_t mat3_mul(mat3_t a, mat3_t b) {
-  mat3_t out = mat3(0.0f);
-
-  out.columns[0] = mat3_mul_vec3(a, b.columns[0]);
-  out.columns[1] = mat3_mul_vec3(a, b.columns[1]);
-  out.columns[2] = mat3_mul_vec3(a, b.columns[2]);
-
-  return out;
-}
-
-mat4_t mat4_mul(mat4_t a, mat4_t b) {
-  mat4_t out = mat4(0.0f);
-
-  out.columns[0] = mat4_mul_vec4(a, b.columns[0]);
-  out.columns[1] = mat4_mul_vec4(a, b.columns[1]);
-  out.columns[2] = mat4_mul_vec4(a, b.columns[2]);
-  out.columns[3] = mat4_mul_vec4(a, b.columns[3]);
-
-  return out;
-}
-
-#endif
 
 #endif
