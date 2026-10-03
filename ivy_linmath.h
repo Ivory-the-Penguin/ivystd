@@ -373,6 +373,21 @@ IVY_FORCE_INLINE vec3_t vec3_cross(vec3_t a, vec3_t b) {
               a.x * b.y - a.y * b.x);
 }
 
+IVY_FORCE_INLINE vec2_t vec2_lerp(vec2_t a, vec2_t b, float t) {
+  return vec2_add(a, vec2_mul_s(vec2_sub(b, a), t));
+}
+
+IVY_FORCE_INLINE vec3_t vec3_lerp(vec3_t a, vec3_t b, float t) {
+  return vec3_add(a, vec3_mul_s(vec3_sub(b, a), t));
+}
+
+IVY_FORCE_INLINE vec4_t vec4_lerp(vec4_t a, vec4_t b, float t) {
+  return vec4_add(a, vec4_mul_s(vec4_sub(b, a), t));
+}
+
+#define vec_lerp(a, b, t)                                                      \
+  _Generic((a), vec2_t: vec2_lerp, vec3_t: vec3_lerp, vec4_t: vec4_lerp)(vec)
+
 #ifdef IVY_IMPL
 
 #endif
