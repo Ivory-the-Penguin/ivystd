@@ -142,8 +142,8 @@ typedef union {
 } quat_t;
 
 /*
-vec2 implementation
-*/
+ *  vec2 implementation
+ */
 IVY_FORCE_INLINE vec2_t vec2(float x, float y) {
   return (vec2_t){.x = x, .y = y};
 }
@@ -212,8 +212,8 @@ IVY_FORCE_INLINE vec2_t vec2_refl(vec2_t vec, vec2_t norm) {
 }
 
 /*
-vec3 implementation
-*/
+ *  vec3 implementation
+ */
 IVY_FORCE_INLINE vec3_t vec3(float x, float y, float z) {
   return (vec3_t){.x = x, .y = y, .z = z};
 }
@@ -287,8 +287,8 @@ IVY_FORCE_INLINE float vec3_dist(vec3_t a, vec3_t b) {
 }
 
 /*
-vec4 implementation
-*/
+ *  vec4 implementation
+ */
 IVY_FORCE_INLINE vec4_t vec4(float x, float y, float z, float w) {
   return (vec4_t){.x = x, .y = y, .z = z, .w = w};
 }
@@ -355,9 +355,10 @@ IVY_FORCE_INLINE float vec4_dist(vec4_t a, vec4_t b) {
 IVY_FORCE_INLINE vec4_t vec4_refl(vec4_t vec, vec4_t norm) {
   return vec4_sub(vec, vec4_mul_s(norm, 2.0f * vec4_dot(vec, norm)));
 }
+
 /*
-mat2 implementation
-*/
+ *  mat2 implementation
+ */
 IVY_FORCE_INLINE mat2_t mat2(float diagonal) {
   mat2_t out;
 
@@ -464,8 +465,8 @@ IVY_FORCE_INLINE vec4_t mat4_mul_vec4(mat4_t mat, vec4_t vec) {
 }
 
 /*
-mat3 implementation
-*/
+ *  mat3 implementation
+ */
 IVY_FORCE_INLINE mat3_t mat3(float diagonal) {
   mat3_t out;
 
@@ -487,8 +488,8 @@ IVY_FORCE_INLINE mat3_t mat3_mul(mat3_t a, mat3_t b) {
 }
 
 /*
-mat4 implementation
-*/
+ *  mat4 implementation
+ */
 IVY_FORCE_INLINE mat4_t mat4(float diagonal) {
   mat4_t out;
 
