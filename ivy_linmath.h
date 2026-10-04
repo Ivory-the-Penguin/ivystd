@@ -6,6 +6,10 @@
    ----- Credits -----
    Handmade Math inspired this header, and some of the functions (specifically
    for mat4 and quaternions) were copied from Handmade Math
+
+   ----- License -----
+   This header (and the rest of ivystd) are licensed by MIT-0, so you can do
+   whatever you want. It would be nice to give credit, but not forced
 */
 #ifndef IVY_LINMATH_H
 #define IVY_LINMATH_H
