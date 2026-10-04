@@ -39,6 +39,9 @@
 
   vecn_len(vec) - Returns the length of the vector
 
+  vecn_eq(a, b) - Returns true if all components of a is equal to b, false
+  otherwise
+
   vecn_norm(vec) - Returns the normalized (length is 1) vector (if vec is a zero
   vector, it returns a zero vector)
 
@@ -267,6 +270,10 @@ IVY_FORCE_INLINE float vec2_dot(vec2_t a, vec2_t b) {
 IVY_FORCE_INLINE float vec2_len_sq(vec2_t vec) { return vec2_dot(vec, vec); }
 IVY_FORCE_INLINE float vec2_len(vec2_t vec) { return sqrtf(vec2_len_sq(vec)); }
 
+IVY_FORCE_INLINE bool vec2_eq(vec2_t a, vec2_t b) {
+  return (a.x == b.x && a.y == b.y);
+}
+
 IVY_FORCE_INLINE vec2_t vec2_norm(vec2_t vec) {
   return vec2_div_s(vec, vec2_len(vec));
 }
@@ -340,6 +347,10 @@ IVY_FORCE_INLINE float vec3_dot(vec3_t a, vec3_t b) {
 
 IVY_FORCE_INLINE float vec3_len_sq(vec3_t vec) { return vec3_dot(vec, vec); }
 IVY_FORCE_INLINE float vec3_len(vec3_t vec) { return sqrtf(vec3_len_sq(vec)); }
+
+IVY_FORCE_INLINE bool vec3_eq(vec3_t a, vec3_t b) {
+  return (a.x == b.x && a.y == b.y && a.z == b.z);
+}
 
 IVY_FORCE_INLINE vec3_t vec3_norm(vec3_t vec) {
   return vec3_div_s(vec, vec3_len(vec));
@@ -419,6 +430,10 @@ IVY_FORCE_INLINE float vec4_dot(vec4_t a, vec4_t b) {
 
 IVY_FORCE_INLINE float vec4_len_sq(vec4_t vec) { return vec4_dot(vec, vec); }
 IVY_FORCE_INLINE float vec4_len(vec4_t vec) { return sqrtf(vec4_len_sq(vec)); }
+
+IVY_FORCE_INLINE bool vec4_eq(vec4_t a, vec4_t b) {
+  return (a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w);
+}
 
 IVY_FORCE_INLINE vec4_t vec4_norm(vec4_t vec) {
   return vec4_div_s(vec, vec4_len(vec));
@@ -869,6 +884,9 @@ IVY_FORCE_INLINE mat4_t mat4_rotate(float angle, vec3_t axis) {
 
 #define vec_len(vec)                                                           \
   _Generic((vec), vec2_t: vec2_len, vec3_t: vec3_len, vec4_t: vec4_len)((vec))
+
+#define vec_eq(a, b)                                                           \
+  _Generic((a), vec2_t: vec2_eq, vec3_t: vec3_eq, vec4_t: vec4_eq)((a), (b))
 
 #define vec_norm(vec)                                                          \
   _Generic((vec), vec2_t: vec2_norm, vec3_t: vec3_norm, vec4_t: vec4_norm)(    \
