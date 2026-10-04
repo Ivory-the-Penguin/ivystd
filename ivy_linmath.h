@@ -825,7 +825,11 @@ IVY_FORCE_INLINE mat4_t mat4_rotate(float angle, vec3_t axis) {
   return out;
 }
 
-// Generic macros
+/*
+ * Generic macros
+ */
+#ifdef IVY_ATLEAST_C11
+
 #define vec_add(a, b)                                                          \
   _Generic((a), vec2_t: vec2_add, vec3_t: vec3_add, vec4_t: vec4_add)((a), (b))
 
@@ -922,5 +926,7 @@ IVY_FORCE_INLINE mat4_t mat4_rotate(float angle, vec3_t axis) {
 
 #define mat_inv(mat)                                                           \
   _Generic((mat), mat2_t: mat2_inv, mat3_t: mat3_inv, mat4_t: mat4_inv)((mat))
+
+#endif
 
 #endif

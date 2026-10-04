@@ -10,6 +10,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if (!defined(__cplusplus) && defined(__STDC_VERSION__))
+
+#if __STDC_VERSION__ >= 201112L
+#define IVY_ATLEAST_C11
+#endif
+
+#endif
+
 #define IVY_ASSERT(condition, message)                                         \
   ((condition)                                                                 \
        ? (void)0                                                               \
