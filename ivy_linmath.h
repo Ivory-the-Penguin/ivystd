@@ -275,6 +275,10 @@ IVY_FORCE_INLINE bool vec2_eq(vec2_t a, vec2_t b) {
 }
 
 IVY_FORCE_INLINE vec2_t vec2_norm(vec2_t vec) {
+  if (vec2_eq(vec, vec2_s(0.0f))) {
+    return vec2_s(0.0f);
+  }
+
   return vec2_div_s(vec, vec2_len(vec));
 }
 
@@ -353,6 +357,10 @@ IVY_FORCE_INLINE bool vec3_eq(vec3_t a, vec3_t b) {
 }
 
 IVY_FORCE_INLINE vec3_t vec3_norm(vec3_t vec) {
+  if (vec3_eq(vec, vec3_s(0.0f))) {
+    return vec3_s(0.0f);
+  }
+
   return vec3_div_s(vec, vec3_len(vec));
 }
 
@@ -436,6 +444,10 @@ IVY_FORCE_INLINE bool vec4_eq(vec4_t a, vec4_t b) {
 }
 
 IVY_FORCE_INLINE vec4_t vec4_norm(vec4_t vec) {
+  if (vec4_eq(vec, vec4_s(0.0f))) {
+    return vec4_s(0.0f);
+  }
+
   return vec4_div_s(vec, vec4_len(vec));
 }
 
