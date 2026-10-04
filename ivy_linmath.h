@@ -1,7 +1,9 @@
 /*
    Ivy Linear Algebra
 
-
+   ----- Credits -----
+   Handmade Math inspired this header, and some of the functions (specifically
+   for mat4 and quaternions) were copied from Handmade Math
 */
 #ifndef IVY_LINMATH_H
 #define IVY_LINMATH_H
