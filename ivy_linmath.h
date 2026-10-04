@@ -77,6 +77,7 @@
 #define IVY_LINMATH_H
 
 #include "ivy_core.h"
+#include "ivy_math.h"
 
 typedef union {
   struct {
