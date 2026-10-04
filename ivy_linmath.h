@@ -223,6 +223,10 @@ IVY_FORCE_INLINE vec3_t vec3(float x, float y, float z) {
   return (vec3_t){.x = x, .y = y, .z = z};
 }
 
+IVY_FORCE_INLINE vec3_t vec3_vec2(vec2_t xy, float z) {
+  return (vec3_t){.xy = xy, .z = z};
+}
+
 IVY_FORCE_INLINE vec3_t vec3_s(float scalar) {
   return (vec3_t){.x = scalar, .y = scalar, .z = scalar};
 }
@@ -296,6 +300,10 @@ IVY_FORCE_INLINE float vec3_dist(vec3_t a, vec3_t b) {
  */
 IVY_FORCE_INLINE vec4_t vec4(float x, float y, float z, float w) {
   return (vec4_t){.x = x, .y = y, .z = z, .w = w};
+}
+
+IVY_FORCE_INLINE vec4_t vec4_vec3(vec3_t xyz, float w) {
+  return (vec4_t){.xyz = xyz, .w = w};
 }
 
 IVY_FORCE_INLINE vec4_t vec4_s(float scalar) {
@@ -449,17 +457,6 @@ IVY_FORCE_INLINE mat2_t mat2_inv(mat2_t mat) {
   return out;
 }
 
-IVY_FORCE_INLINE vec4_t mat4_mul_vec4(mat4_t mat, vec4_t vec) {
-  return vec4(mat.columns[0].x * vec.x + mat.columns[1].x * vec.y +
-                  mat.columns[2].x * vec.z + mat.columns[3].x * vec.w,
-              mat.columns[0].y * vec.x + mat.columns[1].y * vec.y +
-                  mat.columns[2].y * vec.z + mat.columns[3].y * vec.w,
-              mat.columns[0].z * vec.x + mat.columns[1].z * vec.y +
-                  mat.columns[2].z * vec.z + mat.columns[3].z * vec.w,
-              mat.columns[0].w * vec.x + mat.columns[1].w * vec.y +
-                  mat.columns[2].w * vec.z + mat.columns[3].w * vec.w);
-}
-
 /*
  *  mat3 implementation
  */
@@ -584,6 +581,61 @@ IVY_FORCE_INLINE mat4_t mat4(float diagonal) {
   return out;
 }
 
+IVY_FORCE_INLINE mat4_t mat4_transpose(mat4_t mat) {
+  mat4_t out;
+
+  out.elements[0][0] = mat.elements[0][0];
+  out.elements[0][1] = mat.elements[1][0];
+  out.elements[0][2] = mat.elements[2][0];
+  out.elements[0][3] = mat.elements[3][0];
+  out.elements[1][0] = mat.elements[0][1];
+  out.elements[1][1] = mat.elements[1][1];
+  out.elements[1][2] = mat.elements[2][1];
+  out.elements[1][3] = mat.elements[3][1];
+  out.elements[2][0] = mat.elements[0][2];
+  out.elements[2][1] = mat.elements[1][2];
+  out.elements[2][2] = mat.elements[2][2];
+  out.elements[2][3] = mat.elements[3][2];
+  out.elements[3][0] = mat.elements[0][3];
+  out.elements[3][1] = mat.elements[1][3];
+  out.elements[3][2] = mat.elements[2][3];
+  out.elements[3][3] = mat.elements[3][3];
+
+  return out;
+}
+
+IVY_FORCE_INLINE mat4_t mat4_add(mat4_t a, mat4_t b) {
+  mat4_t out = mat4(0.0f);
+
+  out.columns[0] = vec4_add(a.columns[0], b.columns[0]);
+  out.columns[1] = vec4_add(a.columns[1], b.columns[1]);
+  out.columns[2] = vec4_add(a.columns[2], b.columns[2]);
+  out.columns[3] = vec4_add(a.columns[3], b.columns[3]);
+
+  return out;
+}
+
+IVY_FORCE_INLINE mat4_t mat4_sub(mat4_t a, mat4_t b) {
+  mat4_t out = mat4(0.0f);
+
+  out.columns[0] = vec4_sub(a.columns[0], b.columns[0]);
+  out.columns[1] = vec4_sub(a.columns[1], b.columns[1]);
+  out.columns[3] = vec4_sub(a.columns[3], b.columns[3]);
+
+  return out;
+}
+
+IVY_FORCE_INLINE vec4_t mat4_mul_vec4(mat4_t mat, vec4_t vec) {
+  return vec4(mat.columns[0].x * vec.x + mat.columns[1].x * vec.y +
+                  mat.columns[2].x * vec.z + mat.columns[3].x * vec.w,
+              mat.columns[0].y * vec.x + mat.columns[1].y * vec.y +
+                  mat.columns[2].y * vec.z + mat.columns[3].y * vec.w,
+              mat.columns[0].z * vec.x + mat.columns[1].z * vec.y +
+                  mat.columns[2].z * vec.z + mat.columns[3].z * vec.w,
+              mat.columns[0].w * vec.x + mat.columns[1].w * vec.y +
+                  mat.columns[2].w * vec.z + mat.columns[3].w * vec.w);
+}
+
 IVY_FORCE_INLINE mat4_t mat4_mul(mat4_t a, mat4_t b) {
   mat4_t out = mat4(1.0f);
 
@@ -593,6 +645,72 @@ IVY_FORCE_INLINE mat4_t mat4_mul(mat4_t a, mat4_t b) {
   out.columns[3] = mat4_mul_vec4(a, b.columns[3]);
 
   return out;
+}
+
+IVY_FORCE_INLINE mat4_t mat4_mul_s(mat4_t mat, float scalar) {
+  mat4_t out = mat4(1.0f);
+
+  out.columns[0] = vec4_mul_s(mat.columns[0], scalar);
+  out.columns[1] = vec4_mul_s(mat.columns[1], scalar);
+  out.columns[2] = vec4_mul_s(mat.columns[2], scalar);
+  out.columns[3] = vec4_mul_s(mat.columns[3], scalar);
+
+  return out;
+}
+
+IVY_FORCE_INLINE mat4_t mat4_div_s(mat4_t mat, float scalar) {
+  mat4_t out = mat4(1.0f);
+
+  out.columns[0] = vec4_div_s(mat.columns[0], scalar);
+  out.columns[1] = vec4_div_s(mat.columns[1], scalar);
+  out.columns[2] = vec4_div_s(mat.columns[2], scalar);
+  out.columns[3] = vec4_div_s(mat.columns[3], scalar);
+
+  return out;
+}
+
+// some type of magic, copied from Handmade Math
+IVY_FORCE_INLINE float mat4_det(mat4_t mat) {
+  vec3_t c01 = vec3_cross(mat.columns[0].xyz, mat.columns[1].xyz);
+  vec3_t c23 = vec3_cross(mat.columns[2].xyz, mat.columns[3].xyz);
+
+  vec3_t b10 = vec3_sub(vec3_mul_s(mat.columns[0].xyz, mat.columns[1].w),
+                        vec3_mul_s(mat.columns[1].xyz, mat.columns[0].w));
+  vec3_t b32 = vec3_sub(vec3_mul_s(mat.columns[2].xyz, mat.columns[3].w),
+                        vec3_mul_s(mat.columns[3].xyz, mat.columns[2].w));
+
+  return vec3_dot(c01, b32) + vec3_dot(c23, b10);
+}
+
+IVY_FORCE_INLINE mat4_t mat4_inv(mat4_t mat) {
+  vec3_t c01 = vec3_cross(mat.columns[0].xyz, mat.columns[1].xyz);
+  vec3_t c23 = vec3_cross(mat.columns[2].xyz, mat.columns[3].xyz);
+  vec3_t b10 = vec3_sub(vec3_mul_s(mat.columns[0].xyz, mat.columns[1].w),
+                        vec3_mul_s(mat.columns[1].xyz, mat.columns[0].w));
+  vec3_t b32 = vec3_sub(vec3_mul_s(mat.columns[2].xyz, mat.columns[3].w),
+                        vec3_mul_s(mat.columns[3].xyz, mat.columns[2].w));
+
+  float InvDeterminant = 1.0f / (vec3_dot(c01, b32) + vec3_dot(c23, b10));
+  c01 = vec3_mul_s(c01, InvDeterminant);
+  c23 = vec3_mul_s(c23, InvDeterminant);
+  b10 = vec3_mul_s(b10, InvDeterminant);
+  b32 = vec3_mul_s(b32, InvDeterminant);
+
+  mat4_t out;
+  out.columns[0] = vec4_vec3(vec3_add(vec3_cross(mat.columns[1].xyz, b32),
+                                      vec3_mul_s(c23, mat.columns[1].w)),
+                             -vec3_dot(mat.columns[1].xyz, c23));
+  out.columns[1] = vec4_vec3(vec3_sub(vec3_cross(b32, mat.columns[0].xyz),
+                                      vec3_mul_s(c23, mat.columns[0].w)),
+                             +vec3_dot(mat.columns[0].xyz, c23));
+  out.columns[2] = vec4_vec3(vec3_add(vec3_cross(mat.columns[3].xyz, b10),
+                                      vec3_mul_s(c01, mat.columns[3].w)),
+                             -vec3_dot(mat.columns[3].xyz, c01));
+  out.columns[3] = vec4_vec3(vec3_sub(vec3_cross(b10, mat.columns[2].xyz),
+                                      vec3_mul_s(c01, mat.columns[2].w)),
+                             +vec3_dot(mat.columns[2].xyz, c01));
+
+  return mat4_transpose(out);
 }
 
 IVY_FORCE_INLINE mat4_t mat4_translate(vec3_t translate) {
