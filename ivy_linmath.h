@@ -1,5 +1,7 @@
 /*
-   Ivy Linear Algebra
+   ----- Ivy Linear Algebra -----
+   This is a small header only library for linear algebra, if you want to ask
+   why, look at ./docs/linmath.md
 
    ----- Credits -----
    Handmade Math inspired this header, and some of the functions (specifically
