@@ -888,6 +888,18 @@ IVY_FORCE_INLINE mat4_t mat4_rotate(float angle, vec3_t axis) {
   _Generic((vec), vec2_t: vec2_refl, vec3_t: vec3_refl, vec4_t: vec4_refl)(    \
       (vec), (norm))
 
+#define mat_transpose(mat)                                                     \
+  _Generic((mat),                                                              \
+      mat2_t: mat2_transpose,                                                  \
+      mat3_t: mat3_transpose,                                                  \
+      mat4_t: mat4_transpose)((mat))
+
+#define mat_add(a, b)                                                          \
+  _Generic((a), mat2_t: mat2_add, mat3_t: mat3_add, mat4_t: mat4_add)((a), (b))
+
+#define mat_sub(a, b)                                                          \
+  _Generic((a), mat2_t: mat2_sub, mat3_t: mat3_sub, mat4_t: mat4_sub)((a), (b))
+
 #define mat_mul_vec(mat, vec)                                                  \
   _Generic((mat),                                                              \
       mat2_t: mat2_mul_vec2,                                                   \
@@ -896,5 +908,19 @@ IVY_FORCE_INLINE mat4_t mat4_rotate(float angle, vec3_t axis) {
 
 #define mat_mul(a, b)                                                          \
   _Generic((a), mat2_t: mat2_mul, mat3_t: mat3_mul, mat4_t: mat4_mul)((a), (b))
+
+#define mat_mul_s(a, b)                                                        \
+  _Generic((a), mat2_t: mat2_mul_s, mat3_t: mat3_mul_s, mat4_t: mat4_mul_s)(   \
+      (a), (b))
+
+#define mat_div_s(a, b)                                                        \
+  _Generic((a), mat2_t: mat2_div_s, mat3_t: mat3_div_s, mat4_t: mat4_div_s)(   \
+      (a), (b))
+
+#define mat_det(mat)                                                           \
+  _Generic((mat), mat2_t: mat2_det, mat3_t: mat3_det, mat4_t: mat4_det)((mat))
+
+#define mat_inv(mat)                                                           \
+  _Generic((mat), mat2_t: mat2_inv, mat3_t: mat3_inv, mat4_t: mat4_inv)((mat))
 
 #endif
