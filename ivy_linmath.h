@@ -449,15 +449,6 @@ IVY_FORCE_INLINE mat2_t mat2_inv(mat2_t mat) {
   return out;
 }
 
-IVY_FORCE_INLINE vec3_t mat3_mul_vec3(mat3_t mat, vec3_t vec) {
-  return vec3(mat.columns[0].x * vec.x + mat.columns[1].x * vec.y +
-                  mat.columns[2].x * vec.z,
-              mat.columns[0].y * vec.x + mat.columns[1].y * vec.y +
-                  mat.columns[2].y * vec.z,
-              mat.columns[0].z * vec.x + mat.columns[1].z * vec.y +
-                  mat.columns[2].z * vec.z);
-}
-
 IVY_FORCE_INLINE vec4_t mat4_mul_vec4(mat4_t mat, vec4_t vec) {
   return vec4(mat.columns[0].x * vec.x + mat.columns[1].x * vec.y +
                   mat.columns[2].x * vec.z + mat.columns[3].x * vec.w,
@@ -482,6 +473,48 @@ IVY_FORCE_INLINE mat3_t mat3(float diagonal) {
   return out;
 }
 
+IVY_FORCE_INLINE mat3_t mat3_transpose(mat3_t mat) {
+  mat3_t out = mat;
+
+  out.elements[0][1] = mat.elements[1][0];
+  out.elements[0][2] = mat.elements[2][0];
+  out.elements[1][0] = mat.elements[0][1];
+  out.elements[1][2] = mat.elements[2][1];
+  out.elements[2][1] = mat.elements[1][2];
+  out.elements[2][0] = mat.elements[0][2];
+
+  return out;
+}
+
+IVY_FORCE_INLINE mat3_t mat3_add(mat3_t a, mat3_t b) {
+  mat3_t out = mat3(0.0f);
+
+  out.columns[0] = vec3_add(a.columns[0], b.columns[0]);
+  out.columns[1] = vec3_add(a.columns[1], b.columns[1]);
+  out.columns[2] = vec3_add(a.columns[2], b.columns[2]);
+
+  return out;
+}
+
+IVY_FORCE_INLINE mat3_t mat3_sub(mat3_t a, mat3_t b) {
+  mat3_t out = mat3(0.0f);
+
+  out.columns[0] = vec3_sub(a.columns[0], b.columns[0]);
+  out.columns[1] = vec3_sub(a.columns[1], b.columns[1]);
+  out.columns[2] = vec3_sub(a.columns[2], b.columns[2]);
+
+  return out;
+}
+
+IVY_FORCE_INLINE vec3_t mat3_mul_vec3(mat3_t mat, vec3_t vec) {
+  return vec3(mat.columns[0].x * vec.x + mat.columns[1].x * vec.y +
+                  mat.columns[2].x * vec.z,
+              mat.columns[0].y * vec.x + mat.columns[1].y * vec.y +
+                  mat.columns[2].y * vec.z,
+              mat.columns[0].z * vec.x + mat.columns[1].z * vec.y +
+                  mat.columns[2].z * vec.z);
+}
+
 IVY_FORCE_INLINE mat3_t mat3_mul(mat3_t a, mat3_t b) {
   mat3_t out = mat3(1.0f);
 
@@ -490,6 +523,51 @@ IVY_FORCE_INLINE mat3_t mat3_mul(mat3_t a, mat3_t b) {
   out.columns[2] = mat3_mul_vec3(a, b.columns[2]);
 
   return out;
+}
+
+IVY_FORCE_INLINE mat3_t mat3_mul_s(mat3_t mat, float scalar) {
+  mat3_t out = mat3(1.0f);
+
+  out.columns[0] = vec3_mul_s(mat.columns[0], scalar);
+  out.columns[1] = vec3_mul_s(mat.columns[1], scalar);
+  out.columns[2] = vec3_mul_s(mat.columns[2], scalar);
+
+  return out;
+}
+
+IVY_FORCE_INLINE mat3_t mat3_div_s(mat3_t mat, float scalar) {
+  mat3_t out = mat3(1.0f);
+
+  out.columns[0] = vec3_div_s(mat.columns[0], scalar);
+  out.columns[1] = vec3_div_s(mat.columns[1], scalar);
+  out.columns[2] = vec3_div_s(mat.columns[2], scalar);
+
+  return out;
+}
+
+IVY_FORCE_INLINE float mat3_det(mat3_t mat) {
+  mat3_t cross;
+  cross.columns[0] = vec3_cross(mat.columns[1], mat.columns[2]);
+  cross.columns[1] = vec3_cross(mat.columns[2], mat.columns[0]);
+  cross.columns[2] = vec3_cross(mat.columns[0], mat.columns[1]);
+
+  return vec3_dot(cross.columns[2], mat.columns[2]);
+}
+
+IVY_FORCE_INLINE mat3_t mat3_inv(mat3_t mat) {
+  mat3_t cross;
+  cross.columns[0] = vec3_cross(mat.columns[1], mat.columns[2]);
+  cross.columns[1] = vec3_cross(mat.columns[2], mat.columns[0]);
+  cross.columns[2] = vec3_cross(mat.columns[0], mat.columns[1]);
+
+  float inv_det = 1.0f / vec3_dot(cross.columns[2], mat.columns[2]);
+
+  mat3_t out;
+  out.columns[0] = vec3_mul_s(cross.columns[0], inv_det);
+  out.columns[1] = vec3_mul_s(cross.columns[1], inv_det);
+  out.columns[2] = vec3_mul_s(cross.columns[2], inv_det);
+
+  return mat3_transpose(out);
 }
 
 /*
