@@ -51,9 +51,9 @@
 
   vecn_refl(vec, norm) - Returns vector vec reflected on the normal norm
 
-  All of these functions have a generic variation (for C11), where you dont have
-  to specify the n part, so adding two vectors would be vec_add(a, b), and it
-  automatically infers the type of vector a and b.
+  All of these functions have a generic variation (for C11), where you don't
+  have to specify the n part, so adding two vectors would be vec_add(a, b), and
+  it automatically infers the type of vector a and b.
 
   There ARE a few vector functions that are specific for certain types. Such as:
 
