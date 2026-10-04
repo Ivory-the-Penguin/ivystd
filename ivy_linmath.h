@@ -224,7 +224,7 @@ IVY_FORCE_INLINE vec3_t vec3(float x, float y, float z) {
 }
 
 IVY_FORCE_INLINE vec3_t vec3_vec2(vec2_t xy, float z) {
-  return (vec3_t){.xy = xy, .z = z};
+  return (vec3_t){.x = xy.x, .y = xy.y, .z = z};
 }
 
 IVY_FORCE_INLINE vec3_t vec3_s(float scalar) {
@@ -303,7 +303,7 @@ IVY_FORCE_INLINE vec4_t vec4(float x, float y, float z, float w) {
 }
 
 IVY_FORCE_INLINE vec4_t vec4_vec3(vec3_t xyz, float w) {
-  return (vec4_t){.xyz = xyz, .w = w};
+  return (vec4_t){.x = xyz.x, .y = xyz.y, .z = xyz.z, .w = w};
 }
 
 IVY_FORCE_INLINE vec4_t vec4_s(float scalar) {
