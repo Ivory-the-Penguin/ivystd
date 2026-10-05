@@ -84,6 +84,36 @@
 #include "ivy_core.h"
 #include "ivy_math.h"
 
+#ifndef IVY_LINMATH_NO_SIMD
+
+#ifdef _MSC_VER
+
+#if defined(_M_AMD64) || (defined(_M_IX86_FP) && _M_IX86_FP >= 1)
+#define IVY_LINMATH_USE_SSE
+#endif
+
+#else
+
+#ifdef __SSE__
+#define IVY_LINMATH_USE_SSE
+#endif
+
+#endif
+
+#ifdef __ARM_NEON
+#define IVY_LINMATH_USE_NEON
+#endif
+
+#endif
+
+#ifdef IVY_LINMATH_USE_SSE
+#include <xmmintrin.h>
+#endif
+
+#ifdef IVY_LINMATH_USE_NEON
+#include <arm_neon.h>
+#endif
+
 typedef union {
   struct {
     float x;
@@ -189,6 +219,14 @@ typedef union {
   };
 
   float elements[4];
+
+#ifdef IVY_LINMATH_USE_SSE
+  __m128 sse;
+#endif
+
+#ifdef IVY_LINMATH_USE_NEON
+  float32x4_t neon;
+#endif
 } vec4_t;
 
 typedef union {
@@ -220,6 +258,14 @@ typedef union {
   };
 
   float elements[4];
+
+#ifdef IVY_LINMATH_USE_SSE
+  __m128 sse;
+#endif
+
+#ifdef IVY_LINMATH_USE_NEON
+  float32x4_t neon;
+#endif
 } quat_t;
 
 /*
@@ -396,51 +442,88 @@ IVY_FORCE_INLINE float vec3_dist(vec3_t a, vec3_t b) {
 /*
  *  vec4 implementation
  */
+
 static const vec4_t vec4_zero = (vec4_t){0.0f, 0.0f, 0.0f, 0.0f};
 static const vec4_t vec4_one = (vec4_t){1.0f, 1.0f, 1.0f, 1.0f};
 
 IVY_FORCE_INLINE vec4_t vec4(float x, float y, float z, float w) {
+#ifdef IVY_LINMATH_USE_SSE
+  return (vec4_t){.sse = _mm_setr_ps(x, y, z, w)};
+#elif IVY_LINMATH_USE_NEON
+  return (vec4_t){.neon = (float32x4_t){x, y, z, w}};
+#else
   return (vec4_t){.x = x, .y = y, .z = z, .w = w};
+#endif
 }
 
 IVY_FORCE_INLINE vec4_t vec4_vec3(vec3_t xyz, float w) {
-  return (vec4_t){.x = xyz.x, .y = xyz.y, .z = xyz.z, .w = w};
+  return vec4(xyz.x, xyz.y, xyz.z, w);
 }
 
 IVY_FORCE_INLINE vec4_t vec4_s(float scalar) {
-  return (vec4_t){.x = scalar, .y = scalar, .z = scalar, .w = scalar};
+#ifdef IVY_LINMATH_USE_SSE
+  return (vec4_t){.sse = _mm_set1_ps(scalar)};
+#elif
+  return (vec4_t){.neon = vdupq_n_f32(scalar)};
+#else
+  return vec4(scalar, scalar, scalar, scalar);
+#endif
 }
 
 IVY_FORCE_INLINE vec4_t vec4_add(vec4_t a, vec4_t b) {
+#ifdef IVY_LINMATH_USE_SSE
+  return (vec4_t){.sse = _mm_add_ps(a.sse, b.sse)};
+#elif IVY_LINMATH_USE_NEON
+  return (vec4_t){.neon = vaddq_f32(a.neon, b.neon)};
+#else
   return vec4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
+#endif
 }
 
 IVY_FORCE_INLINE vec4_t vec4_sub(vec4_t a, vec4_t b) {
+#ifdef IVY_LINMATH_USE_SSE
+  return (vec4_t){.sse = _mm_sub_ps(a.sse, b.sse)};
+#elif IVY_LINMATH_USE_NEON
+  return (vec4_t){.neon = vsubq_f32(a.neon, b.neon)};
+#else
   return vec4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
+#endif
 }
 
 IVY_FORCE_INLINE vec4_t vec4_mul(vec4_t a, vec4_t b) {
+#ifdef IVY_LINMATH_USE_SSE
+  return (vec4_t){.sse = _mm_mul_ps(a.sse, b.sse)};
+#elif IVY_LINMATH_USE_NEON
+  return (vec4_t){.neon = vmulq_f32(a.neon, b.neon)};
+#else
   return vec4(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
+#endif
 }
 
 IVY_FORCE_INLINE vec4_t vec4_div(vec4_t a, vec4_t b) {
+#ifdef IVY_LINMATH_USE_SSE
+  return (vec4_t){.sse = _mm_div_ps(a.sse, b.sse)};
+#elif IVY_LINMATH_USE_NEON
+  return (vec4_t){.neon = vdivq_f32(a.neon, b.neon)};
+#else
   return vec4(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w);
+#endif
 }
 
 IVY_FORCE_INLINE vec4_t vec4_add_s(vec4_t vec, float scalar) {
-  return vec4(vec.x + scalar, vec.y + scalar, vec.z + scalar, vec.w + scalar);
+  return vec4_add(vec, vec4_s(scalar));
 }
 
 IVY_FORCE_INLINE vec4_t vec4_sub_s(vec4_t vec, float scalar) {
-  return vec4(vec.x - scalar, vec.y - scalar, vec.z - scalar, vec.w - scalar);
+  return vec4_sub(vec, vec4_s(scalar));
 }
 
 IVY_FORCE_INLINE vec4_t vec4_mul_s(vec4_t vec, float scalar) {
-  return vec4(vec.x * scalar, vec.y * scalar, vec.z * scalar, vec.w * scalar);
+  return vec4_mul(vec, vec4_s(scalar));
 }
 
 IVY_FORCE_INLINE vec4_t vec4_div_s(vec4_t vec, float scalar) {
-  return vec4(vec.x / scalar, vec.y / scalar, vec.z / scalar, vec.w / scalar);
+  return vec4_div(vec, vec4_s(scalar));
 }
 
 IVY_FORCE_INLINE float vec4_dot(vec4_t a, vec4_t b) {
