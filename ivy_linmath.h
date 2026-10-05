@@ -532,6 +532,28 @@ IVY_FORCE_INLINE vec4_t vec4_div_s(vec4_t vec, float scalar) {
 }
 
 IVY_FORCE_INLINE float vec4_dot(vec4_t a, vec4_t b) {
+#ifdef IVY_LINMATH_USE_SSE
+  float out;
+
+  __m128 sse_out1 = _mm_mul_ps(a.sse, b.sse);
+  __m128 sse_out2 = _mm_shuffle_ps(sse_out1, sse_out1, _MM_SHUFFLE(2, 3, 0, 1));
+  sse_out1 = _mm_add_ps(sse_out1, sse_out2);
+  sse_out2 = _mm_shuffle_ps(sse_out1, sse_out1, _MM_SHUFFLE(0, 1, 2, 3));
+  sse_out1 = _mm_add_ps(sse_out1, sse_out2);
+  _mm_store_ss(&out, sse_out1);
+
+  return out;
+#elif IVY_LINMATH_USE_NEON
+  float out;
+
+  float32x4_t neon_mul_out = vmulq_f32(a.neon, b.neon);
+  float32x4_t neon_half_add = vpaddq_f32(neon_mul_out, neon_mul_out);
+  float32x4_t neon_full_add = vpaddq_f32(neon_half_add, neon_half_add);
+  out = vgetq_lane_f32(neon_full_add, 0);
+
+  return out;
+#else
+
   return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
@@ -957,16 +979,16 @@ IVY_FORCE_INLINE mat4_t mat4_rotate(float angle, vec3_t axis) {
  */
 #ifdef IVY_ATLEAST_C11
 
-#define vec_add(a, b)                                                          \
+#define vec_add(a, b) \
   _Generic((a), vec2_t: vec2_add, vec3_t: vec3_add, vec4_t: vec4_add)((a), (b))
 
-#define vec_sub(a, b)                                                          \
+#define vec_sub(a, b) \
   _Generic((a), vec2_t: vec2_sub, vec3_t: vec3_sub, vec4_t: vec4_sub)((a), (b))
 
-#define vec_mul(a, b)                                                          \
+#define vec_mul(a, b) \
   _Generic((a), vec2_t: vec2_mul, vec3_t: vec3_mul, vec4_t: vec4_mul)((a), (b))
 
-#define vec_div(a, b)                                                          \
+#define vec_div(a, b) \
   _Generic((a), vec2_t: vec2_div, vec3_t: vec3_div, vec4_t: vec4_div)((a), (b))
 
 #define vec_add_s(vec, scalar)                                                 \
@@ -985,76 +1007,76 @@ IVY_FORCE_INLINE mat4_t mat4_rotate(float angle, vec3_t axis) {
   _Generic((vec), vec2_t: vec2_div_s, vec3_t: vec3_div_s, vec4_t: vec4_div_s)( \
       (vec), (scalar))
 
-#define vec_dot(a, b)                                                          \
+#define vec_dot(a, b) \
   _Generic((a), vec2_t: vec2_dot, vec3_t: vec3_dot, vec4_t: vec4_dot)((a), (b))
 
-#define vec_len_sq(vec)                                                        \
-  _Generic((vec),                                                              \
-      vec2_t: vec2_len_sq,                                                     \
-      vec3_t: vec3_len_sq,                                                     \
+#define vec_len_sq(vec)    \
+  _Generic((vec),          \
+      vec2_t: vec2_len_sq, \
+      vec3_t: vec3_len_sq, \
       vec4_t: vec4_len_sq)((vec))
 
-#define vec_len(vec)                                                           \
+#define vec_len(vec) \
   _Generic((vec), vec2_t: vec2_len, vec3_t: vec3_len, vec4_t: vec4_len)((vec))
 
-#define vec_eq(a, b)                                                           \
+#define vec_eq(a, b) \
   _Generic((a), vec2_t: vec2_eq, vec3_t: vec3_eq, vec4_t: vec4_eq)((a), (b))
 
-#define vec_norm(vec)                                                          \
-  _Generic((vec), vec2_t: vec2_norm, vec3_t: vec3_norm, vec4_t: vec4_norm)(    \
+#define vec_norm(vec)                                                       \
+  _Generic((vec), vec2_t: vec2_norm, vec3_t: vec3_norm, vec4_t: vec4_norm)( \
       (vec))
 
-#define vec_lerp(a, b, t)                                                      \
-  _Generic((a), vec2_t: vec2_lerp, vec3_t: vec3_lerp, vec4_t: vec4_lerp)(      \
+#define vec_lerp(a, b, t)                                                 \
+  _Generic((a), vec2_t: vec2_lerp, vec3_t: vec3_lerp, vec4_t: vec4_lerp)( \
       (a), (b), (t))
 
-#define vec_dist_sq(a, b)                                                      \
-  _Generic((a),                                                                \
-      vec2_t: vec2_dist_sq,                                                    \
-      vec3_t: vec3_dist_sq,                                                    \
+#define vec_dist_sq(a, b)   \
+  _Generic((a),             \
+      vec2_t: vec2_dist_sq, \
+      vec3_t: vec3_dist_sq, \
       vec4_t: vec4_dist_sq)((a), (b))
 
-#define vec_dist(a, b)                                                         \
-  _Generic((a), vec2_t: vec2_dist, vec3_t: vec3_dist, vec4_t: vec4_dist)((a),  \
+#define vec_dist(a, b)                                                        \
+  _Generic((a), vec2_t: vec2_dist, vec3_t: vec3_dist, vec4_t: vec4_dist)((a), \
                                                                          (b))
 
-#define vec_refl(vec, norm)                                                    \
-  _Generic((vec), vec2_t: vec2_refl, vec3_t: vec3_refl, vec4_t: vec4_refl)(    \
+#define vec_refl(vec, norm)                                                 \
+  _Generic((vec), vec2_t: vec2_refl, vec3_t: vec3_refl, vec4_t: vec4_refl)( \
       (vec), (norm))
 
-#define mat_transpose(mat)                                                     \
-  _Generic((mat),                                                              \
-      mat2_t: mat2_transpose,                                                  \
-      mat3_t: mat3_transpose,                                                  \
+#define mat_transpose(mat)    \
+  _Generic((mat),             \
+      mat2_t: mat2_transpose, \
+      mat3_t: mat3_transpose, \
       mat4_t: mat4_transpose)((mat))
 
-#define mat_add(a, b)                                                          \
+#define mat_add(a, b) \
   _Generic((a), mat2_t: mat2_add, mat3_t: mat3_add, mat4_t: mat4_add)((a), (b))
 
-#define mat_sub(a, b)                                                          \
+#define mat_sub(a, b) \
   _Generic((a), mat2_t: mat2_sub, mat3_t: mat3_sub, mat4_t: mat4_sub)((a), (b))
 
-#define mat_mul_vec(mat, vec)                                                  \
-  _Generic((mat),                                                              \
-      mat2_t: mat2_mul_vec2,                                                   \
-      mat3_t: mat3_mul_vec3,                                                   \
+#define mat_mul_vec(mat, vec) \
+  _Generic((mat),             \
+      mat2_t: mat2_mul_vec2,  \
+      mat3_t: mat3_mul_vec3,  \
       mat4_t: mat4_mul_vec4)((mat), (vec))
 
-#define mat_mul(a, b)                                                          \
+#define mat_mul(a, b) \
   _Generic((a), mat2_t: mat2_mul, mat3_t: mat3_mul, mat4_t: mat4_mul)((a), (b))
 
-#define mat_mul_s(a, b)                                                        \
-  _Generic((a), mat2_t: mat2_mul_s, mat3_t: mat3_mul_s, mat4_t: mat4_mul_s)(   \
+#define mat_mul_s(a, b)                                                      \
+  _Generic((a), mat2_t: mat2_mul_s, mat3_t: mat3_mul_s, mat4_t: mat4_mul_s)( \
       (a), (b))
 
-#define mat_div_s(a, b)                                                        \
-  _Generic((a), mat2_t: mat2_div_s, mat3_t: mat3_div_s, mat4_t: mat4_div_s)(   \
+#define mat_div_s(a, b)                                                      \
+  _Generic((a), mat2_t: mat2_div_s, mat3_t: mat3_div_s, mat4_t: mat4_div_s)( \
       (a), (b))
 
-#define mat_det(mat)                                                           \
+#define mat_det(mat) \
   _Generic((mat), mat2_t: mat2_det, mat3_t: mat3_det, mat4_t: mat4_det)((mat))
 
-#define mat_inv(mat)                                                           \
+#define mat_inv(mat) \
   _Generic((mat), mat2_t: mat2_inv, mat3_t: mat3_inv, mat4_t: mat4_inv)((mat))
 
 #endif

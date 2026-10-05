@@ -42,11 +42,11 @@
 
 #endif
 
-#define IVY_ASSERT(condition, message)                                         \
-  ((condition)                                                                 \
-       ? (void)0                                                               \
-       : (fprintf(stderr, "ASSERTION FAILED: %s\nFile: %s, Line: %d\n",        \
-                  (message), __FILE__, __LINE__),                              \
+#define IVY_ASSERT(condition, message)                                  \
+  ((condition)                                                          \
+       ? (void)0                                                        \
+       : (fprintf(stderr, "ASSERTION FAILED: %s\nFile: %s, Line: %d\n", \
+                  (message), __FILE__, __LINE__),                       \
           abort()))
 
 #if defined(_MSC_VER)
