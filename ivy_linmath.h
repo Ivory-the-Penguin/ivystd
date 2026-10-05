@@ -463,7 +463,7 @@ IVY_FORCE_INLINE vec4_t vec4_vec3(vec3_t xyz, float w) {
 IVY_FORCE_INLINE vec4_t vec4_s(float scalar) {
 #ifdef IVY_LINMATH_USE_SSE
   return (vec4_t){.sse = _mm_set1_ps(scalar)};
-#elif
+#elif IVY_LINMATH_USE_NEON
   return (vec4_t){.neon = vdupq_n_f32(scalar)};
 #else
   return vec4(scalar, scalar, scalar, scalar);
