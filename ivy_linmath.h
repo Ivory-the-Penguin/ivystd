@@ -803,6 +803,17 @@ IVY_FORCE_INLINE mat4_t mat4(float diagonal) {
 IVY_FORCE_INLINE mat4_t mat4_transpose(mat4_t mat) {
   mat4_t out;
 
+#ifdef IVY_LINMATH_USE_SSE
+  out = mat;
+  _MM_TRANSPOSE4_PS(out.columns[0].sse, out.columns[1].sse, out.columns[2].sse,
+                    out.columns[3].sse);
+#elif defined(IVY_LINMATH_USE_NEON)
+  float32x4x4_t transposed = vld4q_f32((float *)mat.columns);
+  out.columns[0].neon = transposed.val[0];
+  out.columns[1].neon = transposed.val[1];
+  out.columns[2].neon = transposed.val[2];
+  out.columns[3].neon = transposed.val[3];
+#else
   out.elements[0][0] = mat.elements[0][0];
   out.elements[0][1] = mat.elements[1][0];
   out.elements[0][2] = mat.elements[2][0];
@@ -819,6 +830,7 @@ IVY_FORCE_INLINE mat4_t mat4_transpose(mat4_t mat) {
   out.elements[3][1] = mat.elements[1][3];
   out.elements[3][2] = mat.elements[2][3];
   out.elements[3][3] = mat.elements[3][3];
+#endif
 
   return out;
 }
