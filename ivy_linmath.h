@@ -908,23 +908,38 @@ IVY_FORCE_INLINE mat4_t mat4_mul(mat4_t a, mat4_t b) {
 }
 
 IVY_FORCE_INLINE mat4_t mat4_mul_s(mat4_t mat, float scalar) {
-  mat4_t out = mat4(1.0f);
+  mat4_t out;
 
+#ifdef IVY_LINMATH_USE_SSE
+  __m128 scalar_sse = vec4_s(scalar).sse;
+  out.columns[0].sse = _mm_mul_ps(mat.columns[0].sse, scalar_sse);
+  out.columns[1].sse = _mm_mul_ps(mat.columns[1].sse, scalar_sse);
+  out.columns[2].sse = _mm_mul_ps(mat.columns[2].sse, scalar_sse);
+  out.columns[3].sse = _mm_mul_ps(mat.columns[3].sse, scalar_sse);
+#else
   out.columns[0] = vec4_mul_s(mat.columns[0], scalar);
   out.columns[1] = vec4_mul_s(mat.columns[1], scalar);
   out.columns[2] = vec4_mul_s(mat.columns[2], scalar);
   out.columns[3] = vec4_mul_s(mat.columns[3], scalar);
+#endif
 
   return out;
 }
 
 IVY_FORCE_INLINE mat4_t mat4_div_s(mat4_t mat, float scalar) {
-  mat4_t out = mat4(1.0f);
-
+  mat4_t out;
+#ifdef IVY_LINMATH_USE_SSE
+  __m128 scalar_sse = vec4_s(scalar).sse;
+  out.columns[0].sse = _mm_div_ps(mat.columns[0].sse, scalar_sse);
+  out.columns[1].sse = _mm_div_ps(mat.columns[1].sse, scalar_sse);
+  out.columns[2].sse = _mm_div_ps(mat.columns[2].sse, scalar_sse);
+  out.columns[3].sse = _mm_div_ps(mat.columns[3].sse, scalar_sse);
+#else
   out.columns[0] = vec4_div_s(mat.columns[0], scalar);
   out.columns[1] = vec4_div_s(mat.columns[1], scalar);
   out.columns[2] = vec4_div_s(mat.columns[2], scalar);
   out.columns[3] = vec4_div_s(mat.columns[3], scalar);
+#endif
 
   return out;
 }
