@@ -28,7 +28,7 @@ typedef struct {
   uint64_t length;
 } string_view_t;
 
-#define SV(c_str)                                                              \
+#define SV(c_str) \
   (string_view_t) { .data = c_str, .length = strlen(c_str), }
 
 #define SV_FOREACH(sv, i) for (uint64_t(i) = 0; (i) < (sv.length); (i)++)

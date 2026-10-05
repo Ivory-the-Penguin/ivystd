@@ -553,7 +553,6 @@ IVY_FORCE_INLINE float vec4_dot(vec4_t a, vec4_t b) {
 
   return out;
 #else
-
   return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 #endif
 }

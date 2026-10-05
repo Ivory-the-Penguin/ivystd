@@ -91,14 +91,14 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
       bool is_long = false;
       SV_FOREACH(fmt_option, i) {
         switch (fmt_option.data[i]) {
-        case 'u':
-          is_unsigned = true;
-          break;
-        case 'l':
-          is_long = true;
-          break;
-        default:
-          break;
+          case 'u':
+            is_unsigned = true;
+            break;
+          case 'l':
+            is_long = true;
+            break;
+          default:
+            break;
         }
       }
 

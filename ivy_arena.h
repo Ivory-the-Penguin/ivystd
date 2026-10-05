@@ -15,7 +15,6 @@
 #define IVY_ARENA_FIX 0
 
 #include "ivy_allocator.h"
-
 #include "ivy_core.h"
 
 typedef struct {

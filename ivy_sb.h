@@ -13,11 +13,12 @@
 #define IVY_SB_MINOR 1
 #define IVY_SB_FIX 0
 
+#include <stdint.h>
+#include <string.h>
+
 #include "ivy_allocator.h"
 #include "ivy_core.h"
 #include "ivy_sv.h"
-#include <stdint.h>
-#include <string.h>
 
 typedef struct {
   char *data;
@@ -43,8 +44,9 @@ IVY_FORCE_INLINE string_builder_t sb_make_with_reserved(allocator_t alloc,
 IVY_FORCE_INLINE string_builder_t sb_make_from_sv(allocator_t alloc,
                                                   string_view_t sv) {
   IVY_ASSERT(sv.data != NULL, "String view is NULL");
-  IVY_ASSERT(sv.length > 0, "String view can't be empty. Use "
-                            "sb_make_with_reserved or sb_make instead");
+  IVY_ASSERT(sv.length > 0,
+             "String view can't be empty. Use "
+             "sb_make_with_reserved or sb_make instead");
 
   string_builder_t sb = sb_make_with_reserved(alloc, sv.length);
   sb.length = sv.length;
