@@ -1,5 +1,18 @@
+/*
+  ----- Ivy Format -----
+  Version: 0.1.0
+  License: MIT-0
+
+  This stb-style header has a formatting function for ivystd.
+  Inspired by the C++ library, {fmt}.
+*/
+
 #ifndef IVY_FORMAT_H
 #define IVY_FORMAT_H
+
+#define IVY_FORMAT_MAJOR 0
+#define IVY_FORMAT_MINOR 1
+#define IVY_FORMAT_FIX 0
 
 #include "ivy_allocator.h"
 #include "ivy_sb.h"

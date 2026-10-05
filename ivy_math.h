@@ -1,5 +1,17 @@
+/*
+  ----- Ivy Math -----
+  Version: 0.1.0
+  License: MIT-0
+
+  This header only library has some useful maths functions for the ivystd.
+*/
+
 #ifndef IVY_MATH_H
 #define IVY_MATH_H
+
+#define IVY_MATH_MAJOR 0
+#define IVY_MATH_MINOR 1
+#define IVY_MATH_FIX 0
 
 #include "ivy_core.h"
 

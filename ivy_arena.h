@@ -1,7 +1,21 @@
+/*
+  ----- Ivy Arena -----
+  Version: 0.1.0
+  License: MIT-0
+
+  This header only library has an arena type for the ivystd.
+  Inspired by Zig's FixedBufferAllocator.
+*/
+
 #ifndef IVY_ARENA_H
 #define IVY_ARENA_H
 
+#define IVY_ARENA_MAJOR 0
+#define IVY_ARENA_MINOR 1
+#define IVY_ARENA_FIX 0
+
 #include "ivy_allocator.h"
+
 #include "ivy_core.h"
 
 typedef struct {

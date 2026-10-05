@@ -1,5 +1,17 @@
+/*
+  ----- Ivy String Builder -----
+  Version: 0.1.0
+  License: MIT-0
+
+  This header only library has a string builder type for the ivystd.
+*/
+
 #ifndef IVY_SB_H
 #define IVY_SB_H
+
+#define IVY_SB_MAJOR 0
+#define IVY_SB_MINOR 1
+#define IVY_SB_FIX 0
 
 #include "ivy_allocator.h"
 #include "ivy_core.h"

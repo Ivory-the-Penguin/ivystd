@@ -1,7 +1,12 @@
 /*
-  ----- Ivy Linear Algebra -----
-  This is a small header only library for linear algebra, if you want to ask
-  why, look at ./docs/linmath.md
+  ----- Ivy Linmath -----
+  Version: Pre-1.0.0
+  License: MIT-0
+
+  This is a header only library for linear algebra in the ivystd.
+  Inspired by the C/C++ header only library, Handmade Math.
+
+  My philosophy for this header is at ./docs/linmath.md
 
   ----- Usage -----
   The header uses GLM standards, so radians for angles, column major matrices,
@@ -72,14 +77,15 @@
 
   ----- Credits -----
   Handmade Math inspired this header, and some of the functions (specifically
-  for mat4 and quaternions) were copied from Handmade Math
-
-  ----- License -----
-  This header (and the rest of ivystd) are licensed by MIT-0, so you can do
-  whatever you want. It would be nice to give credit, but not forced
+  for mat4 and quaternions) were copied from Handmade Math.
 */
+
 #ifndef IVY_LINMATH_H
 #define IVY_LINMATH_H
+
+#define IVY_LINMATH_MAJOR 1 /* PRE 1 */
+#define IVY_LINMATH_MINOR 0
+#define IVY_LINMATH_FIX 0
 
 #include "ivy_core.h"
 #include "ivy_math.h"

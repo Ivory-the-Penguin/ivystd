@@ -1,7 +1,18 @@
-// You can't change the default allocators for the heap.
-// BUT you can just make another allocator
+/*
+  ----- Ivy Allocator -----
+  Version: 0.1.0
+  License: MIT-0
+
+  This is an stb-style header has allocators for the ivystd.
+  Inspired by Zig's allocators.
+*/
+
 #ifndef IVY_ALLOCATOR_H
 #define IVY_ALLOCATOR_H
+
+#define IVY_ALLOCATOR_MAJOR 0
+#define IVY_ALLOCATOR_MINOR 1
+#define IVY_ALLOCATOR_FIX 0
 
 #include "ivy_core.h"
 

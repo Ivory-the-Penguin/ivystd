@@ -1,9 +1,17 @@
-// Define IVY_IMPL for implementation
-// Read https://github.com/nothings/stb/blob/master/docs/stb_howto.txt for
-// details
+/*
+  ----- Ivy String View -----
+  Version: 1.0.0
+  License: MIT-0
+
+  This stb-style header has a feature full string view for the ivystd.
+*/
 
 #ifndef IVY_SV_H
 #define IVY_SV_H
+
+#define IVY_SV_MAJOR 1
+#define IVY_SV_MINOR 0
+#define IVY_SV_FIX 0
 
 #include <ctype.h>
 #include <stdbool.h>
