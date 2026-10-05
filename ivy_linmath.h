@@ -17,47 +17,46 @@
   generic variation). Let's assume n is the size of the vector (going from 2 to
   4). We have the follow functions:
 
-  vecn(...) - Makes a vector, and the ... are the components (can go from
-  x and y to x, y, z, and w)
+  ~ vecn(...) : Makes a vector, with all the components (...)
 
-  vecn_s(float scalar) - Makes a vector, where each component is the scalar
+  ~ vecn_s(float scalar) : Makes a vector, where each component is the scalar
 
-  vecn_add(a, b) - Returns a + b
+  ~ vecn_add(a, b) : Returns a + b
 
-  vecn_sub(a, b) - Returns a - b
+  ~ vecn_sub(a, b) : Returns a - b
 
-  vecn_mul(a, b) - Returns a * b
+  ~ vecn_mul(a, b) : Returns a * b
 
-  vecn_div(a, b) - Returns a / b
+  ~ vecn_div(a, b) : Returns a / b
 
-  vecn_add_s(vec, scalar) - Returns vec + vecn_s(scalar)
+  ~ vecn_add_s(vec, scalar) : Returns vec + vecn_s(scalar)
 
-  vecn_sub_s(vec, scalar) - Returns vec - vecn_s(scalar)
+  ~ vecn_sub_s(vec, scalar) : Returns vec : vecn_s(scalar)
 
-  vecn_mul_s(vec, scalar) - Returns vec * vecn_s(scalar)
+  ~ vecn_mul_s(vec, scalar) : Returns vec * vecn_s(scalar)
 
-  vecn_div_s(vec, scalar) - Returns vec / vecn_s(scalar)
+  ~ vecn_div_s(vec, scalar) : Returns vec / vecn_s(scalar)
 
-  vecn_dot(a, b) - Returns the dot product of a and b
+  ~ vecn_dot(a, b) : Returns the dot product of a and b
 
-  vecn_len_sq(vec) - Returns the length of the vector squared
+  ~ vecn_len_sq(vec) : Returns the length of the vector squared
 
-  vecn_len(vec) - Returns the length of the vector
+  ~ vecn_len(vec) : Returns the length of the vector
 
-  vecn_eq(a, b) - Returns true if all components of a is equal to b, false
+  ~ vecn_eq(a, b) : Returns true if all components of a is equal to b, false
   otherwise
 
-  vecn_norm(vec) - Returns the normalized (length is 1) vector (if vec is a zero
-  vector, it returns a zero vector)
+  ~ vecn_norm(vec) : Returns the normalized (length is 1) vector (if vec is a
+  zero vector, it returns a zero vector)
 
-  vecn_lerp(a, b, t) - Returns the lerp of a and b, at t% progress (0% is a,
+  ~ vecn_lerp(a, b, t) : Returns the lerp of a and b, at t% progress (0% is a,
   100% is b, anything else is in between)
 
-  vecn_dist_sq(a, b) - Returns the distance between point A and B squared
+  ~ vecn_dist_sq(a, b) : Returns the distance between point A and B squared
 
-  vecn_dist(a, b) - Returns the distance between point A and B
+  ~ vecn_dist(a, b) : Returns the distance between point A and B
 
-  vecn_refl(vec, norm) - Returns vector vec reflected on the normal norm
+  ~ vecn_refl(vec, norm) : Returns vector vec reflected on the normal norm
 
   All of these functions have a generic variation (for C11 and above), where
   you don't have to specify the n part, so adding two vectors would be
@@ -65,13 +64,13 @@
 
   There ARE a few vector functions that are specific for certain types. Such as:
 
-  vec3_vec2(vec, z) - Returns a 3D vector that comes from a 2D vector and a z
+  ~ vec3_vec2(vec, z) : Returns a 3D vector that comes from a 2D vector and a z
   component
 
-  vec4_vec3(vec, w) - Returns a 4D vector that comes from a 3D vector and a w
+  ~ vec4_vec3(vec, w) : Returns a 4D vector that comes from a 3D vector and a w
   component
 
-  vec3_cross(a, b) - Finds the cross product of 2 vectors (vec3 vectors)
+  ~ vec3_cross(a, b) : Finds the cross product of 2 vectors (vec3 vectors)
 
   For every vector type there is a zero and one vector constant.
 
