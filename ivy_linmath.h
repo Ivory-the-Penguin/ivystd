@@ -812,6 +812,7 @@ IVY_FORCE_INLINE mat4_t mat4_sub(mat4_t a, mat4_t b) {
 
   out.columns[0] = vec4_sub(a.columns[0], b.columns[0]);
   out.columns[1] = vec4_sub(a.columns[1], b.columns[1]);
+  out.columns[2] = vec4_sub(a.columns[2], b.columns[2]);
   out.columns[3] = vec4_sub(a.columns[3], b.columns[3]);
 
   return out;
