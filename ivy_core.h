@@ -36,6 +36,10 @@
 #define IVY_ATLEAST_C17
 #endif
 
+#if __STDC_VERSION__ >= 202311L
+#define IVY_ATLEAST_C23
+#endif
+
 #endif
 
 #define IVY_ASSERT(condition, message)                                         \
