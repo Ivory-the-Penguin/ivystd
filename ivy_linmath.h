@@ -454,7 +454,7 @@ static const vec4_t vec4_one = (vec4_t){1.0f, 1.0f, 1.0f, 1.0f};
 IVY_FORCE_INLINE vec4_t vec4(float x, float y, float z, float w) {
 #ifdef IVY_LINMATH_USE_SSE
   return (vec4_t){.sse = _mm_setr_ps(x, y, z, w)};
-#elif IVY_LINMATH_USE_NEON
+#elif defined(IVY_LINMATH_USE_NEON)
   return (vec4_t){.neon = (float32x4_t){x, y, z, w}};
 #else
   return (vec4_t){.x = x, .y = y, .z = z, .w = w};
@@ -468,7 +468,7 @@ IVY_FORCE_INLINE vec4_t vec4_vec3(vec3_t xyz, float w) {
 IVY_FORCE_INLINE vec4_t vec4_s(float scalar) {
 #ifdef IVY_LINMATH_USE_SSE
   return (vec4_t){.sse = _mm_set1_ps(scalar)};
-#elif IVY_LINMATH_USE_NEON
+#elif defined(IVY_LINMATH_USE_NEON)
   return (vec4_t){.neon = vdupq_n_f32(scalar)};
 #else
   return vec4(scalar, scalar, scalar, scalar);
@@ -478,7 +478,7 @@ IVY_FORCE_INLINE vec4_t vec4_s(float scalar) {
 IVY_FORCE_INLINE vec4_t vec4_add(vec4_t a, vec4_t b) {
 #ifdef IVY_LINMATH_USE_SSE
   return (vec4_t){.sse = _mm_add_ps(a.sse, b.sse)};
-#elif IVY_LINMATH_USE_NEON
+#elif defined(IVY_LINMATH_USE_NEON)
   return (vec4_t){.neon = vaddq_f32(a.neon, b.neon)};
 #else
   return vec4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
@@ -488,7 +488,7 @@ IVY_FORCE_INLINE vec4_t vec4_add(vec4_t a, vec4_t b) {
 IVY_FORCE_INLINE vec4_t vec4_sub(vec4_t a, vec4_t b) {
 #ifdef IVY_LINMATH_USE_SSE
   return (vec4_t){.sse = _mm_sub_ps(a.sse, b.sse)};
-#elif IVY_LINMATH_USE_NEON
+#elif defined(IVY_LINMATH_USE_NEON)
   return (vec4_t){.neon = vsubq_f32(a.neon, b.neon)};
 #else
   return vec4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
@@ -498,7 +498,7 @@ IVY_FORCE_INLINE vec4_t vec4_sub(vec4_t a, vec4_t b) {
 IVY_FORCE_INLINE vec4_t vec4_mul(vec4_t a, vec4_t b) {
 #ifdef IVY_LINMATH_USE_SSE
   return (vec4_t){.sse = _mm_mul_ps(a.sse, b.sse)};
-#elif IVY_LINMATH_USE_NEON
+#elif defined(IVY_LINMATH_USE_NEON)
   return (vec4_t){.neon = vmulq_f32(a.neon, b.neon)};
 #else
   return vec4(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
@@ -508,7 +508,7 @@ IVY_FORCE_INLINE vec4_t vec4_mul(vec4_t a, vec4_t b) {
 IVY_FORCE_INLINE vec4_t vec4_div(vec4_t a, vec4_t b) {
 #ifdef IVY_LINMATH_USE_SSE
   return (vec4_t){.sse = _mm_div_ps(a.sse, b.sse)};
-#elif IVY_LINMATH_USE_NEON
+#elif defined(IVY_LINMATH_USE_NEON)
   return (vec4_t){.neon = vdivq_f32(a.neon, b.neon)};
 #else
   return vec4(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w);
@@ -543,7 +543,7 @@ IVY_FORCE_INLINE float vec4_dot(vec4_t a, vec4_t b) {
   _mm_store_ss(&out, sse_out1);
 
   return out;
-#elif IVY_LINMATH_USE_NEON
+#elif defined(IVY_LINMATH_USE_NEON)
   float out;
 
   float32x4_t neon_mul_out = vmulq_f32(a.neon, b.neon);
