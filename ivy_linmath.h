@@ -845,15 +845,43 @@ IVY_FORCE_INLINE mat4_t mat4_sub(mat4_t a, mat4_t b) {
   return out;
 }
 
-IVY_FORCE_INLINE vec4_t mat4_mul_vec4(mat4_t mat, vec4_t vec) {
-  return vec4(mat.columns[0].x * vec.x + mat.columns[1].x * vec.y +
-                  mat.columns[2].x * vec.z + mat.columns[3].x * vec.w,
-              mat.columns[0].y * vec.x + mat.columns[1].y * vec.y +
-                  mat.columns[2].y * vec.z + mat.columns[3].y * vec.w,
-              mat.columns[0].z * vec.x + mat.columns[1].z * vec.y +
-                  mat.columns[2].z * vec.z + mat.columns[3].z * vec.w,
-              mat.columns[0].w * vec.x + mat.columns[1].w * vec.y +
-                  mat.columns[2].w * vec.z + mat.columns[3].w * vec.w);
+IVY_FORCE_INLINE vec4_t mat4_mul_vec4(mat4_t a, vec4_t b) {
+  vec4_t out;
+#ifdef IVY_LINMATH_USE_SSE
+  out.sse = _mm_mul_ps(_mm_shuffle_ps(b.sse, b.sse, 0x00), a.columns[0].sse);
+  out.sse = _mm_add_ps(out.sse, _mm_mul_ps(_mm_shuffle_ps(b.sse, b.sse, 0x55),
+                                           a.columns[1].sse));
+  out.sse = _mm_add_ps(out.sse, _mm_mul_ps(_mm_shuffle_ps(b.sse, b.sse, 0xaa),
+                                           a.columns[2].sse));
+  out.sse = _mm_add_ps(out.sse, _mm_mul_ps(_mm_shuffle_ps(b.sse, b.sse, 0xff),
+                                           a.columns[3].sse));
+#elif defined(IVY_LINMATH_USE_NEON)
+  out.neon = vmulq_laneq_f32(a.columns[0].neon, b.neon, 0);
+  out.neon = vfmaq_laneq_f32(out.neon, a.columns[1].neon, b.neon, 1);
+  out.neon = vfmaq_laneq_f32(out.neon, a.columns[2].neon, b.neon, 2);
+  out.neon = vfmaq_laneq_f32(out.neon, a.columns[3].neon, b.neon, 3);
+#else
+  out.x = b.x * a.columns[0].x;
+  out.y = b.x * a.columns[0].y;
+  out.z = b.x * a.columns[0].z;
+  out.w = b.x * a.columns[0].w;
+
+  out.x += b.y * a.columns[1].x;
+  out.y += b.y * a.columns[1].y;
+  out.z += b.y * a.columns[1].z;
+  out.w += b.y * a.columns[1].w;
+
+  out.x += b.z * a.columns[2].x;
+  out.y += b.z * a.columns[2].y;
+  out.z += b.z * a.columns[2].z;
+  out.w += b.z * a.columns[2].w;
+
+  out.x += b.w * a.columns[3].x;
+  out.y += b.w * a.columns[3].y;
+  out.z += b.w * a.columns[3].z;
+  out.w += b.w * a.columns[3].w;
+#endif
+  return out;
 }
 
 IVY_FORCE_INLINE mat4_t mat4_mul(mat4_t a, mat4_t b) {
