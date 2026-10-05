@@ -5,6 +5,8 @@
 
   This stb-style header has a formatting function for ivystd.
   Inspired by the C++ library, {fmt}.
+
+  Use IVY_IMPL macro for implementation
 */
 
 #ifndef IVY_FORMAT_H

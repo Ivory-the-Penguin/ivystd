@@ -5,6 +5,8 @@
 
   This is an stb-style header has allocators for the ivystd.
   Inspired by Zig's allocators.
+
+  Use IVY_IMPL macro for implementation
 */
 
 #ifndef IVY_ALLOCATOR_H

@@ -4,6 +4,8 @@
   License: MIT-0
 
   This stb-style header has a feature full string view for the ivystd.
+
+  Use IVY_IMPL macro for implementation
 */
 
 #ifndef IVY_SV_H
