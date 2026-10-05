@@ -24,8 +24,16 @@
 
 #if (!defined(__cplusplus) && defined(__STDC_VERSION__))
 
+#if __STDC_VERSION__ >= 199901L
+#define IVY_ATLEAST_C99
+#endif
+
 #if __STDC_VERSION__ >= 201112L
 #define IVY_ATLEAST_C11
+#endif
+
+#if __STDC_VERSION__ >= 201710L
+#define IVY_ATLEAST_C17
 #endif
 
 #endif
