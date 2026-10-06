@@ -124,22 +124,11 @@ string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
         }
       }
 
-      char scratch[32];
+      string_view_t n_sv = sv_from_uint(heap, n);
 
-      uint64_t length = 0;
-      uint64_t temp = n;
-      while (temp > 0) {
-        length++;
-        temp /= 10;
-      }
-      length = (length == 0 ? 1 : length);
+      sb_append_sv(&buffer, n_sv);
 
-      for (int64_t i = length - 1; i >= 0; i--) {
-        scratch[i] = (n % 10) + '0';
-        n = n / 10;
-      }
-
-      sb_append_sv(&buffer, (string_view_t){.data = scratch, .length = length});
+      ivy_free(heap, (void *)n_sv.data);
     } else {
       IVY_ASSERT(0, "Unknown formatting specifier!");
     }
