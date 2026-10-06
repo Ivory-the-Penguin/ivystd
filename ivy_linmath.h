@@ -10,8 +10,11 @@
 
   ----- Usage -----
   The header uses GLM standards, so radians for angles, column major matrices,
-  and right handed. Use the ivy_rad2deg or ivy_deg2rad functions in ivy_math
-  (or it's builtin if you define IVY_LINMATH_STANDALONE).
+  and right handed. Use the ivy_rad2deg or ivy_deg2rad functions in ivy_math.
+
+  Note that this header supports SIMD, to disable it, you use the
+  IVY_LINMATH_NO_SIMD macro before including the header, or as a compiler flag
+  (-DIVY_LINMATH_NO_SIMD).
 
   For vectors, it follows a pattern for the functions (and for C11 they have a
   generic variation). Let's assume n is the size of the vector (going from 2 to
