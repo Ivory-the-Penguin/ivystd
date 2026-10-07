@@ -1,5 +1,5 @@
 /*
-  ----- Ivy Format -----
+  ----- Ivy Fmt -----
   Version: 0.1.0
   License: MIT-0
 
@@ -9,26 +9,25 @@
   Use IVY_IMPL macro for implementation
 */
 
-#ifndef IVY_FORMAT_H
-#define IVY_FORMAT_H
+#ifndef IVY_FMT_H
+#define IVY_FMT_H
 
-#define IVY_FORMAT_MAJOR 0
-#define IVY_FORMAT_MINOR 1
-#define IVY_FORMAT_FIX 0
+#define IVY_FMT_MAJOR 0
+#define IVY_FMT_MINOR 1
+#define IVY_FMT_FIX 0
 
 #include "ivy_allocator.h"
 #include "ivy_sb.h"
 #include "ivy_sv.h"
 
 // Has a secret '\0' in the end.
-string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
-                              va_list args);
+string_view_t _ivy_fmt_raw(allocator_t alloc, string_view_t fmt, va_list args);
 
-IVY_FORCE_INLINE string_view_t ivy_format(allocator_t alloc, string_view_t fmt,
-                                          ...) {
+IVY_FORCE_INLINE string_view_t ivy_fmt(allocator_t alloc, string_view_t fmt,
+                                       ...) {
   va_list args;
   va_start(args, fmt);
-  string_view_t view = _ivy_format_raw(alloc, fmt, args);
+  string_view_t view = _ivy_fmt_raw(alloc, fmt, args);
   va_end(args);
   return view;
 }
@@ -36,7 +35,7 @@ IVY_FORCE_INLINE string_view_t ivy_format(allocator_t alloc, string_view_t fmt,
 IVY_FORCE_INLINE void ivy_print(const char *fmt, ...) {
   va_list args;
   va_start(args, fmt);
-  string_view_t view = _ivy_format_raw(heap, SV(fmt), args);
+  string_view_t view = _ivy_fmt_raw(heap, SV(fmt), args);
   va_end(args);
 
   fwrite(view.data, sizeof(char), view.length, stdout);
@@ -47,7 +46,7 @@ IVY_FORCE_INLINE void ivy_print(const char *fmt, ...) {
 IVY_FORCE_INLINE void ivy_print_file(FILE *file, const char *fmt, ...) {
   va_list args;
   va_start(args, fmt);
-  string_view_t view = _ivy_format_raw(heap, SV(fmt), args);
+  string_view_t view = _ivy_fmt_raw(heap, SV(fmt), args);
   va_end(args);
 
   fwrite(view.data, sizeof(char), view.length, file);
@@ -57,8 +56,7 @@ IVY_FORCE_INLINE void ivy_print_file(FILE *file, const char *fmt, ...) {
 
 #ifdef IVY_IMPL
 
-string_view_t _ivy_format_raw(allocator_t alloc, string_view_t fmt,
-                              va_list args) {
+string_view_t _ivy_fmt_raw(allocator_t alloc, string_view_t fmt, va_list args) {
   string_builder_t buffer = sb_make(heap);
 
   while (fmt.length > 0) {
