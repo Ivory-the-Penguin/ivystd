@@ -49,12 +49,12 @@
                   (message), __FILE__, __LINE__),                       \
           abort()))
 
-#if defined(_MSC_VER)
-#define IVY_FORCE_INLINE static __forceinline
-#elif defined(__GNUC__) || defined(__clang__)
+#if defined(__GNUC__) || defined(__clang__)
 #define IVY_FORCE_INLINE static inline __attribute__((always_inline))
 #else
 #define IVY_FORCE_INLINE static inline
 #endif
+
+#define IVY_CONSTRUCTOR __attribute__((constructor))
 
 #endif
