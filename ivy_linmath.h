@@ -1012,8 +1012,8 @@ IVY_FORCE_INLINE mat4_t mat4_rotate(float angle, vec3_t axis) {
 
   axis = vec3_norm(axis);
 
-  float sin_theta = sinf(angle);
-  float cos_theta = cosf(angle);
+  float sin_theta = ivy_sin(angle);
+  float cos_theta = ivy_cos(angle);
   float cos_value = 1.0f - cos_theta;
 
   out.elements[0][0] = (axis.x * axis.x * cos_value) + cos_theta;
