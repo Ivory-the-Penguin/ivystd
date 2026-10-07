@@ -279,8 +279,8 @@ typedef union {
 /*
  *  vec2 implementation
  */
-static const vec2_t vec2_zero = (vec2_t){0.0f, 0.0f};
-static const vec2_t vec2_one = (vec2_t){1.0f, 1.0f};
+#define VEC2_ZERO vec2_s(0.0f)
+#define VEC2_ONE vec2_s(1.0f)
 
 IVY_FORCE_INLINE vec2_t vec2(float x, float y) {
   return (vec2_t){.x = x, .y = y};
@@ -334,8 +334,8 @@ IVY_FORCE_INLINE bool vec2_eq(vec2_t a, vec2_t b) {
 }
 
 IVY_FORCE_INLINE vec2_t vec2_norm(vec2_t vec) {
-  if (vec2_eq(vec, vec2_zero)) {
-    return vec2_zero;
+  if (vec2_eq(vec, VEC2_ZERO)) {
+    return VEC2_ZERO;
   }
 
   return vec2_div_s(vec, vec2_len(vec));
@@ -360,8 +360,8 @@ IVY_FORCE_INLINE vec2_t vec2_refl(vec2_t vec, vec2_t norm) {
 /*
  *  vec3 implementation
  */
-static const vec3_t vec3_zero = (vec3_t){0.0f, 0.0f, 0.0f};
-static const vec3_t vec3_one = (vec3_t){1.0f, 1.0f, 1.0f};
+#define VEC3_ZERO vec3_s(0.0f)
+#define VEC3_ONE vec3_s(1.0f)
 
 IVY_FORCE_INLINE vec3_t vec3(float x, float y, float z) {
   return (vec3_t){.x = x, .y = y, .z = z};
@@ -419,8 +419,8 @@ IVY_FORCE_INLINE bool vec3_eq(vec3_t a, vec3_t b) {
 }
 
 IVY_FORCE_INLINE vec3_t vec3_norm(vec3_t vec) {
-  if (vec3_eq(vec, vec3_zero)) {
-    return vec3_zero;
+  if (vec3_eq(vec, VEC3_ZERO)) {
+    return VEC3_ZERO;
   }
 
   return vec3_div_s(vec, vec3_len(vec));
@@ -450,9 +450,8 @@ IVY_FORCE_INLINE float vec3_dist(vec3_t a, vec3_t b) {
 /*
  *  vec4 implementation
  */
-
-static const vec4_t vec4_zero = (vec4_t){0.0f, 0.0f, 0.0f, 0.0f};
-static const vec4_t vec4_one = (vec4_t){1.0f, 1.0f, 1.0f, 1.0f};
+#define VEC4_ZERO vec4_s(0.0f)
+#define VEC4_ONE vec4_s(1.0f)
 
 IVY_FORCE_INLINE vec4_t vec4(float x, float y, float z, float w) {
 #ifdef IVY_LINMATH_USE_SSE
@@ -568,8 +567,8 @@ IVY_FORCE_INLINE bool vec4_eq(vec4_t a, vec4_t b) {
 }
 
 IVY_FORCE_INLINE vec4_t vec4_norm(vec4_t vec) {
-  if (vec4_eq(vec, vec4_zero)) {
-    return vec4_zero;
+  if (vec4_eq(vec, VEC4_ZERO)) {
+    return VEC4_ZERO;
   }
 
   return vec4_div_s(vec, vec4_len(vec));
