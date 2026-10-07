@@ -12,6 +12,7 @@
 #ifndef IVY_FMT_H
 #define IVY_FMT_H
 
+#include "ivy_core.h"
 #define IVY_FMT_MAJOR 0
 #define IVY_FMT_MINOR 1
 #define IVY_FMT_FIX 0
@@ -19,6 +20,18 @@
 #include "ivy_allocator.h"
 #include "ivy_sb.h"
 #include "ivy_sv.h"
+
+typedef void (*ivy_fmt_func_t)(va_list args, string_builder_t *sb,
+                               string_view_t flags);
+
+typedef struct {
+  string_view_t prefix;
+  ivy_fmt_func_t callback;
+} ivy_fmt_spec_t;
+
+#define IVY_FMT_REGISTRY_MAX 32
+
+void push_to_registry(ivy_fmt_spec_t spec);
 
 // Has a secret '\0' in the end.
 string_view_t _ivy_fmt_raw(allocator_t alloc, string_view_t fmt, va_list args);
@@ -39,7 +52,6 @@ IVY_FORCE_INLINE void ivy_print(const char *fmt, ...) {
   va_end(args);
 
   fwrite(view.data, sizeof(char), view.length, stdout);
-
   ivy_free(heap, (void *)view.data);
 }
 
@@ -54,7 +66,12 @@ IVY_FORCE_INLINE void ivy_print_file(FILE *file, const char *fmt, ...) {
   ivy_free(heap, (void *)view.data);
 }
 
+#define IVY_IMPL
+
 #ifdef IVY_IMPL
+
+ivy_fmt_spec_t registry[IVY_FMT_REGISTRY_MAX] = {0};
+uint64_t registry_length = 0;
 
 string_view_t _ivy_fmt_raw(allocator_t alloc, string_view_t fmt, va_list args) {
   string_builder_t buffer = sb_make(heap);
@@ -76,10 +93,7 @@ string_view_t _ivy_fmt_raw(allocator_t alloc, string_view_t fmt, va_list args) {
 
     string_view_t fmt_option = sv_chop_by_delimiter(&fmt, '}');
 
-    if (sv_compare(fmt_option, SV("s")) == 0) {
-      string_view_t str = va_arg(args, string_view_t);
-      sb_append_sv(&buffer, str);
-    } else if (sv_compare(fmt_option, SV("cs")) == 0) {
+    if (sv_compare(fmt_option, SV("cs")) == 0) {
       char *str = va_arg(args, char *);
       sb_append_sv(&buffer, SV(str));
     } else if (sv_has_prefix(fmt_option, SV("i"))) {
@@ -128,7 +142,13 @@ string_view_t _ivy_fmt_raw(allocator_t alloc, string_view_t fmt, va_list args) {
 
       ivy_free(heap, (void *)n_sv.data);
     } else {
-      IVY_ASSERT(0, "Unknown formatting specifier!");
+      for (uint64_t i = 0; i < registry_length; i++) {
+        if (sv_has_prefix(fmt_option, registry[i].prefix)) {
+          registry[i].callback(args, &buffer, fmt_option);
+        }
+      }
+
+      // IVY_ASSERT(0, "Unknown formatting specifier!");
     }
   }
 
@@ -136,6 +156,23 @@ string_view_t _ivy_fmt_raw(allocator_t alloc, string_view_t fmt, va_list args) {
   sb_free(&buffer);
 
   return out;
+}
+
+void push_to_registry(ivy_fmt_spec_t spec) {
+  IVY_ASSERT(registry_length != IVY_FMT_REGISTRY_MAX,
+             "Formatting registry would overflow");
+  registry[registry_length++] = spec;
+}
+
+IVY_FORCE_INLINE void _string_view_fmt(va_list args, string_builder_t *sb,
+                                       string_view_t flags) {
+  string_view_t sv = va_arg(args, string_view_t);
+  sb_append_sv(sb, sv);
+}
+
+IVY_CONSTRUCTOR void fmt_add_builtins() {
+  push_to_registry(
+      (ivy_fmt_spec_t){.prefix = SV("s"), .callback = _string_view_fmt});
 }
 
 #endif
