@@ -1,6 +1,6 @@
 /*
   ----- Ivy Math -----
-  Version: 0.1.0
+  Version: 0.3.0
   License: MIT-0
 
   This header only library has some useful maths functions for the ivystd.
@@ -10,25 +10,84 @@
 #define IVY_MATH_H
 
 #define IVY_MATH_MAJOR 0
-#define IVY_MATH_MINOR 1
+#define IVY_MATH_MINOR 3
 #define IVY_MATH_FIX 0
 
 #include "ivy_core.h"
 
-static const float ivy_pi_f = 3.14159265359f;
-static const double ivy_pi = 3.14159265358979323846;
+#define IVY_PI 3.14159265359f
+#define IVY_2PI 6.28318530718f
+#define IVY_HALF_PI 1.570796326795f
 
-IVY_FORCE_INLINE float ivy_rad2deg_f(float radians) {
-  return radians * (180.0f / ivy_pi_f);
+#define IVY_RAD2DEG(radians) ((radians) * (180.0f / IVY_PI))
+#define IVY_DEG2RAD(degrees) ((degrees) * (IVY_PI / 180.0f))
+
+#define IVY_MIN(a, b) ((a) < (b) ? (a) : (b))
+#define IVY_MAX(a, b) ((a) > (b) ? (a) : (b))
+
+#define IVY_CLAMP(value, min, max) \
+  ((value) > (max) ? (max) : ((value) < (min) ? (min) : (value)))
+
+#define IVY_LERP(a, b, t) ((a) + ((b) - (a)) * (t))
+
+#define IVY_ABS(x) ((x) < 0 ? -(x) : (x))
+
+IVY_FORCE_INLINE float ivy_wrap_pi(float x) {
+  while (x > IVY_PI) x -= IVY_2PI;
+  while (x < -IVY_PI) x += IVY_2PI;
+  return x;
 }
-IVY_FORCE_INLINE float ivy_deg2rad_f(float degrees) {
-  return degrees * (ivy_pi_f / 180.0f);
+
+IVY_FORCE_INLINE float ivy_sin(float x) {
+  x = ivy_wrap_pi(x);
+  float x2 = x * x;
+
+  return x * (1.0f - x2 * (1.0f / 6.0f + x2 * (1.0f / 120.0f)));
 }
-IVY_FORCE_INLINE double ivy_rad2deg_d(double radians) {
-  return radians * (180.0 / ivy_pi);
+
+IVY_FORCE_INLINE float ivy_cos(float x) {
+  x = ivy_wrap_pi(x);
+  float x2 = x * x;
+  return 1.0f - x2 * (0.5f - x2 * (1.0f / 24.0f));
 }
-IVY_FORCE_INLINE float ivy_deg2rad_d(double degrees) {
-  return degrees * (ivy_pi / 180.0);
+
+IVY_FORCE_INLINE float ivy_tan(float x) { return ivy_sin(x) / ivy_cos(x); }
+
+IVY_FORCE_INLINE float ivy_inv_sqrt(float x) {
+  long i;
+  float x2, y;
+  const float threehalfs = 1.5f;
+
+  x2 = x * 0.5f;
+  y = x;
+  i = *(long *)&y;
+  i = 0x5f3759df - (i >> 1);
+  y = *(float *)&i;
+  y = y * (threehalfs - (x2 * y * y));
+
+  return y;
+}
+
+IVY_FORCE_INLINE float ivy_sqrt(float x) {
+  return x > 0.0f ? x * ivy_inv_sqrt(x) : 0.0f;
+}
+
+IVY_FORCE_INLINE float ivy_pow(float x, int exp) {
+  if (x == 0.0f && exp < 0) {
+    return 0.0f;
+  }
+
+  float out = 1.0f;
+  if (exp < 0) {
+    x = 1.0f / x;
+    exp = -exp;
+  }
+
+  for (int i = 0; i < exp; i++) {
+    out *= x;
+  }
+
+  return out;
 }
 
 #endif
