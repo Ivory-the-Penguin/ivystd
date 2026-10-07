@@ -1,6 +1,6 @@
 /*
   ----- Ivy Linmath -----
-  Version: 1.0.1
+  Version: 1.0.2
   License: MIT-0
 
   This is a header only library for linear algebra in the ivystd.
@@ -87,7 +87,7 @@
 
 #define IVY_LINMATH_MAJOR 1
 #define IVY_LINMATH_MINOR 0
-#define IVY_LINMATH_FIX 1
+#define IVY_LINMATH_FIX 2
 
 #include "ivy_core.h"
 #include "ivy_math.h"
@@ -158,6 +158,12 @@ typedef union {
     float r;
     float g;
     float b;
+  };
+
+  struct {
+    float width;
+    float height;
+    float length;
   };
 
   struct {
