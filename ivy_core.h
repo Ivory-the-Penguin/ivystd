@@ -56,5 +56,6 @@
 #endif
 
 #define IVY_CONSTRUCTOR __attribute__((constructor))
+#define IVY_DESTRUCTOR __attribute__((destructor))
 
 #endif
