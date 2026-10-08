@@ -1,6 +1,6 @@
 /*
   ----- Ivy Fmt -----
-  Version: 0.2.1
+  Version: 1.0.0
   License: MIT-0
 
   This stb-style header has a formatting function for ivystd.
@@ -12,9 +12,9 @@
 #ifndef IVY_FMT_H
 #define IVY_FMT_H
 
-#define IVY_FMT_MAJOR 0
-#define IVY_FMT_MINOR 2
-#define IVY_FMT_FIX 1
+#define IVY_FMT_MAJOR 1
+#define IVY_FMT_MINOR 0
+#define IVY_FMT_FIX 0
 
 #include "ivy_allocator.h"
 #include "ivy_core.h"
@@ -22,7 +22,7 @@
 #include "ivy_sv.h"
 
 typedef void (*fmt_func_t)(va_list args, string_builder_t *buffer,
-                           string_view_t flags);
+                           string_view_t flags, allocator_t scratch);
 
 typedef struct {
   string_view_t prefix;
@@ -36,43 +36,32 @@ void fmt_register(string_view_t prefix, fmt_func_t callback);
 // Has a secret '\0' in the end.
 string_view_t _fmt_raw(allocator_t alloc, string_view_t fmt, va_list args);
 
-IVY_FORCE_INLINE string_view_t fmt_format(allocator_t alloc, string_view_t fmt,
-                                          ...) {
-  va_list args;
-  va_start(args, fmt);
-  string_view_t view = _fmt_raw(alloc, fmt, args);
-  va_end(args);
-  return view;
-}
+string_view_t fmt_format(allocator_t alloc, string_view_t fmt, ...);
 
-IVY_FORCE_INLINE void ivy_print(const char *fmt, ...) {
-  va_list args;
-  va_start(args, fmt);
-  string_view_t view = _fmt_raw(heap, SV(fmt), args);
-  va_end(args);
+void ivy_print(const char *fmt, ...);
 
-  fwrite(view.data, sizeof(char), view.length, stdout);
-  ivy_free(heap, (void *)view.data);
-}
-
-IVY_FORCE_INLINE void ivy_print_file(FILE *file, const char *fmt, ...) {
-  va_list args;
-  va_start(args, fmt);
-  string_view_t view = _fmt_raw(heap, SV(fmt), args);
-  va_end(args);
-
-  fwrite(view.data, sizeof(char), view.length, file);
-
-  ivy_free(heap, (void *)view.data);
-}
+void ivy_print_file(FILE *file, const char *fmt, ...);
 
 #ifdef IVY_IMPL
+
+#include "ivy_arena.h"
+
+static arena_t scratch_arena;
+static allocator_t scratch_alloc;
+
+IVY_CONSTRUCTOR void _fmt_scratch_init(void) {
+  scratch_arena = arena_make(heap);
+  scratch_alloc = arena_make_allocator(&scratch_arena);
+}
+
+IVY_DESTRUCTOR void _fmt_scratch_clean(void) { arena_free(&scratch_arena); }
 
 fmt_spec_t registry[FMT_REGISTRY_MAX] = {0};
 uint64_t registry_length = 0;
 
 string_view_t _fmt_raw(allocator_t alloc, string_view_t fmt, va_list args) {
   string_builder_t buffer = sb_make(heap);
+  arena_clear(&scratch_arena);
 
   while (fmt.length > 0) {
     char chopped = fmt.data[0];
@@ -95,7 +84,7 @@ string_view_t _fmt_raw(allocator_t alloc, string_view_t fmt, va_list args) {
     for (uint64_t i = 0; i < registry_length; i++) {
       if (sv_has_prefix(fmt_option, registry[i].prefix)) {
         sv_chop_left(&fmt_option, registry[i].prefix.length);
-        registry[i].callback(args, &buffer, fmt_option);
+        registry[i].callback(args, &buffer, fmt_option, scratch_alloc);
         found = true;
         break;
       }
@@ -110,6 +99,32 @@ string_view_t _fmt_raw(allocator_t alloc, string_view_t fmt, va_list args) {
   return out;
 }
 
+string_view_t fmt_format(allocator_t alloc, string_view_t fmt, ...) {
+  va_list args;
+  va_start(args, fmt);
+  string_view_t view = _fmt_raw(alloc, fmt, args);
+  va_end(args);
+  return view;
+}
+
+void ivy_print(const char *fmt, ...) {
+  va_list args;
+  va_start(args, fmt);
+  string_view_t view = _fmt_raw(scratch_alloc, SV(fmt), args);
+  va_end(args);
+
+  fwrite(view.data, sizeof(char), view.length, stdout);
+}
+
+void ivy_print_file(FILE *file, const char *fmt, ...) {
+  va_list args;
+  va_start(args, fmt);
+  string_view_t view = _fmt_raw(scratch_alloc, SV(fmt), args);
+  va_end(args);
+
+  fwrite(view.data, sizeof(char), view.length, file);
+}
+
 void fmt_register(string_view_t prefix, fmt_func_t callback) {
   IVY_ASSERT(registry_length != FMT_REGISTRY_MAX,
              "Formatting registry would overflow");
@@ -120,14 +135,14 @@ void fmt_register(string_view_t prefix, fmt_func_t callback) {
 }
 
 IVY_FORCE_INLINE void _fmt_c_string(va_list args, string_builder_t *buffer,
-                                    string_view_t flags) {
+                                    string_view_t flags, allocator_t scratch) {
   (void)flags;
   char *str = va_arg(args, char *);
   sb_append_sv(buffer, SV(str));
 }
 
 IVY_FORCE_INLINE void _fmt_int(va_list args, string_builder_t *buffer,
-                               string_view_t flags) {
+                               string_view_t flags, allocator_t scratch) {
   bool is_unsigned = false;
   bool is_long = false;
   SV_FOREACH(flags, i) {
@@ -165,15 +180,13 @@ IVY_FORCE_INLINE void _fmt_int(va_list args, string_builder_t *buffer,
     }
   }
 
-  string_view_t n_sv = sv_from_uint(heap, n);
+  string_view_t n_sv = sv_from_uint(scratch, n);
 
   sb_append_sv(buffer, n_sv);
-
-  ivy_free(heap, (void *)n_sv.data);
 }
 
 IVY_FORCE_INLINE void _fmt_sv(va_list args, string_builder_t *buffer,
-                              string_view_t flags) {
+                              string_view_t flags, allocator_t scratch) {
   string_view_t str = va_arg(args, string_view_t);
   sb_append_sv(buffer, str);
 }
