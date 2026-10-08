@@ -31,7 +31,7 @@ typedef struct {
 
 #define FMT_REGISTRY_MAX 32
 
-void fmt_register(fmt_spec_t spec);
+void fmt_register(string_view_t prefix, fmt_func_t callback);
 
 // Has a secret '\0' in the end.
 string_view_t _fmt_raw(allocator_t alloc, string_view_t fmt, va_list args);
@@ -110,10 +110,13 @@ string_view_t _fmt_raw(allocator_t alloc, string_view_t fmt, va_list args) {
   return out;
 }
 
-void fmt_register(fmt_spec_t spec) {
+void fmt_register(string_view_t prefix, fmt_func_t callback) {
   IVY_ASSERT(registry_length != FMT_REGISTRY_MAX,
              "Formatting registry would overflow");
-  registry[registry_length++] = spec;
+  registry[registry_length++] = (fmt_spec_t){
+      .prefix = prefix,
+      .callback = callback,
+  };
 }
 
 IVY_FORCE_INLINE void _fmt_c_string(va_list args, string_builder_t *buffer,
@@ -176,9 +179,9 @@ IVY_FORCE_INLINE void _fmt_sv(va_list args, string_builder_t *buffer,
 }
 
 IVY_CONSTRUCTOR static void fmt_add_builtins() {
-  fmt_register((fmt_spec_t){.prefix = SV("cs"), .callback = _fmt_c_string});
-  fmt_register((fmt_spec_t){.prefix = SV("i"), .callback = _fmt_int});
-  fmt_register((fmt_spec_t){.prefix = SV("s"), .callback = _fmt_sv});
+  fmt_register(SV("cs"), _fmt_c_string);
+  fmt_register(SV("i"), _fmt_int);
+  fmt_register(SV("s"), _fmt_sv);
 }
 
 #endif
