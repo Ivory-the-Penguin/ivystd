@@ -308,6 +308,7 @@ string_view_t sv_from_int(allocator_t alloc, int64_t n) {
       .length = length + 1,
   };
 }
+
 string_view_t sv_from_uint(allocator_t alloc, uint64_t n) {
   int64_t length = 0;
   uint64_t temp = n;

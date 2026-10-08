@@ -169,10 +169,17 @@ IVY_FORCE_INLINE void _fmt_int(va_list args, string_builder_t *buffer,
   ivy_free(heap, (void *)n_sv.data);
 }
 
+IVY_FORCE_INLINE void _fmt_sv(va_list args, string_builder_t *buffer,
+                              string_view_t flags) {
+  string_view_t str = va_arg(args, string_view_t);
+  sb_append_sv(buffer, str);
+}
+
 IVY_CONSTRUCTOR static void fmt_add_builtins() {
   fmt_push_to_registry(
       (fmt_spec_t){.prefix = SV("cs"), .callback = _fmt_c_string});
   fmt_push_to_registry((fmt_spec_t){.prefix = SV("i"), .callback = _fmt_int});
+  fmt_push_to_registry((fmt_spec_t){.prefix = SV("s"), .callback = _fmt_sv});
 }
 
 #endif
