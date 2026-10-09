@@ -1,6 +1,6 @@
 /*
   ----- Ivy Fmt -----
-  Version: 1.0.0
+  Version: 1.1.0
   License: MIT-0
 
   This stb-style header has a formatting function for ivystd.
@@ -13,7 +13,7 @@
 #define IVY_FMT_H
 
 #define IVY_FMT_MAJOR 1
-#define IVY_FMT_MINOR 0
+#define IVY_FMT_MINOR 1
 #define IVY_FMT_FIX 0
 
 #include "ivy_allocator.h"
@@ -128,10 +128,23 @@ void ivy_print_file(FILE *file, const char *fmt, ...) {
 void fmt_register(string_view_t prefix, fmt_func_t callback) {
   IVY_ASSERT(registry_length != FMT_REGISTRY_MAX,
              "Formatting registry would overflow");
-  registry[registry_length++] = (fmt_spec_t){
+
+  uint64_t target = 0;
+  for (; target < registry_length; target++) {
+    if (registry[target].prefix.length < prefix.length) {
+      break;
+    }
+  }
+
+  memmove((void *)(registry + target + 1), (void *)(registry + target),
+          sizeof(fmt_spec_t) * (registry_length - target));
+
+  registry[target] = (fmt_spec_t){
       .prefix = prefix,
       .callback = callback,
   };
+
+  registry_length++;
 }
 
 IVY_FORCE_INLINE void _fmt_c_string(va_list args, string_builder_t *buffer,
