@@ -1,6 +1,6 @@
 /*
   ----- Ivy Fixed Buffer -----
-  Version: 0.1.0
+  Version: 1.1.0
   License: MIT-0
 
   This header only library has a fixed buffer allocator for the ivystd.
@@ -10,7 +10,7 @@
 #ifndef IVY_FB_H
 #define IVY_FB_H
 
-#define IVY_FB_MAJOR 0
+#define IVY_FB_MAJOR 1
 #define IVY_FB_MINOR 1
 #define IVY_FB_FIX 0
 
@@ -53,9 +53,13 @@ IVY_FORCE_INLINE allocator_t fb_make_allocator(fixed_buffer_t *fb) {
   };
 }
 
+// Just resets it, doesn't clear memory
+IVY_FORCE_INLINE void fb_reset(fixed_buffer_t *fb) { fb->offset = 0; }
+
+// Zeroes out memory
 IVY_FORCE_INLINE void fb_clear(fixed_buffer_t *fb) {
   memset(fb->buffer, 0, fb->offset);
-  fb->offset = 0;
+  fb_reset(fb);
 }
 
 #endif
