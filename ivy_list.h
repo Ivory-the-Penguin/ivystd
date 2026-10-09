@@ -1,6 +1,6 @@
 /*
   ----- Ivy List -----
-  Version: 0.4.0
+  Version: 0.5.0
   License: MIT-0
 
   This is a header only library that has a generic list for the ivystd.
@@ -10,9 +10,8 @@
 #ifndef IVY_LIST_H
 #define IVY_LIST_H
 
-#include <stdbool.h>
 #define IVY_LIST_MAJOR 0
-#define IVY_LIST_MINOR 4
+#define IVY_LIST_MINOR 5
 #define IVY_LIST_FIX 0
 
 #include "ivy_allocator.h"
@@ -66,6 +65,15 @@ IVY_FORCE_INLINE void list_expand(list_opaque_t *list, uint64_t new_size) {
     (list_ptr)->length = 0;                                                 \
     (list_ptr)->capacity = align_bytes((cap));                              \
     (list_ptr)->alloc = (allocator);                                        \
+  } while (0)
+
+#define list_push(list_ptr, item)                                         \
+  do {                                                                    \
+    if ((list_ptr)->length + 1 > (list_ptr)->capacity) {                  \
+      list_expand((list_opaque_t *)(list_ptr), (list_ptr)->capacity * 2); \
+    }                                                                     \
+                                                                          \
+    (list_ptr)->data[(list_ptr)->length++] = item;                        \
   } while (0)
 
 #define list_free(list_ptr)                        \
