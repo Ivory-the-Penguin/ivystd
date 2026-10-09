@@ -35,3 +35,7 @@ I did give out credit to the people I was inspired by, and some code I copied:
 - C++'s `{fmt}`
 - Tsoding's (Alexey Kutepov) sv (initial implementation was copied from him)
 - rxi's `vec` and `map` (I took inspiration from the idea, but implementation is my own)
+
+## Note
+
+This library is still in development, so it is _not_ production ready. But you can play around with some of the features.
