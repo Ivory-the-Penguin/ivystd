@@ -1,6 +1,6 @@
 /*
   ----- Ivy List -----
-  Version: 0.1.0
+  Version: 0.2.0
   License: MIT-0
 
   This is a header only library that has a generic list for the ivystd.
@@ -11,7 +11,7 @@
 #define IVY_LIST_H
 
 #define IVY_LIST_MAJOR 0
-#define IVY_LIST_MINOR 1
+#define IVY_LIST_MINOR 2
 #define IVY_LIST_FIX 0
 
 #include "ivy_allocator.h"
@@ -44,6 +44,16 @@ typedef struct {
     (list_ptr)->length = 0;                                                    \
     (list_ptr)->capacity = LIST_MINIMUM_CAPACITY;                              \
     (list_ptr)->alloc = (allocator);                                           \
+  } while (0)
+
+#define list_free(list_ptr)                        \
+  do {                                             \
+    (list_ptr)->length = 0;                        \
+    (list_ptr)->capacity = 0;                      \
+    (list_ptr)->item_size = 0;                     \
+    ivy_free((list_ptr)->alloc, (list_ptr)->data); \
+    (list_ptr)->data = NULL;                       \
+    (list_ptr)->alloc = (allocator_t){0};          \
   } while (0)
 
 #endif
