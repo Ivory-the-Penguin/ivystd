@@ -6,8 +6,6 @@
   This is a header only library for linear algebra in the ivystd.
   Inspired by the C/C++ header only library, Handmade Math.
 
-  My philosophy for this header is at ./docs/linmath.md
-
   ----- Usage -----
   The header uses GLM standards, so radians for angles, column major matrices,
   and right handed. Use the ivy_rad2deg or ivy_deg2rad functions in ivy_math.
