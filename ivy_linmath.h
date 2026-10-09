@@ -32,7 +32,7 @@
 
   ~ vecn_add_s(vec, scalar) : Returns vec + vecn_s(scalar)
 
-  ~ vecn_sub_s(vec, scalar) : Returns vec : vecn_s(scalar)
+  ~ vecn_sub_s(vec, scalar) : Returns vec - vecn_s(scalar)
 
   ~ vecn_mul_s(vec, scalar) : Returns vec * vecn_s(scalar)
 
