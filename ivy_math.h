@@ -1,6 +1,6 @@
 /*
   ----- Ivy Math -----
-  Version: 0.3.0
+  Version: 0.3.1
   License: MIT-0
 
   This header only library has some useful maths functions for the ivystd.
@@ -11,7 +11,7 @@
 
 #define IVY_MATH_MAJOR 0
 #define IVY_MATH_MINOR 3
-#define IVY_MATH_FIX 0
+#define IVY_MATH_FIX 1
 
 #include "ivy_core.h"
 
@@ -60,9 +60,9 @@ IVY_FORCE_INLINE float ivy_inv_sqrt(float x) {
 
   x2 = x * 0.5f;
   y = x;
-  i = *(long *)&y;
+  memcpy(&i, &y, sizeof(i));
   i = 0x5f3759df - (i >> 1);
-  y = *(float *)&i;
+  memcpy(&y, &i, sizeof(y));
   y = y * (threehalfs - (x2 * y * y));
 
   return y;
