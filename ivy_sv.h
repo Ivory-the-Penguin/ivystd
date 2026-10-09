@@ -3,9 +3,80 @@
   Version: 1.1.0
   License: MIT-0
 
-  This stb-style header has a feature full string view for the ivystd.
+  This stb-style header has a feature-full string view for the ivystd.
 
   Use IVY_IMPL macro for implementation
+
+  ----- Usage -----
+  We have a string_view_t, which contains a pointer to the original data and the
+  length. To go through every character, you would use:
+  SV_FOREACH(sv, i) {
+    putchar(sv.data[i]);
+  }
+
+  Or the reverse variation:
+  SV_FOREACH_REV(sv, i) {
+    putchar(sv.data[i]);
+  }
+
+  To make a string view from a string literal / c string, you use the sv func:
+  string_view_t sv = sv("Hello, World!");
+
+  And from any string with a custom length:
+  string_view_t sv = (string_view_t) {
+    .data = str,
+    .length = str_len,
+  };
+
+  All of the builtin string view functions start with a sv_ prefix. We have the
+  following functions:
+
+  ~ sv_compare(a, b) : Compares a and b lexicographically
+
+  ~ sv_has_prefix(sv, prefix) : Check if the sv has a prefix of prefix
+
+  ~ sv_chop_left(*sv, n) : Chops the left side of sv by n
+
+  ~ sv_chop_right(*sv, n) : Chops the right side of sv by n
+
+  ~ sv_trim_left(*sv) : Trims the left side of sv from any whitespaces
+
+  ~ sv_trim_right(*sv) : Trims the right side of sv from any whitespaces
+
+  ~ sv_trim(*sv) : Trims the left and right sides of sv from any whitespaces
+
+  ~ sv_combine(alloc, a, b) : Returns a and b concatenated, allocated with alloc
+
+  ~ sv_chop_by_delimiter(*sv, delimiter) : Returns a string view which was taken
+  from the start of sv to the delimiter, and modifies sv to be right afterwards
+  (also consumes the delimiter). It frees any instances of the delimiter at the
+  beginning (greedy chopping, like strtok).
+
+  ~ sv_chop_by_type(*sv, is_type) : Same as sv_chop_by_delimiter, but the
+  delimiter is defined by the is_type function (int taken in, and int returned).
+
+  ~ sv_chop_by_type_rev(*sv, is_type) : Same as sv_chop_by_type, BUT, the
+  is_type function determines what ISN'T a delimiter. So you can use isalpha to
+  chop until we reach a non-alphabetic character.
+
+  ~ sv_to_int(sv) : Returns a string view converted into a 64-bit
+  signed integer.
+
+  ~ sv_to_uint(sv) : Returns a string view converted into a 64-bit
+  unsigned integer.
+
+  ~ sv_from_int(alloc, n) : Returns a 64-bit signed integer n converted into a
+  string view, allocated with the alloc. It has a secret null terminator at the
+  end.
+
+  ~ sv_from_uint(alloc, n) : Returns a 64-bit unsigned integer n converted into
+  a string view, allocated with the alloc. It has a secret null terminator at
+  the end.
+
+  ----- Credits -----
+  The initial implementation was a copied from Tsoding's video, "C Strings are
+  Terrible!" (https://www.youtube.com/watch?v=y8PLpDgZc0E). You can technically
+  view this as an expanded version of his implementation.
 */
 
 #ifndef IVY_SV_H
