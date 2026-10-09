@@ -16,7 +16,7 @@
 
   For vectors, it follows a pattern for the functions (and for C11 they have a
   generic variation). Let's assume n is the size of the vector (going from 2 to
-  4). We have the follow functions:
+  4). We have the following functions:
 
   ~ vecn(...) : Makes a vector, with all the components (...)
 
@@ -44,7 +44,7 @@
 
   ~ vecn_len(vec) : Returns the length of the vector
 
-  ~ vecn_eq(a, b) : Returns true if all components of a is equal to b, false
+  ~ vecn_eq(a, b) : Returns true if all components of a are equal to b, false
   otherwise
 
   ~ vecn_norm(vec) : Returns the normalized (length is 1) vector (if vec is a
@@ -73,7 +73,8 @@
 
   ~ vec3_cross(a, b) : Finds the cross product of 2 vectors (vec3 vectors)
 
-  For every vector type there is a zero and one vector constant.
+  For every vector type there is a zero and one vector macro, which are
+  VECN_ZERO, and VECN_ONE (N is the size of the vector).
 
   ----- Credits -----
   Handmade Math inspired this header, and some of the functions (specifically
