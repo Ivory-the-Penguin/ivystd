@@ -1,6 +1,6 @@
 /*
   ----- Ivy Fmt -----
-  Version: 1.1.0
+  Version: 1.1.1
   License: MIT-0
 
   This stb-style header has a formatting function for ivystd.
@@ -14,7 +14,7 @@
 
 #define IVY_FMT_MAJOR 1
 #define IVY_FMT_MINOR 1
-#define IVY_FMT_FIX 0
+#define IVY_FMT_FIX 1
 
 #include "ivy_allocator.h"
 #include "ivy_core.h"
@@ -65,7 +65,7 @@ string_view_t _fmt_raw(allocator_t alloc, string_view_t fmt, va_list args) {
 
   while (fmt.length > 0) {
     char chopped = fmt.data[0];
-    sv_chop_left(&fmt, 1);
+    fmt = sv_chop_left(fmt, 1);
 
     if (chopped != '{' && chopped != '}') {
       sb_append_char(&buffer, chopped);
@@ -74,7 +74,7 @@ string_view_t _fmt_raw(allocator_t alloc, string_view_t fmt, va_list args) {
 
     if (fmt.length > 0 && fmt.data[0] == chopped) {
       sb_append_char(&buffer, chopped);
-      sv_chop_left(&fmt, 1);
+      fmt = sv_chop_left(fmt, 1);
       continue;
     }
 
@@ -83,7 +83,7 @@ string_view_t _fmt_raw(allocator_t alloc, string_view_t fmt, va_list args) {
     bool found = false;
     for (uint64_t i = 0; i < registry_length; i++) {
       if (sv_has_prefix(fmt_option, registry[i].prefix)) {
-        sv_chop_left(&fmt_option, registry[i].prefix.length);
+        fmt_option = sv_chop_left(fmt_option, registry[i].prefix.length);
         registry[i].callback(args, &buffer, fmt_option, scratch_alloc);
         found = true;
         break;

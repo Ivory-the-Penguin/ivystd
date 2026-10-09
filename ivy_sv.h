@@ -1,6 +1,6 @@
 /*
   ----- Ivy String View -----
-  Version: 1.1.0
+  Version: 1.2.0
   License: MIT-0
 
   This stb-style header has a feature-full string view for the ivystd.
@@ -35,15 +35,15 @@
 
   ~ sv_has_prefix(sv, prefix) : Check if the sv has a prefix of prefix
 
-  ~ sv_chop_left(*sv, n) : Chops the left side of sv by n
+  ~ sv_chop_left(sv, n) : Returns sv with the left side chopped by n chars.
 
-  ~ sv_chop_right(*sv, n) : Chops the right side of sv by n
+  ~ sv_chop_right(sv, n) : Returns sv with the right side chopped by n chars.
 
-  ~ sv_trim_left(*sv) : Trims the left side of sv from any whitespaces
+  ~ sv_trim_left(sv) : Returns sv with the left side trimmed of whitespaces.
 
-  ~ sv_trim_right(*sv) : Trims the right side of sv from any whitespaces
+  ~ sv_trim_right(sv) : Returns sv with the right side trimmed of whitespaces.
 
-  ~ sv_trim(*sv) : Trims the left and right sides of sv from any whitespaces
+  ~ sv_trim(sv) : Returns sv with both sides trimmed of whitespaces.
 
   ~ sv_combine(alloc, a, b) : Returns a and b concatenated, allocated with alloc
 
@@ -83,7 +83,7 @@
 #define IVY_SV_H
 
 #define IVY_SV_MAJOR 1
-#define IVY_SV_MINOR 1
+#define IVY_SV_MINOR 2
 #define IVY_SV_FIX 0
 
 #include <ctype.h>
@@ -139,32 +139,40 @@ IVY_FORCE_INLINE bool sv_has_prefix(string_view_t sv, string_view_t prefix) {
   return memcmp(sv.data, prefix.data, prefix.length) == 0;
 }
 
-IVY_FORCE_INLINE void sv_chop_left(string_view_t *sv, uint64_t n) {
-  IVY_ASSERT(sv->length >= n, "String view is too small to be chopped");
-  sv->data += n;
-  sv->length -= n;
+IVY_FORCE_INLINE string_view_t sv_chop_left(string_view_t sv, uint64_t n) {
+  IVY_ASSERT(sv.length >= n, "String view is too small to be chopped");
+  sv.data += n;
+  sv.length -= n;
+
+  return sv;
 }
 
-IVY_FORCE_INLINE void sv_chop_right(string_view_t *sv, uint64_t n) {
-  IVY_ASSERT(sv->length >= n, "String view is too small to be chopped");
-  sv->length -= n;
+IVY_FORCE_INLINE string_view_t sv_chop_right(string_view_t sv, uint64_t n) {
+  IVY_ASSERT(sv.length >= n, "String view is too small to be chopped");
+  sv.length -= n;
+  return sv;
 }
 
-IVY_FORCE_INLINE void sv_trim_left(string_view_t *sv) {
-  while (sv->length > 0 && isspace((unsigned char)sv->data[0])) {
-    sv_chop_left(sv, 1);
+IVY_FORCE_INLINE string_view_t sv_trim_left(string_view_t sv) {
+  while (sv.length > 0 && isspace((unsigned char)sv.data[0])) {
+    sv = sv_chop_left(sv, 1);
   }
+
+  return sv;
 }
 
-IVY_FORCE_INLINE void sv_trim_right(string_view_t *sv) {
-  while (sv->length > 0 && isspace((unsigned char)sv->data[sv->length - 1])) {
-    sv_chop_right(sv, 1);
+IVY_FORCE_INLINE string_view_t sv_trim_right(string_view_t sv) {
+  while (sv.length > 0 && isspace((unsigned char)sv.data[sv.length - 1])) {
+    sv = sv_chop_right(sv, 1);
   }
+
+  return sv;
 }
 
-IVY_FORCE_INLINE void sv_trim(string_view_t *sv) {
-  sv_trim_left(sv);
-  sv_trim_right(sv);
+IVY_FORCE_INLINE string_view_t sv_trim(string_view_t sv) {
+  sv = sv_trim_left(sv);
+  sv = sv_trim_right(sv);
+  return sv;
 }
 
 // Has a secret '\0' in the end.
@@ -201,7 +209,7 @@ string_view_t sv_from_uint(allocator_t alloc, uint64_t n);
 
 string_view_t sv_chop_by_delimiter(string_view_t *sv, char delimiter) {
   while (sv->length > 0 && sv->data[0] == delimiter) {
-    sv_chop_left(sv, 1);
+    *sv = sv_chop_left(*sv, 1);
   }
 
   if (sv->length == 0) {
@@ -219,19 +227,19 @@ string_view_t sv_chop_by_delimiter(string_view_t *sv, char delimiter) {
         .data = sv->data,
         .length = end,
     };
-    sv_chop_left(sv, end + 1);
+    *sv = sv_chop_left(*sv, end + 1);
     return out;
   }
 
   out = *sv;
-  sv_chop_left(sv, sv->length);
+  *sv = sv_chop_left(*sv, sv->length);
   return out;
 }
 
 // is_type is what IS a delimiter
 string_view_t sv_chop_by_type(string_view_t *sv, int (*is_type)(int c)) {
   while (sv->length > 0 && is_type((unsigned char)sv->data[0])) {
-    sv_chop_left(sv, 1);
+    *sv = sv_chop_left(*sv, 1);
   }
 
   if (sv->length == 0) {
@@ -249,19 +257,19 @@ string_view_t sv_chop_by_type(string_view_t *sv, int (*is_type)(int c)) {
         .data = sv->data,
         .length = end,
     };
-    sv_chop_left(sv, end + 1);
+    *sv = sv_chop_left(*sv, end + 1);
     return out;
   }
 
   out = *sv;
-  sv_chop_left(sv, sv->length);
+  *sv = sv_chop_left(*sv, sv->length);
   return out;
 }
 
 // is_type is what ISN'T a delimiter
 string_view_t sv_chop_by_type_rev(string_view_t *sv, int (*is_type)(int c)) {
   while (sv->length > 0 && !is_type((unsigned char)sv->data[0])) {
-    sv_chop_left(sv, 1);
+    *sv = sv_chop_left(*sv, 1);
   }
 
   if (sv->length == 0) {
@@ -279,12 +287,12 @@ string_view_t sv_chop_by_type_rev(string_view_t *sv, int (*is_type)(int c)) {
         .data = sv->data,
         .length = end,
     };
-    sv_chop_left(sv, end + 1);
+    *sv = sv_chop_left(*sv, end + 1);
     return out;
   }
 
   out = *sv;
-  sv_chop_left(sv, sv->length);
+  *sv = sv_chop_left(*sv, sv->length);
   return out;
 }
 
@@ -295,7 +303,7 @@ int64_t sv_to_int(string_view_t sv) {
              "String view can't be null or empty!");
 
   bool is_negative = (sv.data[0] == '-');
-  sv_chop_left(&sv, is_negative);
+  sv = sv_chop_left(sv, is_negative);
 
   int64_t out = 0;
   SV_FOREACH(sv, i) {
