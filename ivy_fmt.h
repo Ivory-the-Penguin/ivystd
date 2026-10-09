@@ -110,7 +110,7 @@ string_view_t fmt_format(allocator_t alloc, string_view_t fmt, ...) {
 void ivy_print(const char *fmt, ...) {
   va_list args;
   va_start(args, fmt);
-  string_view_t view = _fmt_raw(scratch_alloc, SV(fmt), args);
+  string_view_t view = _fmt_raw(scratch_alloc, sv(fmt), args);
   va_end(args);
 
   fwrite(view.data, sizeof(char), view.length, stdout);
@@ -119,7 +119,7 @@ void ivy_print(const char *fmt, ...) {
 void ivy_print_file(FILE *file, const char *fmt, ...) {
   va_list args;
   va_start(args, fmt);
-  string_view_t view = _fmt_raw(scratch_alloc, SV(fmt), args);
+  string_view_t view = _fmt_raw(scratch_alloc, sv(fmt), args);
   va_end(args);
 
   fwrite(view.data, sizeof(char), view.length, file);
@@ -151,7 +151,7 @@ IVY_FORCE_INLINE void _fmt_c_string(va_list args, string_builder_t *buffer,
                                     string_view_t flags, allocator_t scratch) {
   (void)flags;
   char *str = va_arg(args, char *);
-  sb_append_sv(buffer, SV(str));
+  sb_append_sv(buffer, sv(str));
 }
 
 IVY_FORCE_INLINE void _fmt_int(va_list args, string_builder_t *buffer,
@@ -205,9 +205,9 @@ IVY_FORCE_INLINE void _fmt_sv(va_list args, string_builder_t *buffer,
 }
 
 IVY_CONSTRUCTOR static void fmt_add_builtins() {
-  fmt_register(SV("cs"), _fmt_c_string);
-  fmt_register(SV("i"), _fmt_int);
-  fmt_register(SV("s"), _fmt_sv);
+  fmt_register(sv("cs"), _fmt_c_string);
+  fmt_register(sv("i"), _fmt_int);
+  fmt_register(sv("s"), _fmt_sv);
 }
 
 #endif

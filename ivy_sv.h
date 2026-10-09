@@ -1,6 +1,6 @@
 /*
   ----- Ivy String View -----
-  Version: 1.0.0
+  Version: 1.1.0
   License: MIT-0
 
   This stb-style header has a feature full string view for the ivystd.
@@ -12,7 +12,7 @@
 #define IVY_SV_H
 
 #define IVY_SV_MAJOR 1
-#define IVY_SV_MINOR 0
+#define IVY_SV_MINOR 1
 #define IVY_SV_FIX 0
 
 #include <ctype.h>
@@ -28,13 +28,18 @@ typedef struct {
   uint64_t length;
 } string_view_t;
 
-#define SV(c_str) \
-  (string_view_t) { .data = c_str, .length = strlen(c_str), }
-
 #define SV_FOREACH(sv, i) for (uint64_t(i) = 0; (i) < (sv.length); (i)++)
 #define SV_FOREACH_REV(sv, i) for (int64_t(i) = sv.length - 1; (i) >= 0; (i)--)
 
 #define SV_FMT "%.*s"
+
+// Only for c strings. If you need a sv, just manually create the string view
+IVY_FORCE_INLINE string_view_t sv(const char *c_str) {
+  return (string_view_t){
+      .data = c_str,
+      .length = strlen(c_str),
+  };
+}
 
 /*
 -1 means a is smaller than b,
