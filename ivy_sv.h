@@ -105,7 +105,7 @@ typedef struct {
   for (u64(i) = (offset); (i) < (sv).length; (i)++)
 
 #define SV_FOREACH_REV(sv, i, offset) \
-  for (u64(i) = (sv).length - (offset); (i--) >= 0;)
+  for (u64(i) = (sv).length - (offset); (i--) > 0;)
 
 #define SV_FMT "%.*s"
 
