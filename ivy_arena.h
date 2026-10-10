@@ -1,6 +1,6 @@
 /*
   ----- Ivy Arena -----
-  Version: 1.2.1
+  Version: 1.3.0
   License: MIT-0
 
   This header only library has an arena allocator for the ivystd.
@@ -11,17 +11,19 @@
 #define IVY_ARENA_H
 
 #define IVY_ARENA_MAJOR 1
-#define IVY_ARENA_MINOR 2
-#define IVY_ARENA_FIX 1
+#define IVY_ARENA_MINOR 3
+#define IVY_ARENA_FIX 0
 
 #include "ivy_allocator.h"
 #include "ivy_core.h"
 #include "ivy_list.h"
 
 typedef list_t(u8 *) chunk_list_t;
+typedef list_t(void *) big_chunk_list_t;
 
 typedef struct {
   chunk_list_t chunks;
+  big_chunk_list_t big_chunks;
   u64 offset;
   u64 cur_chunk;
   allocator_t alloc;
@@ -36,6 +38,7 @@ IVY_FORCE_INLINE arena_t arena_make(allocator_t alloc) {
   arena.alloc = alloc;
 
   list_init(&arena.chunks, heap);
+  list_init(&arena.big_chunks, heap);
   list_push(&arena.chunks, ivy_alloc(alloc, ARENA_CHUNK_SIZE));
   memset(arena.chunks.data[0], 0, ARENA_CHUNK_SIZE);
 
@@ -49,8 +52,10 @@ IVY_FORCE_INLINE void *_arena_alloc(allocator_t *self, u64 bytes) {
 
   u64 aligned_bytes = align_bytes(bytes);
 
-  IVY_ASSERT(aligned_bytes <= ARENA_CHUNK_SIZE,
-             "Memory too big, use heap instead");
+  if (aligned_bytes > ARENA_CHUNK_SIZE) {
+    list_push(&ctx->big_chunks, ivy_alloc(ctx->alloc, aligned_bytes));
+    return ctx->big_chunks.data[ctx->big_chunks.length - 1];
+  }
 
   if (ctx->offset + aligned_bytes > ARENA_CHUNK_SIZE) {
     list_push(&ctx->chunks, ivy_alloc(ctx->alloc, ARENA_CHUNK_SIZE));
@@ -76,6 +81,11 @@ IVY_FORCE_INLINE allocator_t arena_make_allocator(arena_t *arena) {
 IVY_FORCE_INLINE void arena_reset(arena_t *arena) {
   arena->offset = 0;
   arena->cur_chunk = 0;
+  for (u64 i = 0; i < arena->big_chunks.length; i++) {
+    ivy_free(arena->alloc,
+             arena->big_chunks.data[arena->big_chunks.length - 1]);
+    list_pop(&arena->big_chunks);
+  }
 }
 
 // Zeroes out the memory
