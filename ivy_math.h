@@ -1,6 +1,6 @@
 /*
   ----- Ivy Math -----
-  Version: 0.3.2
+  Version: 0.4.0
   License: MIT-0
 
   This header only library has some useful maths functions for the ivystd.
@@ -10,14 +10,15 @@
 #define IVY_MATH_H
 
 #define IVY_MATH_MAJOR 0
-#define IVY_MATH_MINOR 3
-#define IVY_MATH_FIX 2
+#define IVY_MATH_MINOR 4
+#define IVY_MATH_FIX 0
 
 #include "ivy_core.h"
 
 #define IVY_PI 3.14159265359f
 #define IVY_2PI 6.28318530718f
 #define IVY_HALF_PI 1.570796326795f
+#define IVY_INV_2PI 0.15915494309189533576f
 
 #define IVY_RAD2DEG(radians) ((radians) * (180.0f / IVY_PI))
 #define IVY_DEG2RAD(degrees) ((degrees) * (IVY_PI / 180.0f))
@@ -32,24 +33,25 @@
 
 #define IVY_ABS(x) ((x) < 0 ? -(x) : (x))
 
-IVY_FORCE_INLINE float ivy_wrap_pi(float x) {
-  while (x > IVY_PI) x -= IVY_2PI;
-  while (x < -IVY_PI) x += IVY_2PI;
-  return x;
-}
-
 IVY_FORCE_INLINE float ivy_sin(float x) {
-  x = ivy_wrap_pi(x);
+  float quot = x * IVY_INV_2PI;
+  float rounded = (float)((int)(quot + (quot >= 0.0f ? 0.5f : -0.5f)));
+  x = x - IVY_2PI * rounded;
+
+  if (x > IVY_HALF_PI) x = IVY_PI - x;
+  if (x < -IVY_HALF_PI) x = -IVY_PI - x;
+
   float x2 = x * x;
 
-  return x * (1.0f - x2 * (1.0f / 6.0f + x2 * (1.0f / 120.0f)));
+  const float c1 = -1.666666667e-01f;
+  const float c2 = 8.333333333e-03f;
+  const float c3 = -1.984126984e-04f;
+  const float c4 = 2.755731922e-06f;
+
+  return x * (1.0f + x2 * (c1 + x2 * (c2 + x2 * (c3 + x2 * c4))));
 }
 
-IVY_FORCE_INLINE float ivy_cos(float x) {
-  x = ivy_wrap_pi(x);
-  float x2 = x * x;
-  return 1.0f - x2 * (0.5f - x2 * (1.0f / 24.0f));
-}
+IVY_FORCE_INLINE float ivy_cos(float x) { return ivy_sin(x + IVY_HALF_PI); }
 
 IVY_FORCE_INLINE float ivy_tan(float x) { return ivy_sin(x) / ivy_cos(x); }
 
