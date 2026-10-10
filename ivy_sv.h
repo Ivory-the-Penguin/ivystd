@@ -1,6 +1,6 @@
 /*
   ----- Ivy String View -----
-  Version: 1.2.1
+  Version: 1.2.2
   License: MIT-0
 
   This stb-style header has a feature-full string view for the ivystd.
@@ -84,7 +84,7 @@
 
 #define IVY_SV_MAJOR 1
 #define IVY_SV_MINOR 2
-#define IVY_SV_FIX 1
+#define IVY_SV_FIX 2
 
 #include <ctype.h>
 #include <string.h>
@@ -93,7 +93,7 @@
 #include "ivy_core.h"
 
 typedef struct {
-  const char *data;
+  const c8 *data;
   u64 length;
 } string_view_t;
 
@@ -103,7 +103,7 @@ typedef struct {
 #define SV_FMT "%.*s"
 
 // Only for c strings. If you need a sv, just manually create the string view
-IVY_FORCE_INLINE string_view_t sv(const char *c_str) {
+IVY_FORCE_INLINE string_view_t sv(const c8 *c_str) {
   return (string_view_t){
       .data = c_str,
       .length = strlen(c_str),
@@ -152,7 +152,7 @@ IVY_FORCE_INLINE string_view_t sv_chop_right(string_view_t sv, u64 n) {
 }
 
 IVY_FORCE_INLINE string_view_t sv_trim_left(string_view_t sv) {
-  while (sv.length > 0 && isspace((unsigned char)sv.data[0])) {
+  while (sv.length > 0 && isspace((c8)sv.data[0])) {
     sv = sv_chop_left(sv, 1);
   }
 
@@ -160,7 +160,7 @@ IVY_FORCE_INLINE string_view_t sv_trim_left(string_view_t sv) {
 }
 
 IVY_FORCE_INLINE string_view_t sv_trim_right(string_view_t sv) {
-  while (sv.length > 0 && isspace((unsigned char)sv.data[sv.length - 1])) {
+  while (sv.length > 0 && isspace((c8)sv.data[sv.length - 1])) {
     sv = sv_chop_right(sv, 1);
   }
 
@@ -177,7 +177,7 @@ IVY_FORCE_INLINE string_view_t sv_trim(string_view_t sv) {
 // Recommended to use ivy_format instead of this.
 IVY_FORCE_INLINE string_view_t sv_combine(allocator_t alloc, string_view_t a,
                                           string_view_t b) {
-  char *new_buffer = (char *)ivy_alloc(alloc, a.length + b.length + 1);
+  c8 *new_buffer = (c8 *)ivy_alloc(alloc, a.length + b.length + 1);
   memcpy(new_buffer, a.data, a.length);
   memcpy(new_buffer + a.length, b.data, b.length);
   new_buffer[a.length + b.length] = '\0';
@@ -187,7 +187,7 @@ IVY_FORCE_INLINE string_view_t sv_combine(allocator_t alloc, string_view_t a,
   };
 }
 
-string_view_t sv_chop_by_delimiter(string_view_t *sv, char delimiter);
+string_view_t sv_chop_by_delimiter(string_view_t *sv, c8 delimiter);
 
 // is_type is what IS a delimiter.
 string_view_t sv_chop_by_type(string_view_t *sv, int (*is_type)(int c));
@@ -205,7 +205,7 @@ string_view_t sv_from_uint(allocator_t alloc, u64 n);
 
 #ifdef IVY_IMPL
 
-string_view_t sv_chop_by_delimiter(string_view_t *sv, char delimiter) {
+string_view_t sv_chop_by_delimiter(string_view_t *sv, c8 delimiter) {
   while (sv->length > 0 && sv->data[0] == delimiter) {
     *sv = sv_chop_left(*sv, 1);
   }
@@ -236,7 +236,7 @@ string_view_t sv_chop_by_delimiter(string_view_t *sv, char delimiter) {
 
 // is_type is what IS a delimiter
 string_view_t sv_chop_by_type(string_view_t *sv, int (*is_type)(int c)) {
-  while (sv->length > 0 && is_type((unsigned char)sv->data[0])) {
+  while (sv->length > 0 && is_type((c8)sv->data[0])) {
     *sv = sv_chop_left(*sv, 1);
   }
 
@@ -247,7 +247,7 @@ string_view_t sv_chop_by_type(string_view_t *sv, int (*is_type)(int c)) {
   u64 end = 0;
   do {
     end++;
-  } while (end < sv->length && !is_type((unsigned char)sv->data[end]));
+  } while (end < sv->length && !is_type((c8)sv->data[end]));
 
   string_view_t out;
   if (end < sv->length) {
@@ -266,7 +266,7 @@ string_view_t sv_chop_by_type(string_view_t *sv, int (*is_type)(int c)) {
 
 // is_type is what ISN'T a delimiter
 string_view_t sv_chop_by_type_rev(string_view_t *sv, int (*is_type)(int c)) {
-  while (sv->length > 0 && !is_type((unsigned char)sv->data[0])) {
+  while (sv->length > 0 && !is_type((c8)sv->data[0])) {
     *sv = sv_chop_left(*sv, 1);
   }
 
@@ -277,7 +277,7 @@ string_view_t sv_chop_by_type_rev(string_view_t *sv, int (*is_type)(int c)) {
   u64 end = 0;
   do {
     end++;
-  } while (end < sv->length && is_type((unsigned char)sv->data[end]));
+  } while (end < sv->length && is_type((c8)sv->data[end]));
 
   string_view_t out;
   if (end < sv->length) {
@@ -305,7 +305,7 @@ i64 sv_to_int(string_view_t sv) {
 
   i64 out = 0;
   SV_FOREACH(sv, i) {
-    char c = sv.data[i];
+    c8 c = sv.data[i];
 
     IVY_ASSERT(isdigit(c),
                "String view can't contain a nonnumerical character, or a "
@@ -334,7 +334,7 @@ u64 sv_to_uint(string_view_t sv) {
 
   u64 out = 0;
   SV_FOREACH(sv, i) {
-    char c = sv.data[i];
+    c8 c = sv.data[i];
 
     IVY_ASSERT(isdigit(c),
                "String view can't contain a nonnumerical character, or a "
@@ -372,7 +372,7 @@ string_view_t sv_from_int(allocator_t alloc, i64 n) {
   }
   length = (length == 0 ? 0 : length - 1) + is_negative;
 
-  char *buffer = ivy_alloc(alloc, length + 2);
+  c8 *buffer = ivy_alloc(alloc, length + 2);
 
   if (is_negative) {
     buffer[0] = '-';
@@ -400,7 +400,7 @@ string_view_t sv_from_uint(allocator_t alloc, u64 n) {
   }
   length = (length == 0 ? 0 : length - 1);
 
-  char *buffer = ivy_alloc(alloc, length + 2);
+  c8 *buffer = ivy_alloc(alloc, length + 2);
 
   for (i64 i = length; i >= 0; i--) {
     *(buffer + i) = (n % 10) + '0';

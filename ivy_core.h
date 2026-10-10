@@ -1,6 +1,6 @@
 /*
   ----- Ivy Core -----
-  Version: 0.3.0
+  Version: 0.4.0
   License: MIT-0
 
   This header only library has useful macro's and stuff for the ivystd.
@@ -10,7 +10,7 @@
 #define IVY_CORE_H
 
 #define IVY_CORE_MAJOR 0
-#define IVY_CORE_MINOR 3
+#define IVY_CORE_MINOR 4
 #define IVY_CORE_FIX 0
 
 #include <stdarg.h>
@@ -134,5 +134,9 @@ typedef u32 b32;
 
 #define true 1
 #define false 0
+
+typedef u8 c8;
+
+#define C8_MAX U8_MAX
 
 #endif
