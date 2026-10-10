@@ -17,7 +17,6 @@
 #define IVY_FMT_FIX 1
 
 #include "ivy_allocator.h"
-#include "ivy_core.h"
 #include "ivy_sb.h"
 #include "ivy_sv.h"
 
@@ -45,6 +44,7 @@ void ivy_print_file(FILE *file, const char *fmt, ...);
 #ifdef IVY_IMPL
 
 #include "ivy_arena.h"
+#include "ivy_core.h"
 
 static arena_t scratch_arena;
 static allocator_t scratch_alloc;
