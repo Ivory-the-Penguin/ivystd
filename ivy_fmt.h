@@ -1,6 +1,6 @@
 /*
   ----- Ivy Fmt -----
-  Version: 1.3.0
+  Version: 1.3.1
   License: MIT-0
 
   This stb-style header has a formatting function for ivystd.
@@ -14,7 +14,7 @@
 
 #define IVY_FMT_MAJOR 1
 #define IVY_FMT_MINOR 3
-#define IVY_FMT_FIX 0
+#define IVY_FMT_FIX 1
 
 #include "ivy_allocator.h"
 #include "ivy_sb.h"
@@ -28,14 +28,14 @@ typedef struct {
   fmt_func_t callback;
 } fmt_spec_t;
 
-#define ANSI_COLOR_RED sv("\x1b[31m")
-#define ANSI_COLOR_GREEN sv("\x1b[32m")
-#define ANSI_COLOR_YELLOW sv("\x1b[33m")
-#define ANSI_COLOR_BLUE sv("\x1b[34m")
-#define ANSI_COLOR_MAGENTA sv("\x1b[35m")
-#define ANSI_COLOR_CYAN sv("\x1b[36m")
-#define ANSI_BOLD sv("\033[1m")
-#define ANSI_RESET sv("\033[0m")
+#define ANSI_COLOR_RED "\x1b[31m"
+#define ANSI_COLOR_GREEN "\x1b[32m"
+#define ANSI_COLOR_YELLOW "\x1b[33m"
+#define ANSI_COLOR_BLUE "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN "\x1b[36m"
+#define ANSI_BOLD "\033[1m"
+#define ANSI_RESET "\033[0m"
 #define FMT_REGISTRY_MAX 32
 
 void fmt_register(string_view_t prefix, fmt_func_t callback);
@@ -85,9 +85,7 @@ string_view_t _fmt_raw(allocator_t alloc, string_view_t fmt, va_list args) {
       fmt = sv_chop_left(fmt, 1);
       continue;
     }
-
     string_view_t fmt_option = sv_chop_by_delimiter(&fmt, '}');
-
     b8 found = false;
     for (u64 i = 0; i < registry_length; i++) {
       if (sv_has_prefix(fmt_option, registry[i].prefix)) {
@@ -219,21 +217,21 @@ IVY_FORCE_INLINE void _fmt_color(va_list args, string_builder_t *buffer,
   flags = sv_chop_left(flags, 1);
 
   if (sv_compare(flags, sv("red")) == 0) {
-    sb_append_sv(buffer, ANSI_COLOR_RED);
+    sb_append_sv(buffer, sv(ANSI_COLOR_RED));
   } else if (sv_compare(flags, sv("green")) == 0) {
-    sb_append_sv(buffer, ANSI_COLOR_GREEN);
+    sb_append_sv(buffer, sv(ANSI_COLOR_GREEN));
   } else if (sv_compare(flags, sv("yellow")) == 0) {
-    sb_append_sv(buffer, ANSI_COLOR_YELLOW);
+    sb_append_sv(buffer, sv(ANSI_COLOR_YELLOW));
   } else if (sv_compare(flags, sv("blue")) == 0) {
-    sb_append_sv(buffer, ANSI_COLOR_BLUE);
+    sb_append_sv(buffer, sv(ANSI_COLOR_BLUE));
   } else if (sv_compare(flags, sv("magenta")) == 0) {
-    sb_append_sv(buffer, ANSI_COLOR_MAGENTA);
+    sb_append_sv(buffer, sv(ANSI_COLOR_MAGENTA));
   } else if (sv_compare(flags, sv("cyan")) == 0) {
-    sb_append_sv(buffer, ANSI_COLOR_CYAN);
+    sb_append_sv(buffer, sv(ANSI_COLOR_CYAN));
   } else if (sv_compare(flags, sv("bold")) == 0) {
-    sb_append_sv(buffer, ANSI_BOLD);
+    sb_append_sv(buffer, sv(ANSI_BOLD));
   } else if (sv_compare(flags, sv("reset")) == 0) {
-    sb_append_sv(buffer, ANSI_RESET);
+    sb_append_sv(buffer, sv(ANSI_RESET));
   } else {
     IVY_ASSERT(0, "Unknown color");
   }
