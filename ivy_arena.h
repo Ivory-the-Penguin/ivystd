@@ -1,6 +1,6 @@
 /*
   ----- Ivy Arena -----
-  Version: 1.3.1
+  Version: 1.3.2
   License: MIT-0
 
   This header only library has an arena allocator for the ivystd.
@@ -12,7 +12,7 @@
 
 #define IVY_ARENA_MAJOR 1
 #define IVY_ARENA_MINOR 3
-#define IVY_ARENA_FIX 1
+#define IVY_ARENA_FIX 2
 
 #include "ivy_allocator.h"
 #include "ivy_core.h"
@@ -54,6 +54,7 @@ IVY_FORCE_INLINE void *_arena_alloc(allocator_t *self, u64 bytes) {
 
   if (aligned_bytes > ARENA_CHUNK_SIZE) {
     list_push(&ctx->big_chunks, ivy_alloc(ctx->alloc, aligned_bytes));
+    memset(ctx->big_chunks.data[ctx->big_chunks.length - 1], 0, aligned_bytes);
     return ctx->big_chunks.data[ctx->big_chunks.length - 1];
   }
 
