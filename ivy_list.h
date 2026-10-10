@@ -76,14 +76,14 @@ IVY_FORCE_INLINE void list_resize(list_opaque_t *list, u64 new_size) {
     (list_ptr)->data[(list_ptr)->length++] = item;                         \
   } while (0)
 
-#define list_pop(list_ptr)                                                    \
-  do {                                                                        \
-    if (((list_ptr)->capacity >> 2) >= LIST_MINIMUM_CAPACITY &&               \
-        (list_ptr)->length < ((list_ptr)->capacity >> 2)) {                   \
-      list_resize((list_opaque_t *)(list_ptr), (list_ptr)->capacity >> 1);    \
-    }                                                                         \
-                                                                              \
-    memset((list_ptr)->data[--(list_ptr)->length], 0, (list_ptr)->item_size); \
+#define list_pop(list_ptr)                                                     \
+  do {                                                                         \
+    if ((list_ptr)->capacity / 4 >= LIST_MINIMUM_CAPACITY &&                   \
+        (list_ptr)->length <= (list_ptr)->capacity / 4) {                      \
+      list_resize((list_opaque_t *)(list_ptr), (list_ptr)->capacity / 2);      \
+    }                                                                          \
+                                                                               \
+    memset(&(list_ptr)->data[--(list_ptr)->length], 0, (list_ptr)->item_size); \
   } while (0)
 
 #define list_free(list_ptr)                        \

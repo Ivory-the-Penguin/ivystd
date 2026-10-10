@@ -103,9 +103,9 @@ typedef struct {
 #define SV_FMT "%.*s"
 
 // Only for c strings. If you need a sv, just manually create the string view
-IVY_FORCE_INLINE string_view_t sv(const c8 *c_str) {
+IVY_FORCE_INLINE string_view_t sv(const char *c_str) {
   return (string_view_t){
-      .data = c_str,
+      .data = (const c8 *)c_str,
       .length = strlen(c_str),
   };
 }
