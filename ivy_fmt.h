@@ -1,6 +1,6 @@
 /*
   ----- Ivy Fmt -----
-  Version: 1.1.2
+  Version: 1.2.0
   License: MIT-0
 
   This stb-style header has a formatting function for ivystd.
@@ -13,8 +13,8 @@
 #define IVY_FMT_H
 
 #define IVY_FMT_MAJOR 1
-#define IVY_FMT_MINOR 1
-#define IVY_FMT_FIX 2
+#define IVY_FMT_MINOR 2
+#define IVY_FMT_FIX 0
 
 #include "ivy_allocator.h"
 #include "ivy_sb.h"
@@ -28,6 +28,14 @@ typedef struct {
   fmt_func_t callback;
 } fmt_spec_t;
 
+#define ANSI_COLOR_RED sv("\x1b[31m")
+#define ANSI_COLOR_GREEN sv("\x1b[32m")
+#define ANSI_COLOR_YELLOW sv("\x1b[33m")
+#define ANSI_COLOR_BLUE sv("\x1b[34m")
+#define ANSI_COLOR_MAGENTA sv("\x1b[35m")
+#define ANSI_COLOR_CYAN sv("\x1b[36m")
+#define ANSI_BOLD sv("\033[1m")
+#define ANSI_RESET sv("\033[0m")
 #define FMT_REGISTRY_MAX 32
 
 void fmt_register(string_view_t prefix, fmt_func_t callback);
@@ -204,10 +212,38 @@ IVY_FORCE_INLINE void _fmt_sv(va_list args, string_builder_t *buffer,
   sb_append_sv(buffer, str);
 }
 
+IVY_FORCE_INLINE void _fmt_color(va_list args, string_builder_t *buffer,
+                                 string_view_t flags, allocator_t scratch) {
+  IVY_ASSERT(flags.data[0] == ':', "Use it like: fg:red for example");
+
+  flags = sv_chop_left(flags, 1);
+
+  if (sv_compare(flags, sv("red")) == 0) {
+    sb_append_sv(buffer, ANSI_COLOR_RED);
+  } else if (sv_compare(flags, sv("green")) == 0) {
+    sb_append_sv(buffer, ANSI_COLOR_GREEN);
+  } else if (sv_compare(flags, sv("yellow")) == 0) {
+    sb_append_sv(buffer, ANSI_COLOR_YELLOW);
+  } else if (sv_compare(flags, sv("blue")) == 0) {
+    sb_append_sv(buffer, ANSI_COLOR_BLUE);
+  } else if (sv_compare(flags, sv("magenta")) == 0) {
+    sb_append_sv(buffer, ANSI_COLOR_MAGENTA);
+  } else if (sv_compare(flags, sv("cyan")) == 0) {
+    sb_append_sv(buffer, ANSI_COLOR_CYAN);
+  } else if (sv_compare(flags, sv("bold")) == 0) {
+    sb_append_sv(buffer, ANSI_BOLD);
+  } else if (sv_compare(flags, sv("reset")) == 0) {
+    sb_append_sv(buffer, ANSI_RESET);
+  } else {
+    IVY_ASSERT(0, "Unknown color");
+  }
+}
+
 IVY_CONSTRUCTOR static void fmt_add_builtins() {
   fmt_register(sv("cs"), _fmt_c_string);
   fmt_register(sv("i"), _fmt_int);
   fmt_register(sv("s"), _fmt_sv);
+  fmt_register(sv("fg"), _fmt_color);
 }
 
 #endif
