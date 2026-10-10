@@ -1,6 +1,6 @@
 /*
   ----- Ivy List -----
-  Version: 0.6.0
+  Version: 0.6.1
   License: MIT-0
 
   This is a header only library that has a generic list for the ivystd.
@@ -12,7 +12,7 @@
 
 #define IVY_LIST_MAJOR 0
 #define IVY_LIST_MINOR 6
-#define IVY_LIST_FIX 0
+#define IVY_LIST_FIX 1
 
 #include "ivy_allocator.h"
 #include "ivy_core.h"
@@ -30,7 +30,7 @@ typedef struct {
 IVY_FORCE_INLINE void list_resize(list_opaque_t *list, u64 new_size) {
   u64 aligned = align_bytes(new_size);
 
-  IVY_ASSERT(list->length < aligned,
+  IVY_ASSERT(list->length <= aligned,
              "New size has to be bigger than or equal to the length");
 
   list->data =
