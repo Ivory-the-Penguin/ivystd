@@ -158,7 +158,7 @@ IVY_FORCE_INLINE void _fmt_int(va_list args, string_builder_t *buffer,
                                string_view_t flags, allocator_t scratch) {
   b8 is_unsigned = false;
   b8 is_long = false;
-  SV_FOREACH(flags, i) {
+  SV_FOREACH(flags, i, 0) {
     switch (flags.data[i]) {
       case 'u':
         is_unsigned = true;

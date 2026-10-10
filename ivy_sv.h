@@ -311,7 +311,7 @@ i64 sv_to_int(string_view_t sv) {
   sv = sv_chop_left(sv, is_negative);
 
   i64 out = 0;
-  SV_FOREACH(sv, i) {
+  SV_FOREACH(sv, i, 0) {
     c8 c = sv.data[i];
 
     IVY_ASSERT(isdigit(c),
@@ -340,7 +340,7 @@ u64 sv_to_uint(string_view_t sv) {
              "String view can't be null or empty!");
 
   u64 out = 0;
-  SV_FOREACH(sv, i) {
+  SV_FOREACH(sv, i, 0) {
     c8 c = sv.data[i];
 
     IVY_ASSERT(isdigit(c),
