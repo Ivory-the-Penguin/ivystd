@@ -1,6 +1,6 @@
 /*
   ----- Ivy List -----
-  Version: 0.5.1
+  Version: 0.6.0
   License: MIT-0
 
   This is a header only library that has a generic list for the ivystd.
@@ -11,8 +11,8 @@
 #define IVY_LIST_H
 
 #define IVY_LIST_MAJOR 0
-#define IVY_LIST_MINOR 5
-#define IVY_LIST_FIX 1
+#define IVY_LIST_MINOR 6
+#define IVY_LIST_FIX 0
 
 #include "ivy_allocator.h"
 #include "ivy_core.h"
@@ -27,11 +27,11 @@ typedef struct {
 
 #define LIST_MINIMUM_CAPACITY 16
 
-IVY_FORCE_INLINE void list_expand(list_opaque_t *list, u64 new_size) {
+IVY_FORCE_INLINE void list_resize(list_opaque_t *list, u64 new_size) {
   u64 aligned = align_bytes(new_size);
 
-  IVY_ASSERT(list->capacity < aligned,
-             "New size has to be bigger than the old one");
+  IVY_ASSERT(list->length < aligned,
+             "New size has to be bigger than or equal to the length");
 
   list->data =
       ivy_realloc(list->alloc, (void *)list->data, aligned * list->item_size);
@@ -67,13 +67,23 @@ IVY_FORCE_INLINE void list_expand(list_opaque_t *list, u64 new_size) {
     (list_ptr)->alloc = (allocator);                                        \
   } while (0)
 
-#define list_push(list_ptr, item)                                         \
-  do {                                                                    \
-    if ((list_ptr)->length + 1 > (list_ptr)->capacity) {                  \
-      list_expand((list_opaque_t *)(list_ptr), (list_ptr)->capacity * 2); \
-    }                                                                     \
-                                                                          \
-    (list_ptr)->data[(list_ptr)->length++] = item;                        \
+#define list_push(list_ptr, item)                                          \
+  do {                                                                     \
+    if ((list_ptr)->length + 1 > (list_ptr)->capacity) {                   \
+      list_resize((list_opaque_t *)(list_ptr), (list_ptr)->capacity << 1); \
+    }                                                                      \
+                                                                           \
+    (list_ptr)->data[(list_ptr)->length++] = item;                         \
+  } while (0)
+
+#define list_pop(list_ptr)                                                    \
+  do {                                                                        \
+    if (((list_ptr)->capacity >> 2) >= LIST_MINIMUM_CAPACITY &&               \
+        (list_ptr)->length < ((list_ptr)->capacity >> 2)) {                   \
+      list_resize((list_opaque_t *)(list_ptr), (list_ptr)->capacity >> 1);    \
+    }                                                                         \
+                                                                              \
+    memset((list_ptr)->data[--(list_ptr)->length], 0, (list_ptr)->item_size); \
   } while (0)
 
 #define list_free(list_ptr)                        \
