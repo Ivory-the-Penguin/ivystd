@@ -1,6 +1,6 @@
 /*
   ----- Ivy String View -----
-  Version: 1.2.2
+  Version: 1.3.0
   License: MIT-0
 
   This stb-style header has a feature-full string view for the ivystd.
@@ -10,14 +10,18 @@
   ----- Usage -----
   We have a string_view_t, which contains a pointer to the original data and the
   length. To go through every character, you would use:
-  SV_FOREACH(sv, i) {
+  SV_FOREACH(sv, i, offset) {
     putchar(sv.data[i]);
   }
 
   Or the reverse variation:
-  SV_FOREACH_REV(sv, i) {
+  SV_FOREACH_REV(sv, i, offset) {
     putchar(sv.data[i]);
   }
+
+  sv is the value of the sv (so not a pointer), i is the name of the index, and
+  offset has the offset from the initial position (from the start for the normal
+  variation, and from the end for the reverse variation).
 
   To make a string view from a string literal / c string, you use the sv func:
   string_view_t sv = sv("Hello, World!");
@@ -83,8 +87,8 @@
 #define IVY_SV_H
 
 #define IVY_SV_MAJOR 1
-#define IVY_SV_MINOR 2
-#define IVY_SV_FIX 2
+#define IVY_SV_MINOR 3
+#define IVY_SV_FIX 0
 
 #include <ctype.h>
 #include <string.h>
@@ -97,8 +101,11 @@ typedef struct {
   u64 length;
 } string_view_t;
 
-#define SV_FOREACH(sv, i) for (u64(i) = 0; (i) < (sv.length); (i)++)
-#define SV_FOREACH_REV(sv, i) for (i64(i) = sv.length - 1; (i) >= 0; (i)--)
+#define SV_FOREACH(sv, i, offset) \
+  for (u64(i) = (offset); (i) < (sv).length; (i)++)
+
+#define SV_FOREACH_REV(sv, i, offset) \
+  for (u64(i) = (sv).length - (offset); (i--) >= 0;)
 
 #define SV_FMT "%.*s"
 
