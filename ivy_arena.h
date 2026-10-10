@@ -1,6 +1,6 @@
 /*
   ----- Ivy Arena -----
-  Version: 1.3.0
+  Version: 1.3.1
   License: MIT-0
 
   This header only library has an arena allocator for the ivystd.
@@ -12,7 +12,7 @@
 
 #define IVY_ARENA_MAJOR 1
 #define IVY_ARENA_MINOR 3
-#define IVY_ARENA_FIX 0
+#define IVY_ARENA_FIX 1
 
 #include "ivy_allocator.h"
 #include "ivy_core.h"
@@ -81,7 +81,9 @@ IVY_FORCE_INLINE allocator_t arena_make_allocator(arena_t *arena) {
 IVY_FORCE_INLINE void arena_reset(arena_t *arena) {
   arena->offset = 0;
   arena->cur_chunk = 0;
-  for (u64 i = 0; i < arena->big_chunks.length; i++) {
+
+  u64 amount_to_free = arena->big_chunks.length;
+  for (u64 i = 0; i < amount_to_free; i++) {
     ivy_free(arena->alloc,
              arena->big_chunks.data[arena->big_chunks.length - 1]);
     list_pop(&arena->big_chunks);
@@ -97,11 +99,16 @@ IVY_FORCE_INLINE void arena_clear(arena_t *arena) {
 }
 
 IVY_FORCE_INLINE void arena_free(arena_t *arena) {
-  for (u64 i = 0; i < arena->chunks.length; i++) {
+  LIST_FOREACH(&arena->chunks, i, 0) {
     ivy_free(arena->alloc, arena->chunks.data[i]);
   }
 
+  LIST_FOREACH(&arena->big_chunks, i, 0) {
+    ivy_free(arena->alloc, arena->big_chunks.data[i]);
+  }
+
   list_free(&arena->chunks);
+  list_free(&arena->big_chunks);
 
   *arena = (arena_t){0};
 }
