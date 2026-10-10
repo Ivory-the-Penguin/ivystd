@@ -1,6 +1,6 @@
 /*
   ----- Ivy Fmt -----
-  Version: 1.1.1
+  Version: 1.1.2
   License: MIT-0
 
   This stb-style header has a formatting function for ivystd.
@@ -14,7 +14,7 @@
 
 #define IVY_FMT_MAJOR 1
 #define IVY_FMT_MINOR 1
-#define IVY_FMT_FIX 1
+#define IVY_FMT_FIX 2
 
 #include "ivy_allocator.h"
 #include "ivy_sb.h"
@@ -57,7 +57,7 @@ IVY_CONSTRUCTOR void _fmt_scratch_init(void) {
 IVY_DESTRUCTOR void _fmt_scratch_clean(void) { arena_free(&scratch_arena); }
 
 fmt_spec_t registry[FMT_REGISTRY_MAX] = {0};
-uint64_t registry_length = 0;
+u64 registry_length = 0;
 
 string_view_t _fmt_raw(allocator_t alloc, string_view_t fmt, va_list args) {
   string_builder_t buffer = sb_make(heap);
@@ -80,8 +80,8 @@ string_view_t _fmt_raw(allocator_t alloc, string_view_t fmt, va_list args) {
 
     string_view_t fmt_option = sv_chop_by_delimiter(&fmt, '}');
 
-    bool found = false;
-    for (uint64_t i = 0; i < registry_length; i++) {
+    b8 found = false;
+    for (u64 i = 0; i < registry_length; i++) {
       if (sv_has_prefix(fmt_option, registry[i].prefix)) {
         fmt_option = sv_chop_left(fmt_option, registry[i].prefix.length);
         registry[i].callback(args, &buffer, fmt_option, scratch_alloc);
@@ -129,7 +129,7 @@ void fmt_register(string_view_t prefix, fmt_func_t callback) {
   IVY_ASSERT(registry_length != FMT_REGISTRY_MAX,
              "Formatting registry would overflow");
 
-  uint64_t target = 0;
+  u64 target = 0;
   for (; target < registry_length; target++) {
     if (registry[target].prefix.length < prefix.length) {
       break;
@@ -156,8 +156,8 @@ IVY_FORCE_INLINE void _fmt_c_string(va_list args, string_builder_t *buffer,
 
 IVY_FORCE_INLINE void _fmt_int(va_list args, string_builder_t *buffer,
                                string_view_t flags, allocator_t scratch) {
-  bool is_unsigned = false;
-  bool is_long = false;
+  b8 is_unsigned = false;
+  b8 is_long = false;
   SV_FOREACH(flags, i) {
     switch (flags.data[i]) {
       case 'u':
@@ -171,25 +171,25 @@ IVY_FORCE_INLINE void _fmt_int(va_list args, string_builder_t *buffer,
     }
   }
 
-  uint64_t n;
+  u64 n;
   if (!is_unsigned) {
-    int64_t in_n;
+    u64 in_n;
     if (is_long) {
-      in_n = va_arg(args, int64_t);
+      in_n = va_arg(args, i64);
     } else {
-      in_n = (int64_t)va_arg(args, int32_t);
+      in_n = (i64)va_arg(args, i32);
     }
 
     if (in_n < 0) {
       sb_append_char(buffer, '-');
     }
 
-    n = (in_n < 0 ? -(uint64_t)in_n : (uint64_t)in_n);
+    n = (in_n < 0 ? -(u64)in_n : (u64)in_n);
   } else {
     if (is_long) {
-      n = va_arg(args, uint64_t);
+      n = va_arg(args, u64);
     } else {
-      n = (uint64_t)va_arg(args, uint32_t);
+      n = (u64)va_arg(args, u32);
     }
   }
 

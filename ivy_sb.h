@@ -1,6 +1,6 @@
 /*
   ----- Ivy String Builder -----
-  Version: 0.1.0
+  Version: 0.1.1
   License: MIT-0
 
   This header only library has a string builder type for the ivystd.
@@ -11,9 +11,8 @@
 
 #define IVY_SB_MAJOR 0
 #define IVY_SB_MINOR 1
-#define IVY_SB_FIX 0
+#define IVY_SB_FIX 1
 
-#include <stdint.h>
 #include <string.h>
 
 #include "ivy_allocator.h"
@@ -22,15 +21,15 @@
 
 typedef struct {
   char *data;
-  uint64_t length;
-  uint64_t capacity;
+  u64 length;
+  u64 capacity;
   allocator_t alloc;
 } string_builder_t;
 
 #define SB_MINIMUM_CAPACITY 16
 
 IVY_FORCE_INLINE string_builder_t sb_make_with_reserved(allocator_t alloc,
-                                                        uint64_t capacity) {
+                                                        u64 capacity) {
   IVY_ASSERT(capacity > 0, "Capacity can't be zero");
 
   return (string_builder_t){
@@ -69,7 +68,7 @@ IVY_FORCE_INLINE void sb_free(string_builder_t *sb) {
   sb->capacity = 0;
 }
 
-IVY_FORCE_INLINE void sb_expand(string_builder_t *sb, uint64_t capacity) {
+IVY_FORCE_INLINE void sb_expand(string_builder_t *sb, u64 capacity) {
   IVY_ASSERT(sb->capacity < capacity, "New capacity has to be bigger than old");
 
   sb->data = (char *)ivy_realloc(sb->alloc, sb->data,
@@ -95,7 +94,7 @@ IVY_FORCE_INLINE void sb_append_sv(string_builder_t *sb, string_view_t sv) {
 }
 
 // Use this sparingly
-IVY_FORCE_INLINE void sb_pop(string_builder_t *sb, uint64_t amount) {
+IVY_FORCE_INLINE void sb_pop(string_builder_t *sb, u64 amount) {
   IVY_ASSERT(amount <= sb->length,
              "Popping amount exceeds string builder length");
 

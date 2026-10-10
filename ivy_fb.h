@@ -1,6 +1,6 @@
 /*
   ----- Ivy Fixed Buffer -----
-  Version: 1.1.0
+  Version: 1.1.1
   License: MIT-0
 
   This header only library has a fixed buffer allocator for the ivystd.
@@ -12,18 +12,18 @@
 
 #define IVY_FB_MAJOR 1
 #define IVY_FB_MINOR 1
-#define IVY_FB_FIX 0
+#define IVY_FB_FIX 1
 
 #include "ivy_allocator.h"
 #include "ivy_core.h"
 
 typedef struct {
-  uint8_t *buffer;
-  uint64_t offset;
-  uint64_t capacity;
+  u8 *buffer;
+  u64 offset;
+  u64 capacity;
 } fixed_buffer_t;
 
-IVY_FORCE_INLINE fixed_buffer_t fb_make(uint8_t *buffer, uint64_t n) {
+IVY_FORCE_INLINE fixed_buffer_t fb_make(u8 *buffer, u64 n) {
   memset(buffer, 0, n);
   return (fixed_buffer_t){
       .buffer = buffer,
@@ -32,10 +32,10 @@ IVY_FORCE_INLINE fixed_buffer_t fb_make(uint8_t *buffer, uint64_t n) {
   };
 }
 
-IVY_FORCE_INLINE void *_fb_alloc(allocator_t *self, uint64_t bytes) {
+IVY_FORCE_INLINE void *_fb_alloc(allocator_t *self, u64 bytes) {
   fixed_buffer_t *ctx = (fixed_buffer_t *)self->ctx;
 
-  uint64_t aligned_bytes = align_bytes(bytes);
+  u64 aligned_bytes = align_bytes(bytes);
 
   IVY_ASSERT(ctx->offset + aligned_bytes <= ctx->capacity,
              "Fixed buffer ran out of memory!");

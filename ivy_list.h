@@ -1,6 +1,6 @@
 /*
   ----- Ivy List -----
-  Version: 0.5.0
+  Version: 0.5.1
   License: MIT-0
 
   This is a header only library that has a generic list for the ivystd.
@@ -12,23 +12,23 @@
 
 #define IVY_LIST_MAJOR 0
 #define IVY_LIST_MINOR 5
-#define IVY_LIST_FIX 0
+#define IVY_LIST_FIX 1
 
 #include "ivy_allocator.h"
 #include "ivy_core.h"
 
 typedef struct {
   void *data;
-  uint64_t length;
-  uint64_t capacity;
-  uint64_t item_size;
+  u64 length;
+  u64 capacity;
+  u64 item_size;
   allocator_t alloc;
 } list_opaque_t;
 
 #define LIST_MINIMUM_CAPACITY 16
 
-IVY_FORCE_INLINE void list_expand(list_opaque_t *list, uint64_t new_size) {
-  uint64_t aligned = align_bytes(new_size);
+IVY_FORCE_INLINE void list_expand(list_opaque_t *list, u64 new_size) {
+  u64 aligned = align_bytes(new_size);
 
   IVY_ASSERT(list->capacity < aligned,
              "New size has to be bigger than the old one");
@@ -38,13 +38,13 @@ IVY_FORCE_INLINE void list_expand(list_opaque_t *list, uint64_t new_size) {
   list->capacity = aligned;
 }
 
-#define list_t(type)    \
-  struct {              \
-    type *data;         \
-    uint64_t length;    \
-    uint64_t capacity;  \
-    uint64_t item_size; \
-    allocator_t alloc;  \
+#define list_t(type)   \
+  struct {             \
+    type *data;        \
+    u64 length;        \
+    u64 capacity;      \
+    u64 item_size;     \
+    allocator_t alloc; \
   }
 
 #define list_init(list_ptr, allocator)                                         \

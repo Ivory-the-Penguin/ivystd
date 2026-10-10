@@ -1,6 +1,6 @@
 /*
   ----- Ivy Arena -----
-  Version: 1.1.0
+  Version: 1.1.1
   License: MIT-0
 
   This header only library has an arena allocator for the ivystd.
@@ -12,17 +12,17 @@
 
 #define IVY_ARENA_MAJOR 1
 #define IVY_ARENA_MINOR 1
-#define IVY_ARENA_FIX 0
+#define IVY_ARENA_FIX 1
 
 #include "ivy_allocator.h"
 #include "ivy_core.h"
 
 typedef struct {
-  uint8_t **chunks;
-  uint64_t offset;
-  uint64_t cur_chunk;
-  uint64_t chunks_length;
-  uint64_t chunks_capacity;
+  u8 **chunks;
+  u64 offset;
+  u64 cur_chunk;
+  u64 chunks_length;
+  u64 chunks_capacity;
   allocator_t alloc;
 } arena_t;
 
@@ -30,7 +30,7 @@ typedef struct {
 
 IVY_FORCE_INLINE arena_t arena_make(allocator_t alloc) {
   arena_t arena = {0};
-  arena.chunks = ivy_alloc(heap, sizeof(uint8_t *));
+  arena.chunks = ivy_alloc(heap, sizeof(u8 *));
   arena.chunks[0] = ivy_alloc(alloc, ARENA_CHUNK_SIZE);
   memset(arena.chunks[0], 0, ARENA_CHUNK_SIZE);
   arena.offset = 0;
@@ -41,12 +41,12 @@ IVY_FORCE_INLINE arena_t arena_make(allocator_t alloc) {
   return arena;
 }
 
-IVY_FORCE_INLINE void *_arena_alloc(allocator_t *self, uint64_t bytes) {
+IVY_FORCE_INLINE void *_arena_alloc(allocator_t *self, u64 bytes) {
   arena_t *ctx = (arena_t *)self->ctx;
 
   IVY_ASSERT(ctx->alloc.alloc != NULL, "Arena is already freed");
 
-  uint64_t aligned_bytes = align_bytes(bytes);
+  u64 aligned_bytes = align_bytes(bytes);
 
   IVY_ASSERT(aligned_bytes <= ARENA_CHUNK_SIZE,
              "Memory too big, use heap instead");
@@ -54,8 +54,8 @@ IVY_FORCE_INLINE void *_arena_alloc(allocator_t *self, uint64_t bytes) {
   if (ctx->offset + aligned_bytes > ARENA_CHUNK_SIZE) {
     if (ctx->chunks_length + 1 > ctx->chunks_capacity) {
       ctx->chunks_capacity *= 2;
-      ctx->chunks = ivy_realloc(heap, ctx->chunks,
-                                sizeof(uint8_t *) * ctx->chunks_capacity);
+      ctx->chunks =
+          ivy_realloc(heap, ctx->chunks, sizeof(u8 *) * ctx->chunks_capacity);
     }
     ctx->chunks[++ctx->cur_chunk] = ivy_alloc(ctx->alloc, ARENA_CHUNK_SIZE);
     memset(ctx->chunks[ctx->cur_chunk], 0, ARENA_CHUNK_SIZE);
@@ -84,14 +84,14 @@ IVY_FORCE_INLINE void arena_reset(arena_t *arena) {
 
 // Zeroes out the memory
 IVY_FORCE_INLINE void arena_clear(arena_t *arena) {
-  for (uint64_t i = 0; i <= arena->cur_chunk; i++) {
+  for (u64 i = 0; i <= arena->cur_chunk; i++) {
     memset(arena->chunks[i], 0, ARENA_CHUNK_SIZE);
   }
   arena_reset(arena);
 }
 
 IVY_FORCE_INLINE void arena_free(arena_t *arena) {
-  for (uint64_t i = 0; i < arena->chunks_length; i++) {
+  for (u64 i = 0; i < arena->chunks_length; i++) {
     ivy_free(arena->alloc, arena->chunks[i]);
   }
 

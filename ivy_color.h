@@ -1,6 +1,6 @@
 /*
   ----- Ivy Color -----
-  Version: 0.2.0
+  Version: 0.2.1
   License: MIT-0
 
   This is a header only library which has an implemention for colors
@@ -11,7 +11,7 @@
 
 #define IVY_COLOR_MAJOR 0
 #define IVY_COLOR_MINOR 2
-#define IVY_COLOR_FIX 0
+#define IVY_COLOR_FIX 1
 
 #include "ivy_core.h"
 #include "ivy_linmath.h"
@@ -20,12 +20,12 @@ typedef vec4_t color_t;
 
 typedef union {
   struct {
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
-    uint8_t a;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
   };
-  uint32_t packed;
+  u32 packed;
 } color_bytes_t;
 
 #define COLOR_WHITE color(1.0f, 1.0f, 1.0f, 1.0f)
@@ -46,19 +46,14 @@ IVY_FORCE_INLINE color_t color(float r, float g, float b, float a) {
 
 IVY_FORCE_INLINE color_bytes_t color_to_cb(color_t c) {
   color_bytes_t cb;
-  cb.r =
-      (uint8_t)(c.r < 0.0f ? 0 : (c.r > 1.0f ? 255 : (uint8_t)(c.r * 255.0f)));
-  cb.g =
-      (uint8_t)(c.g < 0.0f ? 0 : (c.g > 1.0f ? 255 : (uint8_t)(c.g * 255.0f)));
-  cb.b =
-      (uint8_t)(c.b < 0.0f ? 0 : (c.b > 1.0f ? 255 : (uint8_t)(c.b * 255.0f)));
-  cb.a =
-      (uint8_t)(c.a < 0.0f ? 0 : (c.a > 1.0f ? 255 : (uint8_t)(c.a * 255.0f)));
+  cb.r = (u8)(c.r < 0.0f ? 0 : (c.r > 1.0f ? 255 : (u8)(c.r * 255.0f)));
+  cb.g = (u8)(c.g < 0.0f ? 0 : (c.g > 1.0f ? 255 : (u8)(c.g * 255.0f)));
+  cb.b = (u8)(c.b < 0.0f ? 0 : (c.b > 1.0f ? 255 : (u8)(c.b * 255.0f)));
+  cb.a = (u8)(c.a < 0.0f ? 0 : (c.a > 1.0f ? 255 : (u8)(c.a * 255.0f)));
   return cb;
 }
 
-IVY_FORCE_INLINE color_bytes_t cb_make(uint8_t r, uint8_t g, uint8_t b,
-                                       uint8_t a) {
+IVY_FORCE_INLINE color_bytes_t cb_make(u8 r, u8 g, u8 b, u8 a) {
   return (color_bytes_t){
       .r = r,
       .g = g,
