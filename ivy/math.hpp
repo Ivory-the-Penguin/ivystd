@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Math -----
- *  Version: 0.2.1
+ *  Version: 0.3.0
  *  License: MIT-0
  */
 
@@ -104,6 +104,14 @@ inline i64 pow(i64 x, u64 n) {
   }
 
   return out;
+}
+
+ivy_forceinline bool compare_decimal(f32 a, f32 b, f32 precision) {
+  return abs(a - b) <= precision;
+}
+
+ivy_forceinline bool compare_decimal(f64 a, f64 b, f64 precision) {
+  return abs(a - b) <= precision;
 }
 
 }  // namespace ivy
