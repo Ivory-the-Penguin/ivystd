@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Math -----
- *  Version: 0.4.0
+ *  Version: 0.5.0
  *  License: MIT-0
  */
 
@@ -139,6 +139,25 @@ inline f32 sin(f32 x) {
 
 ivy_forceinline f32 cos(f32 x) { return sin(x + half_pi); }
 ivy_forceinline f32 tan(f32 x) { return sin(x) / cos(x); }
+
+inline f32 inv_sqrt(f32 x) {
+  i32 i;
+  f32 x2, y;
+  const f32 threehalfs = 1.5f;
+
+  x2 = x * 0.5f;
+  y = x;
+  memcpy(&i, &y, sizeof(i));
+  i = 0x5f3759df - (i >> 1);
+  memcpy(&y, &i, sizeof(y));
+
+  y = y * (threehalfs - (x2 * y * y));
+  y = y * (threehalfs - (x2 * y * y));
+  y = y * (threehalfs - (x2 * y * y));
+  return y;
+}
+
+ivy_forceinline f32 sqrt(f32 x) { return (x > 0.0f ? x * inv_sqrt(x) : 0.0f); }
 
 }  // namespace ivy
 
