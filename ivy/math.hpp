@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Math -----
- *  Version: 0.3.0
+ *  Version: 0.4.0
  *  License: MIT-0
  */
 
@@ -15,6 +15,7 @@ constexpr f32 pi = 3.14159265359f;
 constexpr f32 two_pi = pi * 2;
 constexpr f32 half_pi = pi / 2;
 constexpr f32 inv_pi = 1 / pi;
+constexpr f32 inv_two_pi = 1 / two_pi;
 
 template <typename T>
 ivy_forceinline T rad2deg(T radians) {
@@ -113,6 +114,31 @@ ivy_forceinline bool compare_decimal(f32 a, f32 b, f32 precision) {
 ivy_forceinline bool compare_decimal(f64 a, f64 b, f64 precision) {
   return abs(a - b) <= precision;
 }
+
+inline f32 sin(f32 x) {
+  f32 quot = x * inv_two_pi;
+  f32 rounded = (f32)((int)(quot + (quot >= 0.0f ? 0.5f : -0.5f)));
+  x -= two_pi * rounded;
+
+  if (x > half_pi) {
+    x = pi - x;
+  }
+  if (x < -half_pi) {
+    x = -pi - x;
+  }
+
+  const f32 x2 = x * x;
+
+  const f32 c1 = -1.666666667e-01f;
+  const f32 c2 = 8.333333333e-03f;
+  const f32 c3 = -1.984126984e-04f;
+  const f32 c4 = 2.755731922e-06f;
+
+  return x * (1.0f + x2 * (c1 + x2 * (c2 + x2 * (c3 + x2 * c4))));
+}
+
+ivy_forceinline f32 cos(f32 x) { return sin(x + half_pi); }
+ivy_forceinline f32 tan(f32 x) { return sin(x) / cos(x); }
 
 }  // namespace ivy
 
