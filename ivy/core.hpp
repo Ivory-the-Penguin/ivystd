@@ -1,6 +1,6 @@
 /*
  * ----- Ivy Core -----
- *  Version: 0.2.0
+ *  Version: 0.3.0
  *  License: MIT-0
  */
 
@@ -54,6 +54,60 @@ const u8 U8_MAX = 255;
 const u16 U16_MAX = 65535;
 const u32 U32_MAX = 4294967295;
 const u64 U64_MAX = 18446744073709551615ULL;
+
+inline void *memcpy(void *dest, const void *src, u64 n) {
+  for (u64 i = 0; i < n; i++) {
+    ((u8 *)dest)[i] = ((u8 *)src)[i];
+  }
+
+  return dest;
+}
+
+ivy_forceinline void *memset(void *area, u8 byte, u64 n) {
+  for (u64 i = 0; i < n; i++) {
+    ((u8 *)area)[i] = byte;
+  }
+
+  return area;
+}
+
+ivy_forceinline void *memmove(void *dest, const void *src, u64 n) {
+  if (dest == src) {
+    return dest;
+  }
+
+  if ((u64)dest < (u64)src) {
+    for (u64 i = 0; i < n; i++) {
+      ((u8 *)dest)[i] = ((u8 *)src)[i];
+    }
+  } else {
+    for (u64 i = n; i-- > 0;) {
+      ((u8 *)dest)[i] = ((u8 *)src)[i];
+    }
+  }
+
+  return dest;
+}
+
+ivy_forceinline void *memchr(void *area, u8 byte, u64 n) {
+  for (u64 i = 0; i < n; i++) {
+    if (((u8 *)area)[i] == byte) {
+      return &((u8 *)area)[i];
+    }
+  }
+
+  return nullptr;
+}
+
+ivy_forceinline i64 memcmp(const void *a, const void *b, u64 n) {
+  i64 out = 0;
+
+  for (u64 i = 0; i < n; i++) {
+    out = ((u8 *)a)[i] - ((u8 *)b)[i];
+  }
+
+  return out;
+}
 
 };  // namespace ivy
 
