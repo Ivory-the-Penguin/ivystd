@@ -1,6 +1,6 @@
 /*
  * ----- Ivy Core -----
- *  Version: 0.3.1
+ *  Version: 0.3.2
  *  License: MIT-0
  */
 
@@ -100,13 +100,13 @@ ivy_forceinline void *memchr(void *area, u8 byte, u64 n) {
 }
 
 ivy_forceinline i64 memcmp(const void *a, const void *b, u64 n) {
-  i64 out = 0;
-
   for (u64 i = 0; i < n; i++) {
-    out += ((u8 *)a)[i] - ((u8 *)b)[i];
+    if (((u8 *)a)[i] != ((u8 *)b)[i]) {
+      return (i64)((u8 *)a)[i] - (i64)((u8 *)b)[i];
+    }
   }
 
-  return out;
+  return 0;
 }
 
 };  // namespace ivy
