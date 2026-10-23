@@ -1,6 +1,6 @@
 /*
  * ----- Ivy Core -----
- *  Version: 0.3.3
+ *  Version: 0.3.4
  *  License: MIT-0
  */
 
@@ -39,22 +39,22 @@ using u64 = unsigned long long;
 using f32 = float;
 using f64 = double;
 
-const i8 I8_MAX = 127;
-const i8 I8_MIN = -I8_MAX - 1;
+constexpr i8 I8_MAX = 127;
+constexpr i8 I8_MIN = -I8_MAX - 1;
 
-const i16 I16_MAX = 32767;
-const i16 I16_MIN = -I16_MAX - 1;
+constexpr i16 I16_MAX = 32767;
+constexpr i16 I16_MIN = -I16_MAX - 1;
 
-const i32 I32_MAX = 2147483647;
-const i32 I32_MIN = -I32_MAX - 1;
+constexpr i32 I32_MAX = 2147483647;
+constexpr i32 I32_MIN = -I32_MAX - 1;
 
-const i64 I64_MAX = 9223372036854775807LL;
-const i64 I64_MIN = -I64_MAX - 1;
+constexpr i64 I64_MAX = 9223372036854775807LL;
+constexpr i64 I64_MIN = -I64_MAX - 1;
 
-const u8 U8_MAX = 255;
-const u16 U16_MAX = 65535;
-const u32 U32_MAX = 4294967295;
-const u64 U64_MAX = 18446744073709551615ULL;
+constexpr u8 U8_MAX = 255;
+constexpr u16 U16_MAX = 65535;
+constexpr u32 U32_MAX = 4294967295;
+constexpr u64 U64_MAX = 18446744073709551615ULL;
 
 inline void *memcpy(void *dest, const void *src, u64 n) {
   for (u64 i = 0; i < n; i++) {
