@@ -1,6 +1,6 @@
 /*
  * ----- Ivy Alloc -----
- *  Version: 1.0.0
+ *  Version: 1.0.1
  *  License: MIT-0
  */
 
@@ -27,7 +27,7 @@ using free_fn = void (*)(allocator *self, void *ptr);
 
 struct allocator {
   void *ctx;
-  alloc_flags flags;
+  u8 flags;
 
   alloc_fn alloc_cb;
   realloc_fn realloc_cb;
