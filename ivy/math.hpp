@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Math -----
- *  Version: 0.1.0
+ *  Version: 0.2.1
  *  License: MIT-0
  */
 
@@ -49,6 +49,61 @@ ivy_forceinline T lerp(T a, T b, T t) {
 template <typename T>
 ivy_forceinline T abs(T x) {
   return (x < 0 ? -x : x);
+}
+
+inline f32 pow(f32 x, i64 n) {
+  if (n < 0) {
+    x = 1 / x;
+    n *= -1;
+  }
+
+  if (n == 0) {
+    return 1;
+  }
+
+  f32 y = 1;
+  while (n > 1) {
+    if (n & 1) {
+      y = x * y;
+      n -= 1;
+    }
+    x = x * x;
+    n >>= 1;
+  }
+
+  return x * y;
+}
+
+inline u64 pow(u64 x, u64 n) {
+  if (n == 0) {
+    return 1;
+  }
+
+  u64 y = 1;
+  while (n > 1) {
+    if (n & 1) {
+      y = x * y;
+      n -= 1;
+    }
+    x = x * x;
+    n >>= 1;
+  }
+
+  return x * y;
+}
+
+inline i64 pow(i64 x, u64 n) {
+  if (n == 0) {
+    return 1;
+  }
+
+  i64 out = (i64)pow((x < 0 ? (u64)-x : (u64)x), n);
+
+  if (x < 0 && (n & 1)) {
+    out *= -1;
+  }
+
+  return out;
 }
 
 }  // namespace ivy
