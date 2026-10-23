@@ -1,6 +1,6 @@
 /*
  * ----- Ivy Core -----
- *  Version: 0.3.0
+ *  Version: 0.3.1
  *  License: MIT-0
  */
 
@@ -103,7 +103,7 @@ ivy_forceinline i64 memcmp(const void *a, const void *b, u64 n) {
   i64 out = 0;
 
   for (u64 i = 0; i < n; i++) {
-    out = ((u8 *)a)[i] - ((u8 *)b)[i];
+    out += ((u8 *)a)[i] - ((u8 *)b)[i];
   }
 
   return out;
