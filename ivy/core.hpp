@@ -1,6 +1,6 @@
 /*
  * ----- Ivy Core -----
- *  Version: 0.1.0
+ *  Version: 0.2.0
  *  License: MIT-0
  */
 
@@ -23,7 +23,6 @@
 #endif
 
 namespace ivy {
-
 using i8 = signed char;
 using u8 = unsigned char;
 
@@ -39,6 +38,23 @@ using u64 = unsigned long long;
 using f32 = float;
 using f64 = double;
 
-}  // namespace ivy
+const i8 I8_MAX = 127;
+const i8 I8_MIN = -I8_MAX - 1;
+
+const i16 I16_MAX = 32767;
+const i16 I16_MIN = -I16_MAX - 1;
+
+const i32 I32_MAX = 2147483647;
+const i32 I32_MIN = -I32_MAX - 1;
+
+const i64 I64_MAX = 9223372036854775807LL;
+const i64 I64_MIN = -I64_MAX - 1;
+
+const u8 U8_MAX = 255;
+const u16 U16_MAX = 65535;
+const u32 U32_MAX = 4294967295;
+const u64 U64_MAX = 18446744073709551615ULL;
+
+};  // namespace ivy
 
 #endif  // IVY_CORE_H_
