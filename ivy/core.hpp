@@ -1,23 +1,24 @@
 /*
  * ----- Ivy Core -----
- *  Version: 0.3.2
+ *  Version: 0.3.3
  *  License: MIT-0
  */
 
 #ifndef IVY_CORE_H_
 #define IVY_CORE_H_
 
-// forceinline from https://en.wikipedia.org/wiki/Inline_(C_and_C%2B%2B)
+// forceinline originally taken from
+// https://en.wikipedia.org/wiki/Inline_(C_and_C%2B%2B)
 #ifdef _MSC_VER
 #define ivy_forceinline __forceinline
-#elif defined(__GNUC__)
-#define ivy_forceinline inline __attribute__((__always_inline__))
-#elif defined(__CLANG__)
+#elif defined(__clang__)
 #if __has_attribute(__always_inline__)
 #define ivy_forceinline inline __attribute__((__always_inline__))
 #else
 #define ivy_forceinline inline
 #endif
+#elif defined(__GNUC__)
+#define ivy_forceinline inline __attribute__((__always_inline__))
 #else
 #define ivy_forceinline inline
 #endif
