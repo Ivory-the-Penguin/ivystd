@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String Builder -----
- *  Version: 0.5.0
+ *  Version: 0.6.0
  *  License: MIT-0
  */
 
@@ -54,6 +54,15 @@ struct string_builder {
     }
 
     this->data[this->length++] = c;
+  }
+
+  void append(string_view sv) {
+    if (this->length + sv.length > this->capacity) {
+      this->expand(this->length + sv.length);
+    }
+
+    memcpy(this->data + this->length, sv.data, sv.length);
+    this->length += sv.length;
   }
 
   void free() {
