@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Math -----
- *  Version: 0.5.0
+ *  Version: 0.6.0
  *  License: MIT-0
  */
 
@@ -108,10 +108,6 @@ inline i64 pow(i64 x, u64 n) {
 }
 
 ivy_forceinline bool compare_decimal(f32 a, f32 b, f32 precision) {
-  return abs(a - b) <= precision;
-}
-
-ivy_forceinline bool compare_decimal(f64 a, f64 b, f64 precision) {
   return abs(a - b) <= precision;
 }
 
