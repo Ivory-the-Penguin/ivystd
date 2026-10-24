@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Fixed Buffer -----
- *  Version: 0.2.0
+ *  Version: 0.3.0
  *  License: MIT-0
  */
 
@@ -22,6 +22,13 @@ struct fixed_buffer {
         .offset = 0,
         .capacity = n,
     };
+  }
+
+  ivy_forceinline void reset() { this->offset = 0; }
+
+  ivy_forceinline void clear() {
+    memset(this->buffer, 0, this->offset);
+    this->reset();
   }
 };
 
