@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String View -----
- *  Version: 0.8.0
+ *  Version: 1.0.0
  *  License: MIT-0
  */
 
@@ -109,6 +109,66 @@ struct string_view {
     do {
       end++;
     } while (end < this->length && this->data[end] != delimiter);
+
+    string_view out;
+    if (end < this->length) {
+      out = (string_view){
+          .data = this->data,
+          .length = end,
+      };
+      this->chop_left(end + 1);
+    } else {
+      out = *this;
+      this->chop_left(this->length);
+    }
+
+    return out;
+  }
+
+  // is_type is what is a delimeter
+  inline string_view chop_by_type(is_type_fn is_type_cb) {
+    while (this->length > 0 && is_type_cb(this->data[0])) {
+      this->chop_left(1);
+    }
+
+    if (this->length == 0) {
+      return *this;
+    }
+
+    u64 end = 0;
+    do {
+      end++;
+    } while (end < this->length && !is_type_cb(this->data[end]));
+
+    string_view out;
+    if (end < this->length) {
+      out = (string_view){
+          .data = this->data,
+          .length = end,
+      };
+      this->chop_left(end + 1);
+    } else {
+      out = *this;
+      this->chop_left(this->length);
+    }
+
+    return out;
+  }
+
+  // is_type is what isn't a delimiter
+  inline string_view chop_by_type_rev(is_type_fn is_type_cb) {
+    while (this->length > 0 && !is_type_cb(this->data[0])) {
+      this->chop_left(1);
+    }
+
+    if (this->length == 0) {
+      return *this;
+    }
+
+    u64 end = 0;
+    do {
+      end++;
+    } while (end < this->length && is_type_cb(this->data[end]));
 
     string_view out;
     if (end < this->length) {
