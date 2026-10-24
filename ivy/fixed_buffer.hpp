@@ -1,12 +1,13 @@
 /*
  *  ----- Ivy Fixed Buffer -----
- *  Version: 0.3.0
+ *  Version: 0.4.0
  *  License: MIT-0
  */
 
 #ifndef IVY_FIXED_BUFFER_HPP_
 #define IVY_FIXED_BUFFER_HPP_
 
+#include "allocator.hpp"
 #include "core.hpp"
 
 namespace ivy {
@@ -29,6 +30,16 @@ struct fixed_buffer {
   ivy_forceinline void clear() {
     memset(this->buffer, 0, this->offset);
     this->reset();
+  }
+
+  static void *_alloc(allocator *self, u64 size) {
+    fixed_buffer *ctx = (fixed_buffer *)self->ctx;
+
+    u64 aligned = align_bytes(size);
+
+    ctx->offset += aligned;
+
+    return &ctx->buffer[ctx->offset - aligned];
   }
 };
 
