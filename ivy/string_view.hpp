@@ -1,13 +1,11 @@
 /*
  *  ----- Ivy String View -----
- *  Version: 0.2.0
+ *  Version: 0.2.1
  *  License: MIT-0
  */
 
 #ifndef IVY_STRING_VIEW_HPP_
 #define IVY_STRING_VIEW_HPP_
-
-#include <string.h>
 
 #include "core.hpp"
 
@@ -21,7 +19,7 @@ struct string_view {
 ivy_forceinline string_view sv(const char *cstr) {
   return (string_view){
       .data = (const u8 *)cstr,
-      .length = strlen(cstr),
+      .length = cstrlen(cstr),
   };
 }
 
