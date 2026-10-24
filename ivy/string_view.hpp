@@ -1,12 +1,13 @@
 /*
  *  ----- Ivy String View -----
- *  Version: 0.4.0
+ *  Version: 0.5.0
  *  License: MIT-0
  */
 
 #ifndef IVY_STRING_VIEW_HPP_
 #define IVY_STRING_VIEW_HPP_
 
+#include "allocator.hpp"
 #include "core.hpp"
 
 namespace ivy {
@@ -42,6 +43,20 @@ struct string_view {
   ivy_forceinline void trim() {
     this->trim_left();
     this->trim_right();
+  }
+
+  inline string_view combine(allocator alloc, string_view b) {
+    u8 *new_buffer = (u8 *)alloc.alloc(this->length + b.length + 1);
+
+    memcpy(new_buffer, this->data, this->length);
+    memcpy(new_buffer + this->length, b.data, b.length);
+
+    new_buffer[this->length + b.length] = '\0';
+
+    return (string_view){
+        .data = new_buffer,
+        .length = this->length + b.length,
+    };
   }
 };
 
