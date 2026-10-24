@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String Builder -----
- *  Version: 0.6.0
+ *  Version: 0.7.0
  *  License: MIT-0
  */
 
@@ -64,6 +64,10 @@ struct string_builder {
     memcpy(this->data + this->length, sv.data, sv.length);
     this->length += sv.length;
   }
+
+  // use this very sparingly.
+  // if you use this too often, that means this is the wrong tool for you
+  void pop(u64 n) { this->length -= n; }
 
   void free() {
     this->alloc.free(this->data);
