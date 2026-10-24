@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String View -----
- *  Version: 0.5.0
+ *  Version: 0.6.0
  *  License: MIT-0
  */
 
@@ -11,6 +11,8 @@
 #include "core.hpp"
 
 namespace ivy {
+
+using is_type_fn = bool (*)(u8 c);
 
 ivy_forceinline bool is_space(u8 c) {
   return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' ||
