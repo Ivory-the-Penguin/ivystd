@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Core -----
- *  Version: 0.4.0
+ *  Version: 0.4.1
  *  License: MIT-0
  */
 
@@ -111,8 +111,8 @@ ivy_forceinline i64 memcmp(const void *a, const void *b, u64 n) {
 }
 
 ivy_forceinline u64 cstrlen(const char *cstr) {
-  u64 out = 0;
-  for (u64 i = 0; cstr[i] != 0; i++);
+  u64 out;
+  for (out = 0; cstr[out]; out++);
   return out;
 }
 
