@@ -7,7 +7,7 @@
 #ifndef IVY_HEAP_H_
 #define IVY_HEAP_H_
 
-#include <cstdlib>
+#include <stdlib.h>
 
 #include "alloc.hpp"
 #include "core.hpp"
@@ -16,17 +16,17 @@ namespace ivy {
 
 ivy_forceinline void *_heap_alloc(allocator *self, u64 size) {
   (void)self;
-  return std::malloc(size);
+  return malloc(size);
 }
 
 ivy_forceinline void *_heap_realloc(allocator *self, void *ptr, u64 new_size) {
   (void)self;
-  return std::realloc(ptr, new_size);
+  return realloc(ptr, new_size);
 }
 
 ivy_forceinline void _heap_free(allocator *self, void *ptr) {
   (void)self;
-  std::free(ptr);
+  free(ptr);
 }
 
 inline allocator heap = (allocator){
