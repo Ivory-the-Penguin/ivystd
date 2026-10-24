@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String View -----
- *  Version: 1.0.0
+ *  Version: 1.0.1
  *  License: MIT-0
  */
 
@@ -96,7 +96,7 @@ struct string_view {
     };
   }
 
-  inline string_view chop_by_delimeter(u8 delimiter) {
+  inline string_view chop_by_delimiter(u8 delimiter) {
     while (this->length > 0 && this->data[0] == delimiter) {
       this->chop_left(1);
     }
@@ -125,7 +125,7 @@ struct string_view {
     return out;
   }
 
-  // is_type is what is a delimeter
+  // is_type is what is a delimiter
   inline string_view chop_by_type(is_type_fn is_type_cb) {
     while (this->length > 0 && is_type_cb(this->data[0])) {
       this->chop_left(1);
