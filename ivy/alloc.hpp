@@ -4,8 +4,8 @@
  *  License: MIT-0
  */
 
-#ifndef IVY_ALLOC_H_
-#define IVY_ALLOC_H_
+#ifndef IVY_ALLOC_HPP_
+#define IVY_ALLOC_HPP_
 
 #include "core.hpp"
 
@@ -44,4 +44,4 @@ struct allocator {
 
 }  // namespace ivy
 
-#endif  // IVY_ALLOC_H_
+#endif  // IVY_ALLOC_HPP_

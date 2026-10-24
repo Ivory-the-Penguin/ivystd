@@ -4,8 +4,8 @@
  *  License: MIT-0
  */
 
-#ifndef IVY_MATH_H_
-#define IVY_MATH_H_
+#ifndef IVY_MATH_HPP_
+#define IVY_MATH_HPP_
 
 #include "core.hpp"
 
@@ -161,4 +161,4 @@ ivy_forceinline f32 sqrt(f32 x) { return (x > 0.0f ? x * inv_sqrt(x) : 0.0f); }
 
 }  // namespace ivy
 
-#endif  // IVY_MATH_H_
+#endif  // IVY_MATH_HPP_

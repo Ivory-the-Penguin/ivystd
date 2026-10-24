@@ -4,8 +4,8 @@
  *  License: MIT-0
  */
 
-#ifndef IVY_CORE_H_
-#define IVY_CORE_H_
+#ifndef IVY_CORE_HPP_
+#define IVY_CORE_HPP_
 
 // forceinline originally taken from
 // https://en.wikipedia.org/wiki/Inline_(C_and_C%2B%2B)
@@ -112,4 +112,4 @@ ivy_forceinline i64 memcmp(const void *a, const void *b, u64 n) {
 
 };  // namespace ivy
 
-#endif  // IVY_CORE_H_
+#endif  // IVY_CORE_HPP_

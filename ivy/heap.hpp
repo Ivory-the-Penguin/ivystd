@@ -4,8 +4,8 @@
  *  License: MIT-0
  */
 
-#ifndef IVY_HEAP_H_
-#define IVY_HEAP_H_
+#ifndef IVY_HEAP_HPP_
+#define IVY_HEAP_HPP_
 
 #include <stdlib.h>
 
@@ -41,4 +41,4 @@ inline allocator heap = (allocator){
 
 }  // namespace ivy
 
-#endif  // IVY_HEAP_H_
+#endif  // IVY_HEAP_HPP_

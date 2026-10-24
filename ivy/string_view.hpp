@@ -4,8 +4,8 @@
  *  License: MIT-0
  */
 
-#ifndef IVY_STRING_VIEW_
-#define IVY_STRING_VIEW_
+#ifndef IVY_STRING_VIEW_HPP_
+#define IVY_STRING_VIEW_HPP_
 
 #include "core.hpp"
 
@@ -18,4 +18,4 @@ struct string_view {
 
 }  // namespace ivy
 
-#endif  // IVY_STRING_VIEW_
+#endif  // IVY_STRING_VIEW_HPP_
