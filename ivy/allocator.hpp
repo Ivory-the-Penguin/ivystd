@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Allocator -----
- *  Version: 1.0.1
+ *  Version: 1.1.0
  *  License: MIT-0
  */
 
@@ -17,7 +17,7 @@ enum alloc_flags : u8 {
   ALLOCFLAGS_HAS_FREE = 1 << 2,
 };
 
-ivy_forceinline u64 align_bytes(u64 bytes) { return (u64)((bytes + 15) & ~15); }
+ivy_forceinline u64 align_bytes(u64 bytes) { return (u64)((bytes + 7) & ~7); }
 
 struct allocator;
 
