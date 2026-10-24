@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String View -----
- *  Version: 0.7.0
+ *  Version: 0.8.0
  *  License: MIT-0
  */
 
@@ -94,6 +94,35 @@ struct string_view {
         .data = new_buffer,
         .length = this->length + b.length,
     };
+  }
+
+  inline string_view chop_by_delimeter(u8 delimiter) {
+    while (this->length > 0 && this->data[0] == delimiter) {
+      this->chop_left(1);
+    }
+
+    if (this->length == 0) {
+      return *this;
+    }
+
+    u64 end = 0;
+    do {
+      end++;
+    } while (end < this->length && this->data[end] != delimiter);
+
+    string_view out;
+    if (end < this->length) {
+      out = (string_view){
+          .data = this->data,
+          .length = end,
+      };
+      this->chop_left(end + 1);
+    } else {
+      out = *this;
+      this->chop_left(this->length);
+    }
+
+    return out;
   }
 };
 
