@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String Builder -----
- *  Version: 0.2.0
+ *  Version: 0.3.0
  *  License: MIT-0
  */
 
@@ -9,6 +9,7 @@
 
 #include "allocator.hpp"
 #include "core.hpp"
+#include "string_view.hpp"
 
 namespace ivy {
 
@@ -20,13 +21,24 @@ struct string_builder {
 
   static constexpr u64 minimum_capacity = 8;
 
-  static string_builder make(allocator alloc) {
+  static string_builder make(allocator alloc, u64 capacity) {
+    const u64 aligned = align_bytes(capacity * sizeof(u8));
     return (string_builder){
-        .data = (u8 *)alloc.alloc(minimum_capacity * sizeof(u8)),
+        .data = (u8 *)alloc.alloc(aligned * sizeof(u8)),
         .length = 0,
-        .capacity = minimum_capacity,
+        .capacity = aligned,
         .alloc = alloc,
     };
+  }
+
+  static string_builder make(allocator alloc) {
+    return make(alloc, minimum_capacity);
+  }
+
+  static string_builder make(allocator alloc, string_view sv) {
+    string_builder out = make(alloc, sv.length);
+    memcpy(out.data, sv.data, sv.length);
+    return out;
   }
 
   void free() {
