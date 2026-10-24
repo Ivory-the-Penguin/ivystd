@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Math -----
- *  Version: 0.6.0
+ *  Version: 0.6.1
  *  License: MIT-0
  */
 
@@ -93,18 +93,14 @@ inline u64 pow(u64 x, u64 n) {
   return x * y;
 }
 
-inline i64 pow(i64 x, u64 n) {
+ivy_forceinline i64 pow(i64 x, u64 n) {
   if (n == 0) {
     return 1;
   }
 
   i64 out = (i64)pow((x < 0 ? (u64)-x : (u64)x), n);
 
-  if (x < 0 && (n & 1)) {
-    out *= -1;
-  }
-
-  return out;
+  return (x < 0 && (n & 1) ? -out : out);
 }
 
 ivy_forceinline bool compare_decimal(f32 a, f32 b, f32 precision) {

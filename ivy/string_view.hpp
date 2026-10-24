@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String View -----
- *  Version: 1.0.1
+ *  Version: 1.0.2
  *  License: MIT-0
  */
 
@@ -82,7 +82,7 @@ struct string_view {
     this->trim_right();
   }
 
-  inline string_view combine(allocator alloc, string_view b) {
+  string_view combine(allocator alloc, string_view b) {
     u8 *new_buffer = (u8 *)alloc.alloc(this->length + b.length + 1);
 
     memcpy(new_buffer, this->data, this->length);
@@ -96,7 +96,7 @@ struct string_view {
     };
   }
 
-  inline string_view chop_by_delimiter(u8 delimiter) {
+  string_view chop_by_delimiter(u8 delimiter) {
     while (this->length > 0 && this->data[0] == delimiter) {
       this->chop_left(1);
     }
@@ -126,7 +126,7 @@ struct string_view {
   }
 
   // is_type is what is a delimiter
-  inline string_view chop_by_type(is_type_fn is_type_cb) {
+  string_view chop_by_type(is_type_fn is_type_cb) {
     while (this->length > 0 && is_type_cb(this->data[0])) {
       this->chop_left(1);
     }
@@ -156,7 +156,7 @@ struct string_view {
   }
 
   // is_type is what isn't a delimiter
-  inline string_view chop_by_type_rev(is_type_fn is_type_cb) {
+  string_view chop_by_type_rev(is_type_fn is_type_cb) {
     while (this->length > 0 && !is_type_cb(this->data[0])) {
       this->chop_left(1);
     }

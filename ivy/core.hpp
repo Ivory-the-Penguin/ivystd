@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Core -----
- *  Version: 0.4.1
+ *  Version: 0.4.2
  *  License: MIT-0
  */
 
@@ -24,6 +24,7 @@
 #endif
 
 namespace ivy {
+
 using i8 = signed char;
 using u8 = unsigned char;
 
@@ -64,7 +65,7 @@ inline void *memcpy(void *dest, const void *src, u64 n) {
   return dest;
 }
 
-ivy_forceinline void *memset(void *area, u8 byte, u64 n) {
+inline void *memset(void *area, u8 byte, u64 n) {
   for (u64 i = 0; i < n; i++) {
     ((u8 *)area)[i] = byte;
   }
@@ -72,7 +73,7 @@ ivy_forceinline void *memset(void *area, u8 byte, u64 n) {
   return area;
 }
 
-ivy_forceinline void *memmove(void *dest, const void *src, u64 n) {
+inline void *memmove(void *dest, const void *src, u64 n) {
   if (dest == src) {
     return dest;
   }
@@ -90,7 +91,7 @@ ivy_forceinline void *memmove(void *dest, const void *src, u64 n) {
   return dest;
 }
 
-ivy_forceinline void *memchr(void *area, u8 byte, u64 n) {
+inline void *memchr(void *area, u8 byte, u64 n) {
   for (u64 i = 0; i < n; i++) {
     if (((u8 *)area)[i] == byte) {
       return &((u8 *)area)[i];
@@ -100,7 +101,7 @@ ivy_forceinline void *memchr(void *area, u8 byte, u64 n) {
   return nullptr;
 }
 
-ivy_forceinline i64 memcmp(const void *a, const void *b, u64 n) {
+inline i64 memcmp(const void *a, const void *b, u64 n) {
   for (u64 i = 0; i < n; i++) {
     if (((u8 *)a)[i] != ((u8 *)b)[i]) {
       return (i64)((u8 *)a)[i] - (i64)((u8 *)b)[i];
@@ -110,7 +111,7 @@ ivy_forceinline i64 memcmp(const void *a, const void *b, u64 n) {
   return 0;
 }
 
-ivy_forceinline u64 cstrlen(const char *cstr) {
+inline u64 cstrlen(const char *cstr) {
   u64 out;
   for (out = 0; cstr[out]; out++);
   return out;
