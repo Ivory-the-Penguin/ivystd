@@ -1,0 +1,22 @@
+/*
+ *  ----- Ivy Fixed Buffer -----
+ *  Version: 0.1.0
+ *  License: MIT-0
+ */
+
+#ifndef IVY_FIXED_BUFFER_HPP_
+#define IVY_FIXED_BUFFER_HPP_
+
+#include "core.hpp"
+
+namespace ivy {
+
+struct fixed_buffer {
+  u8 *buffer;
+  u64 offset;
+  u64 capacity;
+};
+
+}  // namespace ivy
+
+#endif  // IVY_FIXED_BUFFER_HPP_
