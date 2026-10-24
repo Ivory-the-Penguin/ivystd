@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String Builder -----
- *  Version: 0.4.0
+ *  Version: 0.5.0
  *  License: MIT-0
  */
 
@@ -46,6 +46,14 @@ struct string_builder {
 
     this->data = (u8 *)this->alloc.realloc(this->data, aligned);
     this->capacity = aligned;
+  }
+
+  void append(u8 c) {
+    if (this->length + 1 > this->capacity) {
+      this->expand(this->capacity * 2);
+    }
+
+    this->data[this->length++] = c;
   }
 
   void free() {
