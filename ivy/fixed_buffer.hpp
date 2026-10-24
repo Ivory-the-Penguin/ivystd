@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Fixed Buffer -----
- *  Version: 0.4.0
+ *  Version: 1.0.0
  *  License: MIT-0
  */
 
@@ -40,6 +40,16 @@ struct fixed_buffer {
     ctx->offset += aligned;
 
     return &ctx->buffer[ctx->offset - aligned];
+  }
+
+  allocator alloc() {
+    return (allocator){
+        .ctx = this,
+        .flags = ALLOCFLAGS_HAS_ALLOC,
+        .alloc_cb = _alloc,
+        .realloc_cb = nullptr,
+        .free_cb = nullptr,
+    };
   }
 };
 
