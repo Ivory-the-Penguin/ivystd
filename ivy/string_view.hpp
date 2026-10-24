@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String View -----
- *  Version: 0.6.0
+ *  Version: 0.7.0
  *  License: MIT-0
  */
 
@@ -14,10 +14,45 @@ namespace ivy {
 
 using is_type_fn = bool (*)(u8 c);
 
-ivy_forceinline bool is_space(u8 c) {
-  return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' ||
-          c == '\r');
+ivy_forceinline bool is_lowercase(u8 c) { return c >= 'a' && c <= 'z'; }
+ivy_forceinline bool is_uppercase(u8 c) { return c >= 'A' && c <= 'Z'; }
+ivy_forceinline bool is_digit(u8 c) { return c >= '0' && c <= '9'; }
+ivy_forceinline bool is_blank(u8 c) { return c == ' ' || c == '\t'; }
+ivy_forceinline bool is_graphical(u8 c) { return c >= 33 && c <= 126; }
+
+ivy_forceinline bool is_control(u8 c) {
+  return (c >= 0 && c <= 31) || c == 127;
 }
+
+ivy_forceinline bool is_space(u8 c) {
+  return c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' ||
+         c == '\r';
+}
+
+ivy_forceinline bool is_punctuation(u8 c) {
+  return (c >= 32 && c <= 47) || (c >= 58 && c <= 64) || (c >= 91 && c <= 96) ||
+         (c >= 123 && c <= 126);
+}
+
+ivy_forceinline bool is_printable(u8 c) {
+  return is_graphical(c) || is_space(c);
+}
+
+ivy_forceinline bool is_letter(u8 c) {
+  return is_lowercase(c) || is_uppercase(c);
+}
+
+ivy_forceinline bool is_letter_or_number(u8 c) {
+  return is_letter(c) || is_digit(c);
+}
+
+ivy_forceinline bool is_hex_digit(u8 c) {
+  return is_digit(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
+}
+
+ivy_forceinline u8 to_lowercase(u8 c) { return (is_uppercase(c) ? c + 32 : c); }
+
+ivy_forceinline u8 to_uppercase(u8 c) { return (is_lowercase(c) ? c - 32 : c); }
 
 struct string_view {
   const u8 *data;
