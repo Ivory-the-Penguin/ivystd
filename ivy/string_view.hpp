@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String View -----
- *  Version: 0.2.1
+ *  Version: 0.3.0
  *  License: MIT-0
  */
 
@@ -14,6 +14,13 @@ namespace ivy {
 struct string_view {
   const u8 *data;
   u64 length;
+
+  ivy_forceinline void chop_left(u64 n) {
+    this->data += n;
+    this->length -= n;
+  }
+
+  ivy_forceinline void chop_right(u64 n) { this->length -= n; }
 };
 
 ivy_forceinline string_view sv(const char *cstr) {
