@@ -1,11 +1,11 @@
 /*
- *  ----- Ivy Alloc -----
+ *  ----- Ivy Allocator -----
  *  Version: 1.0.1
  *  License: MIT-0
  */
 
-#ifndef IVY_ALLOC_HPP_
-#define IVY_ALLOC_HPP_
+#ifndef IVY_ALLOCATOR_HPP_
+#define IVY_ALLOCATOR_HPP_
 
 #include "core.hpp"
 
@@ -44,4 +44,4 @@ struct allocator {
 
 }  // namespace ivy
 
-#endif  // IVY_ALLOC_HPP_
+#endif  // IVY_ALLOCATOR_HPP_
