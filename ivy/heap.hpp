@@ -9,7 +9,7 @@
 
 #include <stdlib.h>
 
-#include "alloc.hpp"
+#include "allocator.hpp"
 #include "core.hpp"
 
 namespace ivy {
