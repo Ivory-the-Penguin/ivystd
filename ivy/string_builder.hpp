@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String Builder -----
- *  Version: 0.7.0
+ *  Version: 0.8.0
  *  License: MIT-0
  */
 
@@ -21,7 +21,7 @@ struct string_builder {
 
   static constexpr u64 minimum_capacity = 8;
 
-  static string_builder make(allocator alloc, u64 capacity) {
+  ivy_forceinline static string_builder make(allocator alloc, u64 capacity) {
     const u64 aligned = align_bytes(capacity * sizeof(u8));
     return (string_builder){
         .data = (u8 *)alloc.alloc(aligned * sizeof(u8)),
@@ -31,24 +31,24 @@ struct string_builder {
     };
   }
 
-  static string_builder make(allocator alloc) {
+  ivy_forceinline static string_builder make(allocator alloc) {
     return make(alloc, minimum_capacity);
   }
 
-  static string_builder make(allocator alloc, string_view sv) {
+  ivy_forceinline static string_builder make(allocator alloc, string_view sv) {
     string_builder out = make(alloc, sv.length);
     memcpy(out.data, sv.data, sv.length);
     return out;
   }
 
-  void expand(u64 new_capacity) {
+  ivy_forceinline void expand(u64 new_capacity) {
     const u64 aligned = align_bytes(new_capacity * sizeof(u8));
 
     this->data = (u8 *)this->alloc.realloc(this->data, aligned);
     this->capacity = aligned;
   }
 
-  void append(u8 c) {
+  ivy_forceinline void append(u8 c) {
     if (this->length + 1 > this->capacity) {
       this->expand(this->capacity * 2);
     }
@@ -56,7 +56,7 @@ struct string_builder {
     this->data[this->length++] = c;
   }
 
-  void append(string_view sv) {
+  ivy_forceinline void append(string_view sv) {
     if (this->length + sv.length > this->capacity) {
       this->expand(this->length + sv.length);
     }
@@ -67,9 +67,9 @@ struct string_builder {
 
   // use this very sparingly.
   // if you use this too often, that means this is the wrong tool for you
-  void pop(u64 n) { this->length -= n; }
+  ivy_forceinline void pop(u64 n) { this->length -= n; }
 
-  void free() {
+  ivy_forceinline void free() {
     this->alloc.free(this->data);
     this->data = nullptr;
     this->length = 0;
