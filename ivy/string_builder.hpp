@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String Builder -----
- *  Version: 0.8.0
+ *  Version: 1.0.0
  *  License: MIT-0
  */
 
@@ -68,6 +68,18 @@ struct string_builder {
   // use this very sparingly.
   // if you use this too often, that means this is the wrong tool for you
   ivy_forceinline void pop(u64 n) { this->length -= n; }
+
+  ivy_forceinline string_view to_sv(allocator alloc) {
+    u8 *buffer = (u8 *)alloc.alloc(this->length + 1);
+
+    memcpy(buffer, this->data, this->length);
+    buffer[this->length] = '\0';
+
+    return (string_view){
+        .data = buffer,
+        .length = this->length,
+    };
+  }
 
   ivy_forceinline void free() {
     this->alloc.free(this->data);
