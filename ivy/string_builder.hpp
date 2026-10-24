@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String Builder -----
- *  Version: 0.3.0
+ *  Version: 0.4.0
  *  License: MIT-0
  */
 
@@ -39,6 +39,13 @@ struct string_builder {
     string_builder out = make(alloc, sv.length);
     memcpy(out.data, sv.data, sv.length);
     return out;
+  }
+
+  void expand(u64 new_capacity) {
+    const u64 aligned = align_bytes(new_capacity * sizeof(u8));
+
+    this->data = (u8 *)this->alloc.realloc(this->data, aligned);
+    this->capacity = aligned;
   }
 
   void free() {
