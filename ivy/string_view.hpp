@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String View -----
- *  Version: 1.0.3
+ *  Version: 1.1.0
  *  License: MIT-0
  */
 
@@ -184,6 +184,9 @@ struct string_view {
 
     return out;
   }
+
+  const u8 *begin() { return this->data; }
+  const u8 *end() { return this->data + this->length; }
 };
 
 ivy_forceinline string_view sv(const char *cstr) {
