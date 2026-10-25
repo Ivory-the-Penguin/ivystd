@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy List -----
- *  Version: 0.5.1
+ *  Version: 0.5.2
  *  License: MIT-0
  */
 
@@ -26,12 +26,13 @@ struct list {
   }
 
   ivy_forceinline static list make(allocator alloc, u64 capacity) {
-    const u64 aligned = align_bytes(capacity);
+    const u64 aligned = align_bytes(capacity * sizeof(T));
+    capacity = aligned / sizeof(T);
 
     return list{
-        .data = (T *)alloc.alloc(aligned * sizeof(T)),
+        .data = (T *)alloc.alloc(aligned),
         .length = 0,
-        .capacity = aligned,
+        .capacity = capacity,
         .alloc = alloc,
     };
   }
