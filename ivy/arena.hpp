@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Arena -----
- *  Version: 0.4.1
+ *  Version: 0.5.0
  *  License: MIT-0
  */
 
@@ -38,6 +38,27 @@ struct arena {
   }
 
   ivy_forceinline static arena make(allocator &alloc) { return make(alloc, 1); }
+
+  static inline void *_alloc(allocator &self, u64 size) {
+    arena *ctx = (arena *)self.ctx;
+
+    u64 aligned = align_bytes(size);
+
+    if (aligned > chunk_size) {
+      ctx->big_chunks.push(ctx->alloc.alloc(aligned));
+      return ctx->big_chunks[ctx->big_chunks.length - 1];
+    }
+
+    if (ctx->offset + aligned > chunk_size) {
+      ctx->chunks.push((u8 *)ctx->alloc.alloc(chunk_size));
+      ctx->current_chunk++;
+      ctx->offset = 0;
+    }
+
+    ctx->offset += aligned;
+
+    return &ctx->chunks[ctx->current_chunk][ctx->offset - aligned];
+  }
 
   inline void reset() {
     for (auto i : this->big_chunks) {
