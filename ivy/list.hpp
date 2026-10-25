@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy List -----
- *  Version: 0.8.1
+ *  Version: 0.9.0
  *  License: MIT-0
  */
 
@@ -51,6 +51,9 @@ struct list {
 
     memcpy(&this->data[this->length++], (void *)&item, sizeof(T));
   }
+
+  inline void pop() { this->length--; }
+  inline void clear() { this->length = 0; }
 
   ivy_forceinline void free() {
     this->alloc.free(this->data);
