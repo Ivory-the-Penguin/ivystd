@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Fixed Buffer -----
- *  Version: 1.0.0
+ *  Version: 1.0.1
  *  License: MIT-0
  */
 
@@ -15,7 +15,7 @@ namespace ivy {
 struct fixed_buffer {
   u8 *buffer;
   u64 offset;
-  const u64 capacity;
+  u64 capacity;
 
   ivy_forceinline static fixed_buffer make(u8 *buffer, u64 n) {
     return (fixed_buffer){
