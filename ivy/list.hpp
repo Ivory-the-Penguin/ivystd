@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy List -----
- *  Version: 0.6.0
+ *  Version: 0.7.0
  *  License: MIT-0
  */
 
@@ -42,6 +42,14 @@ struct list {
 
     this->data = this->alloc.realloc(this->data, aligned);
     this->capacity = aligned / sizeof(T);
+  }
+
+  inline void push(const T &item) {
+    if (this->length + 1 > this->capacity) {
+      expand(this->capacity * 2);
+    }
+
+    memcpy(&this->data[this->length++], item, sizeof(T));
   }
 
   ivy_forceinline void free() {
