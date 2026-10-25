@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Arena -----
- *  Version: 0.3.0
+ *  Version: 0.4.0
  *  License: MIT-0
  */
 
@@ -38,6 +38,16 @@ struct arena {
   }
 
   ivy_forceinline static arena make(allocator &alloc) { return make(alloc, 1); }
+
+  void reset() {
+    for (auto i : this->big_chunks) {
+      this->alloc.free(i);
+    }
+    this->big_chunks.clear();
+
+    this->offset = 0;
+    this->current_chunk = 0;
+  }
 };
 
 }  // namespace ivy
