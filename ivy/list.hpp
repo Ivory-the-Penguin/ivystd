@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy List -----
- *  Version: 0.4.0
+ *  Version: 0.4.1
  *  License: MIT-0
  */
 
@@ -36,7 +36,7 @@ struct list {
     };
   }
 
-  T operator[](u64 index) { return this->data[index]; }
+  T &operator[](u64 index) { return this->data[index]; }
 };
 
 };  // namespace ivy
