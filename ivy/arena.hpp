@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Arena -----
- *  Version: 0.6.0
+ *  Version: 1.0.0
  *  License: MIT-0
  */
 
@@ -68,6 +68,16 @@ struct arena {
 
     this->offset = 0;
     this->current_chunk = 0;
+  }
+
+  inline void free() {
+    this->reset();
+    this->big_chunks.free();
+
+    for (auto i : this->chunks) {
+      this->alloc.free(i);
+    }
+    this->chunks.free();
   }
 
   inline allocator make_allocator() {
