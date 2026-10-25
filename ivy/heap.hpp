@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Heap -----
- *  Version: 1.0.1
+ *  Version: 1.0.2
  *  License: MIT-0
  */
 
@@ -14,17 +14,17 @@
 
 namespace ivy {
 
-ivy_forceinline void *_heap_alloc(allocator *self, u64 size) {
+ivy_forceinline void *_heap_alloc(allocator &self, u64 size) {
   (void)self;
   return malloc(size);
 }
 
-ivy_forceinline void *_heap_realloc(allocator *self, void *ptr, u64 new_size) {
+ivy_forceinline void *_heap_realloc(allocator &self, void *ptr, u64 new_size) {
   (void)self;
   return realloc(ptr, new_size);
 }
 
-ivy_forceinline void _heap_free(allocator *self, void *ptr) {
+ivy_forceinline void _heap_free(allocator &self, void *ptr) {
   (void)self;
   free(ptr);
 }

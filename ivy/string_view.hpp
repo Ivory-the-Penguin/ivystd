@@ -82,7 +82,7 @@ struct string_view {
     this->trim_right();
   }
 
-  string_view combine(allocator alloc, string_view b) {
+  string_view combine(allocator &alloc, string_view b) {
     u8 *new_buffer = (u8 *)alloc.alloc(this->length + b.length + 1);
 
     memcpy(new_buffer, this->data, this->length);

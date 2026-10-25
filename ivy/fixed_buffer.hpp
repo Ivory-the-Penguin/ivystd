@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Fixed Buffer -----
- *  Version: 1.0.2
+ *  Version: 1.0.3
  *  License: MIT-0
  */
 
@@ -32,8 +32,8 @@ struct fixed_buffer {
     this->reset();
   }
 
-  static void *_alloc(allocator *self, u64 size) {
-    fixed_buffer *ctx = (fixed_buffer *)self->ctx;
+  static void *_alloc(allocator &self, u64 size) {
+    fixed_buffer *ctx = (fixed_buffer *)self.ctx;
 
     u64 aligned = align_bytes(size);
 

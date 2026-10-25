@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String Builder -----
- *  Version: 1.0.2
+ *  Version: 1.0.3
  *  License: MIT-0
  */
 
@@ -21,7 +21,7 @@ struct string_builder {
 
   static constexpr u64 minimum_capacity = 8;
 
-  ivy_forceinline static string_builder make(allocator alloc, u64 capacity) {
+  ivy_forceinline static string_builder make(allocator &alloc, u64 capacity) {
     const u64 aligned = align_bytes(capacity * sizeof(u8));
     return string_builder{
         .data = (u8 *)alloc.alloc(aligned * sizeof(u8)),
@@ -31,11 +31,11 @@ struct string_builder {
     };
   }
 
-  ivy_forceinline static string_builder make(allocator alloc) {
+  ivy_forceinline static string_builder make(allocator &alloc) {
     return make(alloc, minimum_capacity);
   }
 
-  ivy_forceinline static string_builder make(allocator alloc, string_view sv) {
+  ivy_forceinline static string_builder make(allocator &alloc, string_view sv) {
     string_builder out = make(alloc, sv.length);
     memcpy(out.data, sv.data, sv.length);
     return out;
@@ -69,7 +69,7 @@ struct string_builder {
   // if you use this too often, that means this is the wrong tool for you
   ivy_forceinline void pop(u64 n) { this->length -= n; }
 
-  string_view to_sv(allocator alloc) {
+  string_view to_sv(allocator &alloc) {
     u8 *buffer = (u8 *)alloc.alloc(this->length + 1);
 
     memcpy(buffer, this->data, this->length);

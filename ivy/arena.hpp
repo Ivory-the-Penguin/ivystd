@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Arena -----
- *  Version: 0.2.0
+ *  Version: 0.2.1
  *  License: MIT-0
  */
 
@@ -23,7 +23,7 @@ struct arena {
 
   static constexpr u64 chunk_size = 1024 * 4;
 
-  static arena make(allocator alloc) {
+  static arena make(allocator &alloc) {
     arena out;
     out.chunks = list<u8 *>::make(heap);
     out.chunks.push((u8 *)alloc.alloc(chunk_size));
