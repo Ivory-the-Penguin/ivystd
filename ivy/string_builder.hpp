@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String Builder -----
- *  Version: 1.0.3
+ *  Version: 1.0.4
  *  License: MIT-0
  */
 
@@ -21,7 +21,7 @@ struct string_builder {
 
   static constexpr u64 minimum_capacity = 8;
 
-  ivy_forceinline static string_builder make(allocator &alloc, u64 capacity) {
+  inline static string_builder make(allocator &alloc, u64 capacity) {
     const u64 aligned = align_bytes(capacity * sizeof(u8));
     return string_builder{
         .data = (u8 *)alloc.alloc(aligned * sizeof(u8)),
@@ -41,14 +41,14 @@ struct string_builder {
     return out;
   }
 
-  void expand(u64 new_capacity) {
+  inline void expand(u64 new_capacity) {
     const u64 aligned = align_bytes(new_capacity * sizeof(u8));
 
     this->data = (u8 *)this->alloc.realloc(this->data, aligned);
     this->capacity = aligned;
   }
 
-  void append(u8 c) {
+  inline void append(u8 c) {
     if (this->length + 1 > this->capacity) {
       this->expand(this->capacity * 2);
     }
@@ -56,7 +56,7 @@ struct string_builder {
     this->data[this->length++] = c;
   }
 
-  void append(string_view sv) {
+  inline void append(string_view sv) {
     if (this->length + sv.length > this->capacity) {
       this->expand(this->length + sv.length);
     }
@@ -69,7 +69,7 @@ struct string_builder {
   // if you use this too often, that means this is the wrong tool for you
   ivy_forceinline void pop(u64 n) { this->length -= n; }
 
-  string_view to_sv(allocator &alloc) {
+  inline string_view to_sv(allocator &alloc) {
     u8 *buffer = (u8 *)alloc.alloc(this->length + 1);
 
     memcpy(buffer, this->data, this->length);

@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy List -----
- *  Version: 0.9.0
+ *  Version: 0.9.1
  *  License: MIT-0
  */
 
@@ -25,7 +25,7 @@ struct list {
     return make(alloc, minimum_capacity);
   }
 
-  ivy_forceinline static list make(allocator &alloc, u64 capacity) {
+  inline static list make(allocator &alloc, u64 capacity) {
     const u64 aligned = align_bytes(capacity * sizeof(T));
     capacity = aligned / sizeof(T);
 
@@ -52,8 +52,8 @@ struct list {
     memcpy(&this->data[this->length++], (void *)&item, sizeof(T));
   }
 
-  inline void pop() { this->length--; }
-  inline void clear() { this->length = 0; }
+  ivy_forceinline void pop() { this->length--; }
+  ivy_forceinline void clear() { this->length = 0; }
 
   ivy_forceinline void free() {
     this->alloc.free(this->data);
@@ -62,10 +62,10 @@ struct list {
     this->alloc = allocator{};
   }
 
-  T &operator[](u64 index) { return this->data[index]; }
+  inline T &operator[](u64 index) { return this->data[index]; }
 
-  T *begin() { return this->data; }
-  T *end() { return this->data + this->length; }
+  inline T *begin() { return this->data; }
+  inline T *end() { return this->data + this->length; }
 };
 
 };  // namespace ivy

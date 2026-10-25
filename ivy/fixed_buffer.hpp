@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Fixed Buffer -----
- *  Version: 1.0.3
+ *  Version: 1.0.4
  *  License: MIT-0
  */
 
@@ -17,7 +17,7 @@ struct fixed_buffer {
   u64 offset;
   u64 capacity;
 
-  ivy_forceinline static fixed_buffer make(u8 *buffer, u64 n) {
+  inline static fixed_buffer make(u8 *buffer, u64 n) {
     return fixed_buffer{
         .buffer = buffer,
         .offset = 0,
@@ -32,7 +32,7 @@ struct fixed_buffer {
     this->reset();
   }
 
-  static void *_alloc(allocator &self, u64 size) {
+  inline static void *_alloc(allocator &self, u64 size) {
     fixed_buffer *ctx = (fixed_buffer *)self.ctx;
 
     u64 aligned = align_bytes(size);
@@ -42,7 +42,7 @@ struct fixed_buffer {
     return &ctx->buffer[ctx->offset - aligned];
   }
 
-  allocator alloc() {
+  inline allocator alloc() {
     return allocator{
         .ctx = this,
         .flags = ALLOCFLAGS_HAS_ALLOC,

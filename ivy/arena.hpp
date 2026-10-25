@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Arena -----
- *  Version: 0.4.0
+ *  Version: 0.4.1
  *  License: MIT-0
  */
 
@@ -24,7 +24,7 @@ struct arena {
   static constexpr u64 chunk_size = 1024 * 4;
 
   // capacity is the amount of chunks we would have
-  static arena make(allocator &alloc, u64 capacity) {
+  inline static arena make(allocator &alloc, u64 capacity) {
     arena out;
     out.chunks = list<u8 *>::make(heap, capacity);
     for (u64 i = 0; i < capacity; i++) {
@@ -39,7 +39,7 @@ struct arena {
 
   ivy_forceinline static arena make(allocator &alloc) { return make(alloc, 1); }
 
-  void reset() {
+  inline void reset() {
     for (auto i : this->big_chunks) {
       this->alloc.free(i);
     }

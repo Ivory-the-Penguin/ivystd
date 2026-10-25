@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String View -----
- *  Version: 1.1.0
+ *  Version: 1.1.1
  *  License: MIT-0
  */
 
@@ -82,7 +82,7 @@ struct string_view {
     this->trim_right();
   }
 
-  string_view combine(allocator &alloc, string_view b) {
+  inline string_view combine(allocator &alloc, string_view b) {
     u8 *new_buffer = (u8 *)alloc.alloc(this->length + b.length + 1);
 
     memcpy(new_buffer, this->data, this->length);
@@ -96,7 +96,7 @@ struct string_view {
     };
   }
 
-  string_view chop_by_delimiter(u8 delimiter) {
+  inline string_view chop_by_delimiter(u8 delimiter) {
     while (this->length > 0 && this->data[0] == delimiter) {
       this->chop_left(1);
     }
@@ -126,7 +126,7 @@ struct string_view {
   }
 
   // is_type is what is a delimiter
-  string_view chop_by_type(is_type_fn is_type_cb) {
+  inline string_view chop_by_type(is_type_fn is_type_cb) {
     while (this->length > 0 && is_type_cb(this->data[0])) {
       this->chop_left(1);
     }
@@ -156,7 +156,7 @@ struct string_view {
   }
 
   // is_type is what isn't a delimiter
-  string_view chop_by_type_rev(is_type_fn is_type_cb) {
+  inline string_view chop_by_type_rev(is_type_fn is_type_cb) {
     while (this->length > 0 && !is_type_cb(this->data[0])) {
       this->chop_left(1);
     }
@@ -185,11 +185,11 @@ struct string_view {
     return out;
   }
 
-  const u8 *begin() { return this->data; }
-  const u8 *end() { return this->data + this->length; }
+  inline const u8 *begin() { return this->data; }
+  inline const u8 *end() { return this->data + this->length; }
 };
 
-ivy_forceinline string_view sv(const char *cstr) {
+inline string_view sv(const char *cstr) {
   return string_view{
       .data = (const u8 *)cstr,
       .length = cstrlen(cstr),
