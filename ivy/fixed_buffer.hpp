@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Fixed Buffer -----
- *  Version: 1.0.4
+ *  Version: 1.1.0
  *  License: MIT-0
  */
 
@@ -26,11 +26,6 @@ struct fixed_buffer {
   }
 
   ivy_forceinline void reset() { this->offset = 0; }
-
-  ivy_forceinline void clear() {
-    memset(this->buffer, 0, this->offset);
-    this->reset();
-  }
 
   inline static void *_alloc(allocator &self, u64 size) {
     fixed_buffer *ctx = (fixed_buffer *)self.ctx;
