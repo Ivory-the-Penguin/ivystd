@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy List -----
- *  Version: 0.4.1
+ *  Version: 0.5.0
  *  License: MIT-0
  */
 
@@ -34,6 +34,13 @@ struct list {
         .capacity = aligned,
         .alloc = alloc,
     };
+  }
+
+  ivy_forceinline void free() {
+    this->alloc.free(this->data);
+    this->length = 0;
+    this->capacity = 0;
+    this->alloc = (allocator){};
   }
 
   T &operator[](u64 index) { return this->data[index]; }
