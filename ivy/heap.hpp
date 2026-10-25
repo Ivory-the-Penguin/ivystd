@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Heap -----
- *  Version: 1.0.0
+ *  Version: 1.0.1
  *  License: MIT-0
  */
 
@@ -29,7 +29,7 @@ ivy_forceinline void _heap_free(allocator *self, void *ptr) {
   free(ptr);
 }
 
-inline allocator heap = (allocator){
+inline allocator heap = allocator{
     .ctx = nullptr,
     .flags =
         ALLOCFLAGS_HAS_ALLOC | ALLOCFLAGS_HAS_REALLOC | ALLOCFLAGS_HAS_FREE,

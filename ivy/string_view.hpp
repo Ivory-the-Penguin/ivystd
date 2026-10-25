@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String View -----
- *  Version: 1.0.2
+ *  Version: 1.0.3
  *  License: MIT-0
  */
 
@@ -90,7 +90,7 @@ struct string_view {
 
     new_buffer[this->length + b.length] = '\0';
 
-    return (string_view){
+    return string_view{
         .data = new_buffer,
         .length = this->length + b.length,
     };
@@ -112,7 +112,7 @@ struct string_view {
 
     string_view out;
     if (end < this->length) {
-      out = (string_view){
+      out = string_view{
           .data = this->data,
           .length = end,
       };
@@ -142,7 +142,7 @@ struct string_view {
 
     string_view out;
     if (end < this->length) {
-      out = (string_view){
+      out = string_view{
           .data = this->data,
           .length = end,
       };
@@ -172,7 +172,7 @@ struct string_view {
 
     string_view out;
     if (end < this->length) {
-      out = (string_view){
+      out = string_view{
           .data = this->data,
           .length = end,
       };
@@ -187,7 +187,7 @@ struct string_view {
 };
 
 ivy_forceinline string_view sv(const char *cstr) {
-  return (string_view){
+  return string_view{
       .data = (const u8 *)cstr,
       .length = cstrlen(cstr),
   };

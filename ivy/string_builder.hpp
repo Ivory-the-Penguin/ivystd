@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String Builder -----
- *  Version: 1.0.1
+ *  Version: 1.0.2
  *  License: MIT-0
  */
 
@@ -23,7 +23,7 @@ struct string_builder {
 
   ivy_forceinline static string_builder make(allocator alloc, u64 capacity) {
     const u64 aligned = align_bytes(capacity * sizeof(u8));
-    return (string_builder){
+    return string_builder{
         .data = (u8 *)alloc.alloc(aligned * sizeof(u8)),
         .length = 0,
         .capacity = aligned,
@@ -75,7 +75,7 @@ struct string_builder {
     memcpy(buffer, this->data, this->length);
     buffer[this->length] = '\0';
 
-    return (string_view){
+    return string_view{
         .data = buffer,
         .length = this->length,
     };
