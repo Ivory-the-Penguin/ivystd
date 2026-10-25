@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Arena -----
- *  Version: 0.5.0
+ *  Version: 0.6.0
  *  License: MIT-0
  */
 
@@ -68,6 +68,17 @@ struct arena {
 
     this->offset = 0;
     this->current_chunk = 0;
+  }
+
+  inline allocator make_allocator() {
+    return allocator{
+        .ctx = this,
+        .flags = ALLOCFLAGS_HAS_ALLOC,
+
+        .alloc_cb = _alloc,
+        .realloc_cb = nullptr,
+        .free_cb = nullptr,
+    };
   }
 };
 
