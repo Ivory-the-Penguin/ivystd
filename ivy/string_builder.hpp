@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String Builder -----
- *  Version: 1.0.5
+ *  Version: 1.0.6
  *  License: MIT-0
  */
 
@@ -86,6 +86,7 @@ struct string_builder {
     this->data = nullptr;
     this->length = 0;
     this->capacity = 0;
+    this->alloc = {};
   }
 };
 

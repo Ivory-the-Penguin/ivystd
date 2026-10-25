@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy List -----
- *  Version: 0.9.2
+ *  Version: 0.9.3
  *  License: MIT-0
  */
 
@@ -59,7 +59,7 @@ struct list {
     this->alloc.free(this->data);
     this->length = 0;
     this->capacity = 0;
-    this->alloc = allocator{};
+    this->alloc = {};
   }
 
   inline T &operator[](u64 index) { return this->data[index]; }
