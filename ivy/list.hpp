@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy List -----
- *  Version: 0.5.2
+ *  Version: 0.6.0
  *  License: MIT-0
  */
 
@@ -35,6 +35,13 @@ struct list {
         .capacity = capacity,
         .alloc = alloc,
     };
+  }
+
+  inline void expand(u64 new_capacity) {
+    const u64 aligned = align_bytes(new_capacity * sizeof(T));
+
+    this->data = this->alloc.realloc(this->data, aligned);
+    this->capacity = aligned / sizeof(T);
   }
 
   ivy_forceinline void free() {
