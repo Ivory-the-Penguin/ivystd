@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Arena -----
- *  Version: 0.2.1
+ *  Version: 0.3.0
  *  License: MIT-0
  */
 
@@ -23,16 +23,21 @@ struct arena {
 
   static constexpr u64 chunk_size = 1024 * 4;
 
-  static arena make(allocator &alloc) {
+  // capacity is the amount of chunks we would have
+  static arena make(allocator &alloc, u64 capacity) {
     arena out;
-    out.chunks = list<u8 *>::make(heap);
-    out.chunks.push((u8 *)alloc.alloc(chunk_size));
+    out.chunks = list<u8 *>::make(heap, capacity);
+    for (u64 i = 0; i < capacity; i++) {
+      out.chunks.push((u8 *)alloc.alloc(chunk_size * sizeof(u8)));
+    }
     out.big_chunks = list<void *>::make(heap);
     out.offset = 0;
     out.current_chunk = 0;
     out.alloc = alloc;
     return out;
   }
+
+  ivy_forceinline static arena make(allocator &alloc) { return make(alloc, 1); }
 };
 
 }  // namespace ivy
