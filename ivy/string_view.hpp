@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String View -----
- *  Version: 1.1.1
+ *  Version: 1.1.2
  *  License: MIT-0
  */
 
@@ -65,13 +65,13 @@ struct string_view {
 
   ivy_forceinline void chop_right(u64 n) { this->length -= n; }
 
-  ivy_forceinline void trim_left() {
+  inline void trim_left() {
     while (this->length > 0 && is_space(this->data[0])) {
       this->chop_left(1);
     }
   }
 
-  ivy_forceinline void trim_right() {
+  inline void trim_right() {
     while (this->length > 0 && is_space(this->data[this->length - 1])) {
       this->chop_right(1);
     }

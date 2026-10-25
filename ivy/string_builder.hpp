@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy String Builder -----
- *  Version: 1.0.4
+ *  Version: 1.0.5
  *  License: MIT-0
  */
 
@@ -81,7 +81,7 @@ struct string_builder {
     };
   }
 
-  ivy_forceinline void free() {
+  inline void free() {
     this->alloc.free(this->data);
     this->data = nullptr;
     this->length = 0;

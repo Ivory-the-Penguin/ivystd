@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy List -----
- *  Version: 0.9.1
+ *  Version: 0.9.2
  *  License: MIT-0
  */
 
@@ -55,7 +55,7 @@ struct list {
   ivy_forceinline void pop() { this->length--; }
   ivy_forceinline void clear() { this->length = 0; }
 
-  ivy_forceinline void free() {
+  inline void free() {
     this->alloc.free(this->data);
     this->length = 0;
     this->capacity = 0;
