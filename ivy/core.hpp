@@ -1,6 +1,6 @@
 /*
  *  ----- Ivy Core -----
- *  Version: 0.4.2
+ *  Version: 0.5.0
  *  License: MIT-0
  */
 
@@ -39,6 +39,15 @@ using u64 = unsigned long long;
 
 using f32 = float;
 using f64 = double;
+
+static_assert(sizeof(i8) == 1);
+static_assert(sizeof(u8) == 1);
+static_assert(sizeof(i16) == 2);
+static_assert(sizeof(u16) == 2);
+static_assert(sizeof(i32) == 4);
+static_assert(sizeof(u32) == 4);
+static_assert(sizeof(i64) == 8);
+static_assert(sizeof(u64) == 8);
 
 constexpr i8 I8_MAX = 127;
 constexpr i8 I8_MIN = -I8_MAX - 1;
